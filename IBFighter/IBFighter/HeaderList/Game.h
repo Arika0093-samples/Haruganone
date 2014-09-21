@@ -3,6 +3,9 @@
 
 #include <windows.h>
 
+// Base Include
+#include "Base/IB_BaseInclude.hpp"
+
 #include "Constant.h"
 
 class Game{

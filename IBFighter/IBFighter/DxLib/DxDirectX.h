@@ -2,7 +2,7 @@
 //
 //		ÇcÇwÉâÉCÉuÉâÉä		DirectX ä÷òAíËã`ópÉwÉbÉ_ÉtÉ@ÉCÉã
 //
-//				Ver 3.12c
+//				Ver 3.09b
 //
 // ----------------------------------------------------------------------------
 
@@ -18,15 +18,10 @@
 	#include <unknwn.h>
 #endif
 
-#ifdef DX_USE_NAMESPACE
-
-//namespace DxLib
-//{
-
-#endif // DX_USE_NAMESPACE
+namespace DxLib
+{
 
 typedef void *D_HMONITOR ;
-typedef unsigned char D_UINT8 ;
 
 // ÇcÇâÇíÇÖÇÉÇîÇrÇèÇïÇéÇÑ -----------------------------------------------------
 
@@ -175,893 +170,6 @@ public :
 	virtual HRESULT __stdcall SetNotificationPositions	( DWORD dwPositionNotifies, const D_DSBPOSITIONNOTIFY *pcPositionNotifies ) = 0 ;
 } ;
 
-// ÇwÇRÇcÇ`ÇïÇÑÇâÇè -----------------------------------------------------------
-
-#if !defined(D__SPEAKER_POSITIONS_)
-	#define D__SPEAKER_POSITIONS_
-	#define D_SPEAKER_FRONT_LEFT				(0x00000001)
-	#define D_SPEAKER_FRONT_RIGHT				(0x00000002)
-	#define D_SPEAKER_FRONT_CENTER				(0x00000004)
-	#define D_SPEAKER_LOW_FREQUENCY				(0x00000008)
-	#define D_SPEAKER_BACK_LEFT					(0x00000010)
-	#define D_SPEAKER_BACK_RIGHT				(0x00000020)
-	#define D_SPEAKER_FRONT_LEFT_OF_CENTER		(0x00000040)
-	#define D_SPEAKER_FRONT_RIGHT_OF_CENTER		(0x00000080)
-	#define D_SPEAKER_BACK_CENTER				(0x00000100)
-	#define D_SPEAKER_SIDE_LEFT					(0x00000200)
-	#define D_SPEAKER_SIDE_RIGHT				(0x00000400)
-	#define D_SPEAKER_TOP_CENTER				(0x00000800)
-	#define D_SPEAKER_TOP_FRONT_LEFT			(0x00001000)
-	#define D_SPEAKER_TOP_FRONT_CENTER			(0x00002000)
-	#define D_SPEAKER_TOP_FRONT_RIGHT			(0x00004000)
-	#define D_SPEAKER_TOP_BACK_LEFT				(0x00008000)
-	#define D_SPEAKER_TOP_BACK_CENTER			(0x00010000)
-	#define D_SPEAKER_TOP_BACK_RIGHT			(0x00020000)
-	#define D_SPEAKER_RESERVED					(0x7FFC0000)
-	#define D_SPEAKER_ALL						(0x80000000)
-#endif
-
-#if !defined(D_SPEAKER_MONO)
-	#define D_SPEAKER_MONO						(D_SPEAKER_FRONT_CENTER)
-	#define D_SPEAKER_STEREO					(D_SPEAKER_FRONT_LEFT | D_SPEAKER_FRONT_RIGHT)
-	#define D_SPEAKER_2POINT1					(D_SPEAKER_FRONT_LEFT | D_SPEAKER_FRONT_RIGHT | D_SPEAKER_LOW_FREQUENCY)
-	#define D_SPEAKER_SURROUND					(D_SPEAKER_FRONT_LEFT | D_SPEAKER_FRONT_RIGHT | D_SPEAKER_FRONT_CENTER | D_SPEAKER_BACK_CENTER)
-	#define D_SPEAKER_QUAD						(D_SPEAKER_FRONT_LEFT | D_SPEAKER_FRONT_RIGHT | D_SPEAKER_BACK_LEFT | D_SPEAKER_BACK_RIGHT)
-	#define D_SPEAKER_4POINT1					(D_SPEAKER_FRONT_LEFT | D_SPEAKER_FRONT_RIGHT | D_SPEAKER_LOW_FREQUENCY | D_SPEAKER_BACK_LEFT | D_SPEAKER_BACK_RIGHT)
-	#define D_SPEAKER_5POINT1					(D_SPEAKER_FRONT_LEFT | D_SPEAKER_FRONT_RIGHT | D_SPEAKER_FRONT_CENTER | D_SPEAKER_LOW_FREQUENCY | D_SPEAKER_BACK_LEFT | D_SPEAKER_BACK_RIGHT)
-	#define D_SPEAKER_7POINT1					(D_SPEAKER_FRONT_LEFT | D_SPEAKER_FRONT_RIGHT | D_SPEAKER_FRONT_CENTER | D_SPEAKER_LOW_FREQUENCY | D_SPEAKER_BACK_LEFT | D_SPEAKER_BACK_RIGHT | D_SPEAKER_FRONT_LEFT_OF_CENTER | D_SPEAKER_FRONT_RIGHT_OF_CENTER)
-	#define D_SPEAKER_5POINT1_SURROUND			(D_SPEAKER_FRONT_LEFT | D_SPEAKER_FRONT_RIGHT | D_SPEAKER_FRONT_CENTER | D_SPEAKER_LOW_FREQUENCY | D_SPEAKER_SIDE_LEFT | D_SPEAKER_SIDE_RIGHT)
-	#define D_SPEAKER_7POINT1_SURROUND			(D_SPEAKER_FRONT_LEFT | D_SPEAKER_FRONT_RIGHT | D_SPEAKER_FRONT_CENTER | D_SPEAKER_LOW_FREQUENCY | D_SPEAKER_BACK_LEFT | D_SPEAKER_BACK_RIGHT | D_SPEAKER_SIDE_LEFT | D_SPEAKER_SIDE_RIGHT)
-#endif
-
-#define D_X3DAUDIO_CALCULATE_MATRIX				(0x00000001)
-#define D_X3DAUDIO_CALCULATE_DELAY				(0x00000002)
-#define D_X3DAUDIO_CALCULATE_LPF_DIRECT			(0x00000004)
-#define D_X3DAUDIO_CALCULATE_LPF_REVERB			(0x00000008)
-#define D_X3DAUDIO_CALCULATE_REVERB				(0x00000010)
-#define D_X3DAUDIO_CALCULATE_DOPPLER			(0x00000020)
-#define D_X3DAUDIO_CALCULATE_EMITTER_ANGLE		(0x00000040)
-#define D_X3DAUDIO_CALCULATE_ZEROCENTER			(0x00010000)
-#define D_X3DAUDIO_CALCULATE_REDIRECT_TO_LFE	(0x00020000)
-
-#define D_X3DAUDIO_SPEED_OF_SOUND				(343.5f)
-
-typedef struct tagD_X3DAUDIO_VECTOR
-{
-	float										x ;
-	float			  							y ;
-	float										z ;
-} D_X3DAUDIO_VECTOR ;
-
-#ifndef DX_GCC_COMPILE
-#pragma pack(push)
-#pragma pack(1)
-#else
-#pragma pack(push,1)
-#endif
-
-#define D_X3DAUDIO_HANDLE_BYTESIZE				(20)
-
-typedef BYTE D_X3DAUDIO_HANDLE[ D_X3DAUDIO_HANDLE_BYTESIZE ] ;
-
-typedef struct tagD_X3DAUDIO_CONE
-{
-	float										InnerAngle ;
-	float										OuterAngle ;
-	float										InnerVolume ;
-	float										OuterVolume ;
-	float										InnerLPF ;
-	float										OuterLPF ;
-	float										InnerReverb ;
-	float										OuterReverb ;
-} D_X3DAUDIO_CONE ;
-
-typedef struct tagD_X3DAUDIO_DISTANCE_CURVE_POINT
-{
-	float										Distance ;
-	float										DSPSetting ;
-} D_X3DAUDIO_DISTANCE_CURVE_POINT ;
-
-typedef struct tagD_X3DAUDIO_DISTANCE_CURVE
-{
-	D_X3DAUDIO_DISTANCE_CURVE_POINT*			pPoints ;
-	DWORD										PointCount ;
-} D_X3DAUDIO_DISTANCE_CURVE ;
-
-typedef struct tagD_X3DAUDIO_EMITTER
-{
-	D_X3DAUDIO_CONE*							pCone ;
-	D_X3DAUDIO_VECTOR							OrientFront ;
-	D_X3DAUDIO_VECTOR							OrientTop ;
-
-	D_X3DAUDIO_VECTOR							Position ;
-	D_X3DAUDIO_VECTOR							Velocity ;
-
-	float										InnerRadius ;
-	float										InnerRadiusAngle ;
-
-	DWORD										ChannelCount ;
-	float										ChannelRadius ;
-	float*										pChannelAzimuths ;
-
-	D_X3DAUDIO_DISTANCE_CURVE*					pVolumeCurve ;
-	D_X3DAUDIO_DISTANCE_CURVE*					pLFECurve ;
-	D_X3DAUDIO_DISTANCE_CURVE*					pLPFDirectCurve ;
-	D_X3DAUDIO_DISTANCE_CURVE*					pLPFReverbCurve ;
-	D_X3DAUDIO_DISTANCE_CURVE*					pReverbCurve ;
-
-	float										CurveDistanceScaler ;
-	float										DopplerScaler ;
-} D_X3DAUDIO_EMITTER ;
-
-typedef struct tagD_X3DAUDIO_LISTENER
-{
-	D_X3DAUDIO_VECTOR							OrientFront ;
-	D_X3DAUDIO_VECTOR							OrientTop ;
-
-	D_X3DAUDIO_VECTOR							Position ;
-	D_X3DAUDIO_VECTOR							Velocity ;
-
-	D_X3DAUDIO_CONE*							pCone ;
-} D_X3DAUDIO_LISTENER ;
-
-typedef struct tagD_X3DAUDIO_DSP_SETTINGS
-{
-	float*										pMatrixCoefficients ;
-	float*										pDelayTimes ;
-	DWORD										SrcChannelCount ;
-	DWORD										DstChannelCount ;
-
-	float										LPFDirectCoefficient ;
-	float										LPFReverbCoefficient ;
-	float										ReverbLevel ;
-	float										DopplerFactor ;
-	float										EmitterToListenerAngle ;
-
-	float										EmitterToListenerDistance ;
-	float										EmitterVelocityComponent ;
-	float										ListenerVelocityComponent ;
-} D_X3DAUDIO_DSP_SETTINGS ;
-
-enum D_XAUDIO2FX_PRESET
-{
-	D_XAUDIO2FX_PRESET_DEFAULT,
-	D_XAUDIO2FX_PRESET_GENERIC,
-	D_XAUDIO2FX_PRESET_PADDEDCELL,
-	D_XAUDIO2FX_PRESET_ROOM,
-	D_XAUDIO2FX_PRESET_BATHROOM,
-	D_XAUDIO2FX_PRESET_LIVINGROOM,
-	D_XAUDIO2FX_PRESET_STONEROOM,
-	D_XAUDIO2FX_PRESET_AUDITORIUM,
-	D_XAUDIO2FX_PRESET_CONCERTHALL,
-	D_XAUDIO2FX_PRESET_CAVE,
-	D_XAUDIO2FX_PRESET_ARENA,
-	D_XAUDIO2FX_PRESET_HANGAR,
-	D_XAUDIO2FX_PRESET_CARPETEDHALLWAY,
-	D_XAUDIO2FX_PRESET_HALLWAY,
-	D_XAUDIO2FX_PRESET_STONECORRIDOR,
-	D_XAUDIO2FX_PRESET_ALLEY,
-	D_XAUDIO2FX_PRESET_FOREST,
-	D_XAUDIO2FX_PRESET_CITY,
-	D_XAUDIO2FX_PRESET_MOUNTAINS,
-	D_XAUDIO2FX_PRESET_QUARRY,
-	D_XAUDIO2FX_PRESET_PLAIN,
-	D_XAUDIO2FX_PRESET_PARKINGLOT,
-	D_XAUDIO2FX_PRESET_SEWERPIPE,
-	D_XAUDIO2FX_PRESET_UNDERWATER,
-	D_XAUDIO2FX_PRESET_SMALLROOM,
-	D_XAUDIO2FX_PRESET_MEDIUMROOM,
-	D_XAUDIO2FX_PRESET_LARGEROOM,
-	D_XAUDIO2FX_PRESET_MEDIUMHALL,
-	D_XAUDIO2FX_PRESET_LARGEHALL,
-	D_XAUDIO2FX_PRESET_PLATE,
-
-	D_XAUDIO2FX_PRESET_NUM,
-} ;
-
-#define D_XAUDIO2FX_DEBUG								(1)
-
-#define D_XAUDIO2FX_REVERB_MIN_FRAMERATE				(20000)
-#define D_XAUDIO2FX_REVERB_MAX_FRAMERATE				(48000)
-
-#define D_XAUDIO2FX_REVERB_MIN_WET_DRY_MIX				(0.0f)
-#define D_XAUDIO2FX_REVERB_MIN_REFLECTIONS_DELAY		(0)
-#define D_XAUDIO2FX_REVERB_MIN_REVERB_DELAY				(0)
-#define D_XAUDIO2FX_REVERB_MIN_REAR_DELAY				(0)
-#define D_XAUDIO2FX_REVERB_MIN_POSITION					(0)
-#define D_XAUDIO2FX_REVERB_MIN_DIFFUSION				(0)
-#define D_XAUDIO2FX_REVERB_MIN_LOW_EQ_GAIN				(0)
-#define D_XAUDIO2FX_REVERB_MIN_LOW_EQ_CUTOFF			(0)
-#define D_XAUDIO2FX_REVERB_MIN_HIGH_EQ_GAIN				(0)
-#define D_XAUDIO2FX_REVERB_MIN_HIGH_EQ_CUTOFF			(0)
-#define D_XAUDIO2FX_REVERB_MIN_ROOM_FILTER_FREQ			(20.0f)
-#define D_XAUDIO2FX_REVERB_MIN_ROOM_FILTER_MAIN			(-100.0f)
-#define D_XAUDIO2FX_REVERB_MIN_ROOM_FILTER_HF			(-100.0f)
-#define D_XAUDIO2FX_REVERB_MIN_REFLECTIONS_GAIN			(-100.0f)
-#define D_XAUDIO2FX_REVERB_MIN_REVERB_GAIN				(-100.0f)
-#define D_XAUDIO2FX_REVERB_MIN_DECAY_TIME				(0.1f)
-#define D_XAUDIO2FX_REVERB_MIN_DENSITY					(0.0f)
-#define D_XAUDIO2FX_REVERB_MIN_ROOM_SIZE				(0.0f)
-
-#define D_XAUDIO2FX_REVERB_MAX_WET_DRY_MIX				(100.0f)
-#define D_XAUDIO2FX_REVERB_MAX_REFLECTIONS_DELAY		(300)
-#define D_XAUDIO2FX_REVERB_MAX_REVERB_DELAY				(85)
-#define D_XAUDIO2FX_REVERB_MAX_REAR_DELAY				(5)
-#define D_XAUDIO2FX_REVERB_MAX_POSITION					(30)
-#define D_XAUDIO2FX_REVERB_MAX_DIFFUSION				(15)
-#define D_XAUDIO2FX_REVERB_MAX_LOW_EQ_GAIN				(12)
-#define D_XAUDIO2FX_REVERB_MAX_LOW_EQ_CUTOFF			(9)
-#define D_XAUDIO2FX_REVERB_MAX_HIGH_EQ_GAIN				(8)
-#define D_XAUDIO2FX_REVERB_MAX_HIGH_EQ_CUTOFF			(14)
-#define D_XAUDIO2FX_REVERB_MAX_ROOM_FILTER_FREQ			(20000.0f)
-#define D_XAUDIO2FX_REVERB_MAX_ROOM_FILTER_MAIN			(0.0f)
-#define D_XAUDIO2FX_REVERB_MAX_ROOM_FILTER_HF			(0.0f)
-#define D_XAUDIO2FX_REVERB_MAX_REFLECTIONS_GAIN			(20.0f)
-#define D_XAUDIO2FX_REVERB_MAX_REVERB_GAIN				(20.0f)
-#define D_XAUDIO2FX_REVERB_MAX_DENSITY					(100.0f)
-#define D_XAUDIO2FX_REVERB_MAX_ROOM_SIZE				(100.0f)
-
-#define D_XAUDIO2FX_REVERB_DEFAULT_WET_DRY_MIX			(100.0f)
-#define D_XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_DELAY	(5)
-#define D_XAUDIO2FX_REVERB_DEFAULT_REVERB_DELAY			(5)
-#define D_XAUDIO2FX_REVERB_DEFAULT_REAR_DELAY			(5)
-#define D_XAUDIO2FX_REVERB_DEFAULT_POSITION				(6)
-#define D_XAUDIO2FX_REVERB_DEFAULT_POSITION_MATRIX		(27)
-#define D_XAUDIO2FX_REVERB_DEFAULT_EARLY_DIFFUSION		(8)
-#define D_XAUDIO2FX_REVERB_DEFAULT_LATE_DIFFUSION		(8)
-#define D_XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_GAIN			(8)
-#define D_XAUDIO2FX_REVERB_DEFAULT_LOW_EQ_CUTOFF		(4)
-#define D_XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_GAIN			(8)
-#define D_XAUDIO2FX_REVERB_DEFAULT_HIGH_EQ_CUTOFF		(4)
-#define D_XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_FREQ		(5000.0f)
-#define D_XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_MAIN		(0.0f)
-#define D_XAUDIO2FX_REVERB_DEFAULT_ROOM_FILTER_HF		(0.0f)
-#define D_XAUDIO2FX_REVERB_DEFAULT_REFLECTIONS_GAIN		(0.0f)
-#define D_XAUDIO2FX_REVERB_DEFAULT_REVERB_GAIN			(0.0f)
-#define D_XAUDIO2FX_REVERB_DEFAULT_DECAY_TIME			(1.0f)
-#define D_XAUDIO2FX_REVERB_DEFAULT_DENSITY				(100.0f)
-#define D_XAUDIO2FX_REVERB_DEFAULT_ROOM_SIZE			(100.0f)
-#define D_XAUDIO2FX_REVERB_DEFAULT_DISABLE_LATE_FIELD	(FALSE)
-
-typedef struct tagD_XAUDIO2FX_REVERB_PARAMETERS
-{
-	float										WetDryMix ;
-
-	UINT32										ReflectionsDelay ;
-	BYTE										ReverbDelay ;
-	BYTE										RearDelay ;
-
-	BYTE										PositionLeft ;
-	BYTE										PositionRight ;
-	BYTE										PositionMatrixLeft ;
-	BYTE										PositionMatrixRight ;
-	BYTE										EarlyDiffusion ;
-	BYTE										LateDiffusion ;
-	BYTE										LowEQGain ;
-	BYTE										LowEQCutoff ;
-	BYTE										HighEQGain ;
-	BYTE										HighEQCutoff ;
-
-	float										RoomFilterFreq ;
-	float										RoomFilterMain ;
-	float										RoomFilterHF ;
-	float										ReflectionsGain ;
-	float										ReverbGain ;
-	float										DecayTime ;
-	float										Density ;
-	float										RoomSize ;
-} D_XAUDIO2FX_REVERB_PARAMETERS;
-
-typedef struct tagD_XAUDIO2FX_REVERB_PARAMETERS2_8
-{
-	float										WetDryMix ;
-
-	UINT32										ReflectionsDelay ;
-	BYTE										ReverbDelay ;
-	BYTE										RearDelay ;
-
-	BYTE										PositionLeft ;
-	BYTE										PositionRight ;
-	BYTE										PositionMatrixLeft ;
-	BYTE										PositionMatrixRight ;
-	BYTE										EarlyDiffusion ;
-	BYTE										LateDiffusion ;
-	BYTE										LowEQGain ;
-	BYTE										LowEQCutoff ;
-	BYTE										HighEQGain ;
-	BYTE										HighEQCutoff ;
-
-	float										RoomFilterFreq ;
-	float										RoomFilterMain ;
-	float										RoomFilterHF ;
-	float										ReflectionsGain ;
-	float										ReverbGain ;
-	float										DecayTime ;
-	float										Density ;
-	float										RoomSize ;
-
-	BOOL										DisableLateField ;
-} D_XAUDIO2FX_REVERB_PARAMETERS2_8 ;
-
-typedef struct tagD_XAUDIO2FX_REVERB_I3DL2_PARAMETERS
-{
-	float										WetDryMix ;
-
-	int											Room ;
-	int											RoomHF ;
-	float										RoomRolloffFactor ;
-	float										DecayTime ;
-	float										DecayHFRatio ;
-	int											Reflections ;
-	float										ReflectionsDelay ;
-	int											Reverb ;
-	float										ReverbDelay ;
-	float										Diffusion ;
-	float										Density ;
-	float										HFReference ;
-} D_XAUDIO2FX_REVERB_I3DL2_PARAMETERS ;
-
-#define D_XAUDIO2FX_I3DL2_PRESET_DEFAULT         {100,-10000,    0,0.0f, 1.00f,0.50f,-10000,0.020f,-10000,0.040f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_GENERIC         {100, -1000, -100,0.0f, 1.49f,0.83f, -2602,0.007f,   200,0.011f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_PADDEDCELL      {100, -1000,-6000,0.0f, 0.17f,0.10f, -1204,0.001f,   207,0.002f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_ROOM            {100, -1000, -454,0.0f, 0.40f,0.83f, -1646,0.002f,    53,0.003f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_BATHROOM        {100, -1000,-1200,0.0f, 1.49f,0.54f,  -370,0.007f,  1030,0.011f,100.0f, 60.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_LIVINGROOM      {100, -1000,-6000,0.0f, 0.50f,0.10f, -1376,0.003f, -1104,0.004f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_STONEROOM       {100, -1000, -300,0.0f, 2.31f,0.64f,  -711,0.012f,    83,0.017f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_AUDITORIUM      {100, -1000, -476,0.0f, 4.32f,0.59f,  -789,0.020f,  -289,0.030f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_CONCERTHALL     {100, -1000, -500,0.0f, 3.92f,0.70f, -1230,0.020f,    -2,0.029f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_CAVE            {100, -1000,    0,0.0f, 2.91f,1.30f,  -602,0.015f,  -302,0.022f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_ARENA           {100, -1000, -698,0.0f, 7.24f,0.33f, -1166,0.020f,    16,0.030f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_HANGAR          {100, -1000,-1000,0.0f,10.05f,0.23f,  -602,0.020f,   198,0.030f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_CARPETEDHALLWAY {100, -1000,-4000,0.0f, 0.30f,0.10f, -1831,0.002f, -1630,0.030f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_HALLWAY         {100, -1000, -300,0.0f, 1.49f,0.59f, -1219,0.007f,   441,0.011f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_STONECORRIDOR   {100, -1000, -237,0.0f, 2.70f,0.79f, -1214,0.013f,   395,0.020f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_ALLEY           {100, -1000, -270,0.0f, 1.49f,0.86f, -1204,0.007f,    -4,0.011f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_FOREST          {100, -1000,-3300,0.0f, 1.49f,0.54f, -2560,0.162f,  -613,0.088f, 79.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_CITY            {100, -1000, -800,0.0f, 1.49f,0.67f, -2273,0.007f, -2217,0.011f, 50.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_MOUNTAINS       {100, -1000,-2500,0.0f, 1.49f,0.21f, -2780,0.300f, -2014,0.100f, 27.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_QUARRY          {100, -1000,-1000,0.0f, 1.49f,0.83f,-10000,0.061f,   500,0.025f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_PLAIN           {100, -1000,-2000,0.0f, 1.49f,0.50f, -2466,0.179f, -2514,0.100f, 21.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_PARKINGLOT      {100, -1000,    0,0.0f, 1.65f,1.50f, -1363,0.008f, -1153,0.012f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_SEWERPIPE       {100, -1000,-1000,0.0f, 2.81f,0.14f,   429,0.014f,   648,0.021f, 80.0f, 60.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_UNDERWATER      {100, -1000,-4000,0.0f, 1.49f,0.10f,  -449,0.007f,  1700,0.011f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_SMALLROOM       {100, -1000, -600,0.0f, 1.10f,0.83f,  -400,0.005f,   500,0.010f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_MEDIUMROOM      {100, -1000, -600,0.0f, 1.30f,0.83f, -1000,0.010f,  -200,0.020f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_LARGEROOM       {100, -1000, -600,0.0f, 1.50f,0.83f, -1600,0.020f, -1000,0.040f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_MEDIUMHALL      {100, -1000, -600,0.0f, 1.80f,0.70f, -1300,0.015f,  -800,0.030f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_LARGEHALL       {100, -1000, -600,0.0f, 1.80f,0.70f, -2000,0.030f, -1400,0.060f,100.0f,100.0f,5000.0f}
-#define D_XAUDIO2FX_I3DL2_PRESET_PLATE           {100, -1000, -200,0.0f, 1.30f,0.90f,     0,0.002f,     0,0.010f,100.0f, 75.0f,5000.0f}
-
-#ifndef DX_GCC_COMPILE
-#pragma pack(pop)
-#pragma pack()
-#else
-#pragma pack(pop)
-#endif
-
-
-// ÇwÇ`ÇïÇÑÇâÇè ---------------------------------------------------------------
-
-#ifndef DX_GCC_COMPILE
-#pragma pack(push)
-#pragma pack(1)
-#else
-#pragma pack(push,1)
-#endif
-
-#define D_XAUDIO2_MAX_BUFFER_BYTES				(0x80000000)
-#define D_XAUDIO2_MAX_QUEUED_BUFFERS			(64)
-#define D_XAUDIO2_MAX_BUFFERS_SYSTEM			(2)
-#define D_XAUDIO2_MAX_AUDIO_CHANNELS			(64)
-#define D_XAUDIO2_MIN_SAMPLE_RATE				(1000)
-#define D_XAUDIO2_MAX_SAMPLE_RATE				(200000)
-#define D_XAUDIO2_MAX_VOLUME_LEVEL				(16777216.0f)
-#define D_XAUDIO2_MIN_FREQ_RATIO				(1/1024.0f)
-#define D_XAUDIO2_MAX_FREQ_RATIO				(1024.0f)
-#define D_XAUDIO2_DEFAULT_FREQ_RATIO			(2.0f)
-#define D_XAUDIO2_MAX_FILTER_ONEOVERQ			(1.5f)
-#define D_XAUDIO2_MAX_FILTER_FREQUENCY			(1.0f)
-#define D_XAUDIO2_MAX_LOOP_COUNT				(254)
-#define D_XAUDIO2_MAX_INSTANCES					(8)
-
-#define D_XAUDIO2_COMMIT_NOW					(0)
-#define D_XAUDIO2_COMMIT_ALL					(0)
-#define D_XAUDIO2_INVALID_OPSET					((DWORD)(-1))
-#define D_XAUDIO2_NO_LOOP_REGION				(0)
-#define D_XAUDIO2_LOOP_INFINITE					(255)
-#define D_XAUDIO2_DEFAULT_CHANNELS				(0)
-#define D_XAUDIO2_DEFAULT_SAMPLERATE			(0)
-
-#define D_XAUDIO2_DEBUG_ENGINE					(0x0001)
-#define D_XAUDIO2_VOICE_NOPITCH					(0x0002)
-#define D_XAUDIO2_VOICE_NOSRC					(0x0004)
-#define D_XAUDIO2_VOICE_USEFILTER				(0x0008)
-#define D_XAUDIO2_VOICE_MUSIC					(0x0010)
-#define D_XAUDIO2_PLAY_TAILS					(0x0020)
-#define D_XAUDIO2_END_OF_STREAM					(0x0040)
-#define D_XAUDIO2_SEND_USEFILTER				(0x0080)
-
-typedef enum tagD_XAUDIO2_WINDOWS_PROCESSOR_SPECIFIER
-{
-	D_Processor1 								= 0x00000001,
-	D_Processor2 								= 0x00000002,
-	D_Processor3 								= 0x00000004,
-	D_Processor4 								= 0x00000008,
-	D_Processor5 								= 0x00000010,
-	D_Processor6 								= 0x00000020,
-	D_Processor7 								= 0x00000040,
-	D_Processor8 								= 0x00000080,
-	D_Processor9 								= 0x00000100,
-	D_Processor10								= 0x00000200,
-	D_Processor11								= 0x00000400,
-	D_Processor12								= 0x00000800,
-	D_Processor13								= 0x00001000,
-	D_Processor14								= 0x00002000,
-	D_Processor15								= 0x00004000,
-	D_Processor16								= 0x00008000,
-	D_Processor17								= 0x00010000,
-	D_Processor18								= 0x00020000,
-	D_Processor19								= 0x00040000,
-	D_Processor20								= 0x00080000,
-	D_Processor21								= 0x00100000,
-	D_Processor22								= 0x00200000,
-	D_Processor23								= 0x00400000,
-	D_Processor24								= 0x00800000,
-	D_Processor25								= 0x01000000,
-	D_Processor26								= 0x02000000,
-	D_Processor27								= 0x04000000,
-	D_Processor28								= 0x08000000,
-	D_Processor29								= 0x10000000,
-	D_Processor30								= 0x20000000,
-	D_Processor31								= 0x40000000,
-	D_Processor32								= 0x80000000,
-	D_XAUDIO2_ANY_PROCESSOR						= 0xffffffff,
-	D_XAUDIO2_DEFAULT_PROCESSOR					= D_XAUDIO2_ANY_PROCESSOR
-} D_XAUDIO2_WINDOWS_PROCESSOR_SPECIFIER, D_XAUDIO2_PROCESSOR ;
-
-enum D_XAUDIO2_DEVICE_ROLE
-{
-	D_NotDefaultDevice							= 0x0,
-	D_DefaultConsoleDevice						= 0x1,
-	D_DefaultMultimediaDevice					= 0x2,
-	D_DefaultCommunicationsDevice				= 0x4,
-	D_DefaultGameDevice							= 0x8,
-	D_GlobalDefaultDevice						= 0xf,
-	D_InvalidDeviceRole							= ~D_GlobalDefaultDevice
-} ;
-
-enum D_XAUDIO2_FILTER_TYPE
-{
-	D_LowPassFilter,
-	D_BandPassFilter,
-	D_HighPassFilter,
-	D_NotchFilter
-} ;
-
-enum D_AUDIO_STREAM_CATEGORY
-{
-	D_AudioCategory_Other = 0,
-	D_AudioCategory_ForegroundOnlyMedia,
-	D_AudioCategory_BackgroundCapableMedia,
-	D_AudioCategory_Communications,
-	D_AudioCategory_Alerts,
-	D_AudioCategory_SoundEffects,
-	D_AudioCategory_GameEffects,
-	D_AudioCategory_GameMedia,
-} ;
-
-typedef struct tagD_WAVEFORMATEXTENSIBLE
-{
-	WAVEFORMATEX								Format ;
-	union
-	{
-		WORD									wValidBitsPerSample ;
-		WORD									wSamplesPerBlock ;
-		WORD									wReserved ;
-	} Samples ;
-	DWORD										dwChannelMask ;
-	GUID										SubFormat ;
-} D_WAVEFORMATEXTENSIBLE ;
-
-typedef struct tagD_XAUDIO2_VOICE_STATE
-{
-	void *										pCurrentBufferContext ;
-	DWORD										BuffersQueued ;
-	ULONGLONG									SamplesPlayed ;
-} D_XAUDIO2_VOICE_STATE;
-
-typedef struct tagD_XAUDIO2_EFFECT_DESCRIPTOR
-{
-	IUnknown*									pEffect ;
-	BOOL										InitialState ;
-	DWORD										OutputChannels ;
-} D_XAUDIO2_EFFECT_DESCRIPTOR ;
-
-typedef struct tagD_XAUDIO2_DEVICE_DETAILS
-{
-	WCHAR										DeviceID[256] ;
-	WCHAR										DisplayName[256] ;
-	D_XAUDIO2_DEVICE_ROLE						Role ;
-	D_WAVEFORMATEXTENSIBLE						OutputFormat ;
-} D_XAUDIO2_DEVICE_DETAILS ;
-
-typedef struct tagD_XAUDIO2_VOICE_DETAILS
-{
-	DWORD										CreationFlags ;
-	DWORD										InputChannels ;
-	DWORD										InputSampleRate ;
-} D_XAUDIO2_VOICE_DETAILS ;
-
-typedef struct tagD_XAUDIO2_VOICE_DETAILS2_8
-{
-	DWORD										CreationFlags ;
-	DWORD										ActiveFlags ;
-	DWORD										InputChannels ;
-	DWORD										InputSampleRate ;
-} D_XAUDIO2_VOICE_DETAILS2_8 ;
-
-typedef struct tagD_XAUDIO2_SEND_DESCRIPTOR
-{
-	DWORD										Flags ;
-	class D_IXAudio2Voice*						pOutputVoice ;
-} D_XAUDIO2_SEND_DESCRIPTOR ;
-
-typedef struct tagD_XAUDIO2_SEND_DESCRIPTOR2_8
-{
-	DWORD										Flags ;
-	class D_IXAudio2_8Voice*					pOutputVoice ;
-} D_XAUDIO2_SEND_DESCRIPTOR2_8 ;
-
-typedef struct tagD_XAUDIO2_VOICE_SENDS
-{
-	DWORD										SendCount ;
-	D_XAUDIO2_SEND_DESCRIPTOR*					pSends ;
-} D_XAUDIO2_VOICE_SENDS ;
-
-typedef struct tagD_XAUDIO2_VOICE_SENDS2_8
-{
-	DWORD										SendCount ;
-	D_XAUDIO2_SEND_DESCRIPTOR2_8*				pSends ;
-} D_XAUDIO2_VOICE_SENDS2_8 ;
-
-typedef struct tagD_XAUDIO2_PERFORMANCE_DATA
-{
-	ULONGLONG									AudioCyclesSinceLastQuery ;
-	ULONGLONG									TotalCyclesSinceLastQuery ;
-	DWORD										MinimumCyclesPerQuantum ;
-	DWORD										MaximumCyclesPerQuantum ;
-	DWORD										MemoryUsageInBytes ;
-	DWORD										CurrentLatencyInSamples ;
-	DWORD										GlitchesSinceEngineStarted ;
-	DWORD										ActiveSourceVoiceCount ;
-	DWORD										TotalSourceVoiceCount ;
-	DWORD										ActiveSubmixVoiceCount ;
-	DWORD										ActiveResamplerCount ;
-	DWORD										ActiveMatrixMixCount ;
-	DWORD										ActiveXmaSourceVoices ;
-	DWORD										ActiveXmaStreams ;
-} D_XAUDIO2_PERFORMANCE_DATA ;
-
-typedef struct tagD_XAUDIO2_DEBUG_CONFIGURATION
-{
-	DWORD										TraceMask ;
-	DWORD										BreakMask ;
-	BOOL										LogThreadID ;
-	BOOL										LogFileline ;
-	BOOL										LogFunctionName ;
-	BOOL										LogTiming ;
-} D_XAUDIO2_DEBUG_CONFIGURATION ;
-
-typedef struct tagD_XAUDIO2_EFFECT_CHAIN
-{
-	DWORD										EffectCount ;
-	D_XAUDIO2_EFFECT_DESCRIPTOR*				pEffectDescriptors ;
-} D_XAUDIO2_EFFECT_CHAIN ;
-
-typedef struct tagD_XAUDIO2_BUFFER
-{
-	DWORD										Flags ;
-	DWORD										AudioBytes ;
-	const BYTE*									pAudioData ;
-	DWORD										PlayBegin ;
-	DWORD										PlayLength ;
-	DWORD										LoopBegin ;
-	DWORD										LoopLength ;
-	DWORD										LoopCount ;
-	void*										pContext ;
-} D_XAUDIO2_BUFFER;
-
-typedef struct tagD_XAUDIO2_FILTER_PARAMETERS
-{
-	D_XAUDIO2_FILTER_TYPE						Type;
-	float										Frequency;
-	float										OneOverQ;
-} D_XAUDIO2_FILTER_PARAMETERS ;
-
-typedef struct tagD_XAUDIO2_BUFFER_WMA
-{
-	const DWORD*								pDecodedPacketCumulativeBytes ;
-	DWORD										PacketCount ;
-} D_XAUDIO2_BUFFER_WMA ;
-
-class D_IXAudio2VoiceCallback
-{
-public:
-	virtual void    __stdcall OnVoiceProcessingPassStart( DWORD BytesRequired ) = 0 ;
-	virtual void    __stdcall OnVoiceProcessingPassEnd	() = 0 ;
-	virtual void    __stdcall OnStreamEnd				() = 0 ;
-	virtual void    __stdcall OnBufferStart				( void* pBufferContext ) = 0 ;
-	virtual void    __stdcall OnBufferEnd				( void* pBufferContext ) = 0 ;
-	virtual void    __stdcall OnLoopEnd					( void* pBufferContext ) = 0 ;
-	virtual void    __stdcall OnVoiceError				( void* pBufferContext, HRESULT Error ) = 0 ;
-};
-
-class D_IXAudio2EngineCallback
-{
-public:
-	virtual void    __stdcall OnProcessingPassStart		() = 0 ;
-	virtual void    __stdcall OnProcessingPassEnd		() = 0 ;
-	virtual void    __stdcall OnCriticalError			( HRESULT Error ) = 0 ;
-};
-
-class D_IXAudio2 : public IUnknown
-{
-public:
-	virtual HRESULT __stdcall QueryInterface			( REFIID riid,  void** ppvInterface ) = 0 ;
-	virtual ULONG   __stdcall AddRef					( void ) = 0 ;
-	virtual ULONG   __stdcall Release					( void ) = 0 ;
-	virtual HRESULT __stdcall GetDeviceCount			( DWORD* pCount ) = 0 ;
-	virtual HRESULT __stdcall GetDeviceDetails			( DWORD Index,  D_XAUDIO2_DEVICE_DETAILS* pDeviceDetails ) = 0 ;
-	virtual HRESULT __stdcall Initialize				( DWORD Flags = 0, D_XAUDIO2_PROCESSOR XAudio2Processor = D_XAUDIO2_DEFAULT_PROCESSOR ) = 0 ;
-	virtual HRESULT __stdcall RegisterForCallbacks		( D_IXAudio2EngineCallback* pCallback ) = 0 ;
-	virtual void    __stdcall UnregisterForCallbacks	( D_IXAudio2EngineCallback* pCallback ) = 0 ;
-	virtual HRESULT __stdcall CreateSourceVoice			( class D_IXAudio2SourceVoice** ppSourceVoice, const WAVEFORMATEX* pSourceFormat, DWORD Flags = 0, float MaxFrequencyRatio = D_XAUDIO2_DEFAULT_FREQ_RATIO, class D_IXAudio2VoiceCallback* pCallback = NULL, const D_XAUDIO2_VOICE_SENDS* pSendList = NULL, const D_XAUDIO2_EFFECT_CHAIN* pEffectChain = NULL ) = 0 ;
-	virtual HRESULT __stdcall CreateSubmixVoice			( class D_IXAudio2SubmixVoice** ppSubmixVoice, DWORD InputChannels, DWORD InputSampleRate, DWORD Flags = 0, DWORD ProcessingStage = 0, const D_XAUDIO2_VOICE_SENDS* pSendList = NULL, const D_XAUDIO2_EFFECT_CHAIN* pEffectChain = NULL ) = 0 ;
-	virtual HRESULT __stdcall CreateMasteringVoice		( class D_IXAudio2MasteringVoice** ppMasteringVoice, DWORD InputChannels = D_XAUDIO2_DEFAULT_CHANNELS, DWORD InputSampleRate = D_XAUDIO2_DEFAULT_SAMPLERATE, DWORD Flags = 0, DWORD DeviceIndex = 0, const D_XAUDIO2_EFFECT_CHAIN* pEffectChain = NULL ) = 0 ;
-	virtual HRESULT __stdcall StartEngine				( void ) = 0 ;
-	virtual void    __stdcall StopEngine				( void ) = 0 ;
-	virtual HRESULT __stdcall CommitChanges				( DWORD OperationSet ) = 0 ;
-	virtual void    __stdcall GetPerformanceData		( D_XAUDIO2_PERFORMANCE_DATA* pPerfData ) = 0 ;
-	virtual void    __stdcall SetDebugConfigurationv	( const D_XAUDIO2_DEBUG_CONFIGURATION* pDebugConfiguration, void* pReserved = NULL ) = 0 ;
-} ;
-
-class D_IXAudio2_8 : public IUnknown
-{
-public :
-    virtual HRESULT __stdcall QueryInterface			( REFIID riid, void** ppvInterface ) = 0 ;
-    virtual ULONG   __stdcall AddRef					( void ) = 0 ;
-    virtual ULONG   __stdcall Release					( void ) = 0 ;
-    virtual HRESULT __stdcall RegisterForCallbacks		( D_IXAudio2EngineCallback* pCallback ) = 0 ;
-    virtual void    __stdcall UnregisterForCallbacks	( D_IXAudio2EngineCallback* pCallback ) = 0 ;
-    virtual HRESULT __stdcall CreateSourceVoice			( class D_IXAudio2_8SourceVoice** ppSourceVoice, const WAVEFORMATEX* pSourceFormat, DWORD Flags = 0, float MaxFrequencyRatio = D_XAUDIO2_DEFAULT_FREQ_RATIO, D_IXAudio2VoiceCallback* pCallback = NULL, const D_XAUDIO2_VOICE_SENDS2_8* pSendList = NULL, const D_XAUDIO2_EFFECT_CHAIN* pEffectChain = NULL ) = 0 ;
-    virtual HRESULT __stdcall CreateSubmixVoice			( class D_IXAudio2_8SubmixVoice** ppSubmixVoice, DWORD InputChannels, DWORD InputSampleRate, DWORD Flags = 0, DWORD ProcessingStage = 0, const D_XAUDIO2_VOICE_SENDS* pSendList = NULL, const D_XAUDIO2_EFFECT_CHAIN* pEffectChain = NULL ) = 0 ;
-    virtual HRESULT __stdcall CreateMasteringVoice		( class D_IXAudio2_8MasteringVoice** ppMasteringVoice, DWORD InputChannels = D_XAUDIO2_DEFAULT_CHANNELS, DWORD InputSampleRate = D_XAUDIO2_DEFAULT_SAMPLERATE, DWORD Flags = 0, LPCWSTR szDeviceId = NULL, const D_XAUDIO2_EFFECT_CHAIN* pEffectChain = NULL, D_AUDIO_STREAM_CATEGORY StreamCategory = D_AudioCategory_GameEffects ) = 0 ;
-    virtual HRESULT __stdcall StartEngine				( void ) = 0 ;
-    virtual void    __stdcall StopEngine				( void ) = 0 ;
-    virtual HRESULT __stdcall CommitChanges				( DWORD OperationSet ) = 0 ;
-    virtual void    __stdcall GetPerformanceData		( D_XAUDIO2_PERFORMANCE_DATA* pPerfData ) = 0 ;
-    virtual void    __stdcall SetDebugConfiguration		( const D_XAUDIO2_DEBUG_CONFIGURATION* pDebugConfiguration, void* pReserved = NULL ) = 0 ;
-} ;
-
-class D_IXAudio2Voice
-{
-public:
-	virtual void    __stdcall GetVoiceDetailsv			( D_XAUDIO2_VOICE_DETAILS* pVoiceDetails ) = 0 ;
-	virtual HRESULT __stdcall SetOutputVoices			( const D_XAUDIO2_VOICE_SENDS* pSendList ) = 0 ;
-	virtual HRESULT __stdcall SetEffectChain			( const D_XAUDIO2_EFFECT_CHAIN* pEffectChain ) = 0 ;
-	virtual HRESULT __stdcall EnableEffect				( DWORD EffectIndex, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual HRESULT __stdcall DisableEffect				( DWORD EffectIndex, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetEffectState			( DWORD EffectIndex,  BOOL* pEnabled ) = 0 ;
-	virtual HRESULT __stdcall SetEffectParameters		( DWORD EffectIndex, const void* pParameters, DWORD ParametersByteSize, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual HRESULT __stdcall GetEffectParameters		( DWORD EffectIndex, void* pParameters, DWORD ParametersByteSize ) = 0 ;
-	virtual HRESULT __stdcall SetFilterParameters		( const D_XAUDIO2_FILTER_PARAMETERS* pParameters, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetFilterParameters		( D_XAUDIO2_FILTER_PARAMETERS* pParameters ) = 0 ;
-	virtual HRESULT __stdcall SetOutputFilterParameters	( D_IXAudio2Voice* pDestinationVoice, const D_XAUDIO2_FILTER_PARAMETERS* pParameters, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetOutputFilterParameters	( D_IXAudio2Voice* pDestinationVoice, D_XAUDIO2_FILTER_PARAMETERS* pParameters ) = 0 ;
-	virtual HRESULT __stdcall SetVolume					( float Volume, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetVolume					( float* pVolume ) = 0 ;
-	virtual HRESULT __stdcall SetChannelVolumes			( DWORD Channels, const float* pVolumes, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetChannelVolumes			( DWORD Channels, float* pVolumes ) = 0 ; 
-	virtual HRESULT __stdcall SetOutputMatrix			( D_IXAudio2Voice* pDestinationVoice, DWORD SourceChannels, DWORD DestinationChannels, const float* pLevelMatrix, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetOutputMatrix			( D_IXAudio2Voice* pDestinationVoice, DWORD SourceChannels, DWORD DestinationChannels, float* pLevelMatrix ) = 0 ;
-	virtual void    __stdcall DestroyVoice				( void ) = 0 ;
-} ;
-
-class D_IXAudio2_8Voice
-{
-public:
-	virtual void    __stdcall GetVoiceDetails			( D_XAUDIO2_VOICE_DETAILS2_8* pVoiceDetails ) = 0 ;
-	virtual HRESULT __stdcall SetOutputVoices			( const D_XAUDIO2_VOICE_SENDS* pSendList ) = 0 ;
-	virtual HRESULT __stdcall SetEffectChain			( const D_XAUDIO2_EFFECT_CHAIN* pEffectChain ) = 0 ;
-	virtual HRESULT __stdcall EnableEffect				( DWORD EffectIndex, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual HRESULT __stdcall DisableEffect				( DWORD EffectIndex, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetEffectState			( DWORD EffectIndex, BOOL* pEnabled ) = 0 ;
-	virtual HRESULT __stdcall SetEffectParameters		( DWORD EffectIndex, const void* pParameters, DWORD ParametersByteSize, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual HRESULT __stdcall GetEffectParameters		( DWORD EffectIndex, void* pParameters, DWORD ParametersByteSize ) = 0 ;
-	virtual HRESULT __stdcall SetFilterParameters		( const D_XAUDIO2_FILTER_PARAMETERS* pParameters, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetFilterParameters		( D_XAUDIO2_FILTER_PARAMETERS* pParameters ) = 0 ;
-	virtual HRESULT __stdcall SetOutputFilterParameters	( D_IXAudio2_8Voice* pDestinationVoice, const D_XAUDIO2_FILTER_PARAMETERS* pParameters, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetOutputFilterParameters	( D_IXAudio2_8Voice* pDestinationVoice, D_XAUDIO2_FILTER_PARAMETERS* pParameters ) = 0 ;
-	virtual HRESULT __stdcall SetVolume					( float Volume, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetVolume					( float* pVolume ) = 0 ;
-	virtual HRESULT __stdcall SetChannelVolumes			( DWORD Channels, const float* pVolumes, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetChannelVolumes			( DWORD Channels, float* pVolumes ) = 0 ;
-	virtual HRESULT __stdcall SetOutputMatrix			( D_IXAudio2_8Voice* pDestinationVoice, DWORD SourceChannels, DWORD DestinationChannels, const float* pLevelMatrix, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetOutputMatrix			( D_IXAudio2_8Voice* pDestinationVoice, DWORD SourceChannels, DWORD DestinationChannels, float* pLevelMatrix ) = 0 ;
-	virtual void    __stdcall DestroyVoice				( void ) = 0 ;
-} ;
-
-class D_IXAudio2SubmixVoice : public D_IXAudio2Voice
-{
-};
-
-class D_IXAudio2_8SubmixVoice : public D_IXAudio2_8Voice
-{
-};
-
-class D_IXAudio2MasteringVoice : public D_IXAudio2Voice
-{
-};
-
-class D_IXAudio2_8MasteringVoice : public D_IXAudio2_8Voice
-{
-public :
-	virtual HRESULT __stdcall GetChannelMask			( DWORD * pChannelmask ) = 0 ;
-};
-
-class D_IXAudio2SourceVoice : public D_IXAudio2Voice
-{
-public:
-	virtual HRESULT __stdcall Start						( DWORD Flags = 0, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual HRESULT __stdcall Stop						( DWORD Flags = 0, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual HRESULT __stdcall SubmitSourceBuffer		( const D_XAUDIO2_BUFFER* pBuffer,  const D_XAUDIO2_BUFFER_WMA* pBufferWMA = NULL ) = 0 ;
-	virtual HRESULT __stdcall FlushSourceBuffers		( void ) = 0 ;
-	virtual HRESULT __stdcall Discontinuity				( void ) = 0 ;
-	virtual HRESULT __stdcall ExitLoop					( DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetState					( D_XAUDIO2_VOICE_STATE* pVoiceState ) = 0 ;
-	virtual HRESULT __stdcall SetFrequencyRatio			( float Ratio, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetFrequencyRatio			( float* pRatio ) = 0 ;
-	virtual HRESULT __stdcall SetSourceSampleRate		( DWORD NewSourceSampleRate ) = 0 ;
-};
-
-class D_IXAudio2_8SourceVoice : public D_IXAudio2_8Voice
-{
-public:
-	virtual HRESULT __stdcall Start						( DWORD Flags = 0, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual HRESULT __stdcall Stop						( DWORD Flags = 0, DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual HRESULT __stdcall SubmitSourceBuffer		( const D_XAUDIO2_BUFFER* pBuffer, const D_XAUDIO2_BUFFER_WMA* pBufferWMA = NULL ) = 0 ;
-	virtual HRESULT __stdcall FlushSourceBuffers		( void ) = 0 ;
-	virtual HRESULT __stdcall Discontinuity				( void ) = 0 ;
-	virtual HRESULT __stdcall ExitLoop					( DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetState					( D_XAUDIO2_VOICE_STATE* pVoiceState, DWORD Flags = 0 ) = 0 ;
-	virtual HRESULT __stdcall SetFrequencyRatio			( float Ratio,  DWORD OperationSet = D_XAUDIO2_COMMIT_NOW ) = 0 ;
-	virtual void    __stdcall GetFrequencyRatio			( float* pRatio ) = 0 ;
-	virtual HRESULT __stdcall SetSourceSampleRate		( DWORD NewSourceSampleRate ) = 0 ;
-} ;
-
-#ifndef DX_GCC_COMPILE
-#pragma pack(pop)
-#pragma pack()
-#else
-#pragma pack(pop)
-#endif
-
-// ÇvÇ`ÇrÇ`ÇoÇh ---------------------------------------------------------------
-
-typedef long									D_MUSIC_TIME ;
-typedef LONGLONG								D_REFERENCE_TIME ;
-
-#if 0
-
-enum D_EDataFlow
-{
-	D_eRender,
-	D_eCapture,
-	D_eAll,
-	D_EDataFlow_enum_count 
-} ;
-
-enum D_ERole
-{
-	D_eConsole,
-	D_eMultimedia,
-	D_eCommunications,
-	D_ERole_enum_count 
-} ;
-
-enum D_AUDCLNT_SHAREMODE
-{ 
-	D_AUDCLNT_SHAREMODE_SHARED, 
-	D_AUDCLNT_SHAREMODE_EXCLUSIVE 
-} ;
-
-#define D_DEVICE_STATE_ACTIVE							(0x00000001)
-#define D_DEVICE_STATE_DISABLED							(0x00000002)
-#define D_DEVICE_STATE_NOTPRESENT						(0x00000004)
-#define D_DEVICE_STATE_UNPLUGGED						(0x00000008)
-#define D_DEVICE_STATEMASK_ALL							(0x0000000f)
-
-#define D_AUDCLNT_STREAMFLAGS_CROSSPROCESS				(0x00010000)
-#define D_AUDCLNT_STREAMFLAGS_LOOPBACK					(0x00020000)
-#define D_AUDCLNT_STREAMFLAGS_EVENTCALLBACK				(0x00040000)
-#define D_AUDCLNT_STREAMFLAGS_NOPERSIST					(0x00080000)
-#define D_AUDCLNT_STREAMFLAGS_RATEADJUST				(0x00100000)
-#define D_AUDCLNT_SESSIONFLAGS_EXPIREWHENUNOWNED		(0x10000000)
-#define D_AUDCLNT_SESSIONFLAGS_DISPLAY_HIDE				(0x20000000)
-#define D_AUDCLNT_SESSIONFLAGS_DISPLAY_HIDEWHENEXPIRED	(0x40000000)
-
-class D_IPropertyStore : public IUnknown
-{
-public:
-	virtual HRESULT __stdcall GetCount					( DWORD *cProps ) = 0 ;
-	virtual HRESULT __stdcall GetAt						( DWORD iProp, PROPERTYKEY *pkey ) = 0 ;
-	virtual HRESULT __stdcall GetValue					( PROPERTYKEY &key, PROPVARIANT *pv ) = 0 ;
-	virtual HRESULT __stdcall SetValue					( PROPERTYKEY &key, PROPVARIANT &propvar ) = 0 ;
-	virtual HRESULT __stdcall Commit					( void ) = 0 ;
-};
-
-class D_IMMDevice : public IUnknown
-{
-public:
-	virtual  HRESULT __stdcall Activate					( REFIID iid, DWORD dwClsCtx, PROPVARIANT *pActivationParams, void **ppInterface ) = 0 ;
-	virtual  HRESULT __stdcall OpenPropertyStore		( DWORD stgmAccess, D_IPropertyStore **ppProperties ) = 0 ;
-	virtual  HRESULT __stdcall GetId					( LPWSTR *ppstrId ) = 0 ;
-	virtual  HRESULT __stdcall GetState					( DWORD *pdwState ) = 0 ;
-} ;
-
-class D_IMMNotificationClient : public IUnknown
-{
-public:
-	virtual HRESULT __stdcall OnDeviceStateChanged		( LPCWSTR pwstrDeviceId, DWORD dwNewState ) = 0 ;
-	virtual HRESULT __stdcall OnDeviceAdded				( LPCWSTR pwstrDeviceId ) = 0 ;
-	virtual HRESULT __stdcall OnDeviceRemoved			( LPCWSTR pwstrDeviceId ) = 0 ;
-	virtual HRESULT __stdcall OnDefaultDeviceChanged	( D_EDataFlow flow, D_ERole role, LPCWSTR pwstrDefaultDeviceId ) = 0 ;
-	virtual HRESULT __stdcall OnPropertyValueChanged	( LPCWSTR pwstrDeviceId, const PROPERTYKEY key ) = 0 ;
-} ;
-
-class D_IMMDeviceCollection : public IUnknown
-{
-public:
-	virtual HRESULT __stdcall GetCount					( UINT *pcDevices ) = 0 ;
-	virtual HRESULT __stdcall Item						( UINT nDevice, D_IMMDevice **ppDevice ) = 0 ;
-} ;
-
-class D_IMMDeviceEnumerator : public IUnknown
-{
-public:
-	virtual HRESULT __stdcall EnumAudioEndpoints		( D_EDataFlow dataFlow, DWORD dwStateMask, D_IMMDeviceCollection **ppDevices ) = 0 ;
-	virtual HRESULT __stdcall GetDefaultAudioEndpoint	( D_EDataFlow dataFlow, D_ERole role, D_IMMDevice **ppEndpoint ) = 0 ;
-	virtual HRESULT __stdcall GetDevice					( LPCWSTR pwstrId, D_IMMDevice **ppDevice ) = 0 ;
-	virtual HRESULT __stdcall RegisterEndpointNotificationCallback( D_IMMNotificationClient *pClient ) = 0 ;
-	virtual HRESULT __stdcall UnregisterEndpointNotificationCallback( D_IMMNotificationClient *pClient ) = 0 ;
-} ;
-
-class D_IAudioRenderClient : public IUnknown
-{
-public:
-	virtual HRESULT __stdcall GetBuffer					( DWORD NumFramesRequested, BYTE **ppData ) = 0 ;
-	virtual HRESULT __stdcall ReleaseBuffer				( DWORD NumFramesWritten, DWORD dwFlags ) = 0 ;
-} ;
-
-class D_IAudioClient : public IUnknown
-{
-public:
-	virtual HRESULT __stdcall Initialize				( D_AUDCLNT_SHAREMODE ShareMode, DWORD StreamFlags, D_REFERENCE_TIME hnsBufferDuration, D_REFERENCE_TIME hnsPeriodicity, const WAVEFORMATEX *pFormat, LPCGUID AudioSessionGuid ) = 0 ;
-	virtual HRESULT __stdcall GetBufferSize				( DWORD *pNumBufferFrames ) = 0 ;
-	virtual HRESULT __stdcall GetStreamLatency			( D_REFERENCE_TIME *phnsLatency ) = 0 ;
-	virtual HRESULT __stdcall GetCurrentPadding			( DWORD *pNumPaddingFrames ) = 0 ;
-	virtual HRESULT __stdcall IsFormatSupported			( D_AUDCLNT_SHAREMODE ShareMode, const WAVEFORMATEX *pFormat, WAVEFORMATEX **ppClosestMatch ) = 0 ;
-	virtual HRESULT __stdcall GetMixFormat				( WAVEFORMATEX **ppDeviceFormat ) = 0 ;
-	virtual HRESULT __stdcall GetDevicePeriod			( D_REFERENCE_TIME *phnsDefaultDevicePeriod, D_REFERENCE_TIME *phnsMinimumDevicePeriod ) = 0 ;
-	virtual HRESULT __stdcall Start						( void ) = 0 ;
-	virtual HRESULT __stdcall Stop						( void ) = 0 ;
-	virtual HRESULT __stdcall Reset						( void ) = 0 ;
-	virtual HRESULT __stdcall SetEventHandle			( HANDLE eventHandle ) = 0 ;
-	virtual HRESULT __stdcall GetService				( REFIID riid, void **ppv ) = 0 ;
-} ;
-
-#endif
-
 #endif // __WINDOWS__
 
 // ÇcÇâÇíÇÖÇÉÇîÇlÇïÇìÇâÇÉ -----------------------------------------------------
@@ -1089,6 +197,10 @@ typedef enum tagD_DMUS_SEGF_FLAGS
 {
 	D_DMUS_SEGF_REFTIME							= 1 << 6,
 } D_DMUS_SEGF_FLAGS ;
+
+
+typedef long									D_MUSIC_TIME ;
+typedef LONGLONG								D_REFERENCE_TIME ;
 
 typedef struct tagD_DMUS_PORTCAPS
 {
@@ -1345,50 +457,7 @@ public :
 
 #define D_DDPCAPS_8BIT							(0x00000004l)
 
-#define D_DDSCAPS2_RESERVED4					(0x00000002L)
-#define D_DDSCAPS2_HARDWAREDEINTERLACE			(0x00000000L)
-#define D_DDSCAPS2_HINTDYNAMIC					(0x00000004L)
-#define D_DDSCAPS2_HINTSTATIC					(0x00000008L)
 #define D_DDSCAPS2_TEXTUREMANAGE				(0x00000010L)
-#define D_DDSCAPS2_RESERVED1					(0x00000020L)
-#define D_DDSCAPS2_RESERVED2					(0x00000040L)
-#define D_DDSCAPS2_OPAQUE						(0x00000080L)
-#define D_DDSCAPS2_HINTANTIALIASING				(0x00000100L)
-#define D_DDSCAPS2_CUBEMAP						(0x00000200L)
-#define D_DDSCAPS2_CUBEMAP_POSITIVEX			(0x00000400L)
-#define D_DDSCAPS2_CUBEMAP_NEGATIVEX			(0x00000800L)
-#define D_DDSCAPS2_CUBEMAP_POSITIVEY			(0x00001000L)
-#define D_DDSCAPS2_CUBEMAP_NEGATIVEY			(0x00002000L)
-#define D_DDSCAPS2_CUBEMAP_POSITIVEZ			(0x00004000L)
-#define D_DDSCAPS2_CUBEMAP_NEGATIVEZ			(0x00008000L)
-#define D_DDSCAPS2_CUBEMAP_ALLFACES				(	D_DDSCAPS2_CUBEMAP_POSITIVEX |\
-													D_DDSCAPS2_CUBEMAP_NEGATIVEX |\
-													D_DDSCAPS2_CUBEMAP_POSITIVEY |\
-													D_DDSCAPS2_CUBEMAP_NEGATIVEY |\
-													D_DDSCAPS2_CUBEMAP_POSITIVEZ |\
-													D_DDSCAPS2_CUBEMAP_NEGATIVEZ )
-#define D_DDSCAPS2_MIPMAPSUBLEVEL				(0x00010000L)
-#define D_DDSCAPS2_D3DTEXTUREMANAGE				(0x00020000L)
-#define D_DDSCAPS2_DONOTPERSIST					(0x00040000L)
-#define D_DDSCAPS2_STEREOSURFACELEFT			(0x00080000L)
-#define D_DDSCAPS2_VOLUME						(0x00200000L)
-#define D_DDSCAPS2_NOTUSERLOCKABLE				(0x00400000L)
-#define D_DDSCAPS2_POINTS						(0x00800000L)
-#define D_DDSCAPS2_RTPATCHES					(0x01000000L)
-#define D_DDSCAPS2_NPATCHES						(0x02000000L)
-#define D_DDSCAPS2_RESERVED3					(0x04000000L)
-#define D_DDSCAPS2_DISCARDBACKBUFFER			(0x10000000L)
-#define D_DDSCAPS2_ENABLEALPHACHANNEL			(0x20000000L)
-#define D_DDSCAPS2_EXTENDEDFORMATPRIMARY		(0x40000000L)
-#define D_DDSCAPS2_ADDITIONALPRIMARY			(0x80000000L)
-#define D_DDSCAPS3_MULTISAMPLE_MASK				(0x0000001FL)
-#define D_DDSCAPS3_MULTISAMPLE_QUALITY_MASK		(0x000000E0L)
-#define D_DDSCAPS3_MULTISAMPLE_QUALITY_SHIFT	(5)
-#define D_DDSCAPS3_RESERVED1					(0x00000100L)
-#define D_DDSCAPS3_RESERVED2					(0x00000200L)
-#define D_DDSCAPS3_LIGHTWEIGHTMIPMAP			(0x00000400L)
-#define D_DDSCAPS3_AUTOGENMIPMAP				(0x00000800L)
-#define D_DDSCAPS3_DMAP							(0x00001000L)
 
 #define D_DDBLT_COLORFILL						(0x00000400l)
 #define D_DDBLT_WAIT							(0x01000000l)
@@ -2033,1570 +1102,7 @@ public :
 
 #endif // __WINDOWS__
 
-
-
-// ÇcÇâÇíÇÖÇÉÇîÇRÇcÇPÇP -------------------------------------------------------
-
-#define D_DXGI_CPU_ACCESS_NONE					( 0 )
-#define D_DXGI_CPU_ACCESS_DYNAMIC				( 1 )
-#define D_DXGI_CPU_ACCESS_READ_WRITE			( 2 )
-#define D_DXGI_CPU_ACCESS_SCRATCH				( 3 )
-#define D_DXGI_CPU_ACCESS_FIELD					15
-#define D_DXGI_USAGE_SHADER_INPUT				( 1L << (0 + 4) )
-#define D_DXGI_USAGE_RENDER_TARGET_OUTPUT		( 1L << (1 + 4) )
-#define D_DXGI_USAGE_BACK_BUFFER				( 1L << (2 + 4) )
-#define D_DXGI_USAGE_SHARED						( 1L << (3 + 4) )
-#define D_DXGI_USAGE_READ_ONLY					( 1L << (4 + 4) )
-#define D_DXGI_USAGE_DISCARD_ON_PRESENT			( 1L << (5 + 4) )
-#define D_DXGI_USAGE_UNORDERED_ACCESS			( 1L << (6 + 4) )
-typedef UINT D_DXGI_USAGE ;
-
-typedef enum tagD_DXGI_SWAP_EFFECT
-{
-	D_DXGI_SWAP_EFFECT_DISCARD					= 0,
-	D_DXGI_SWAP_EFFECT_SEQUENTIAL				= 1
-} D_DXGI_SWAP_EFFECT;
-
-typedef enum tagD_DXGI_MODE_SCANLINE_ORDER
-{
-	D_DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED		= 0,
-	D_DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE		= 1,
-	D_DXGI_MODE_SCANLINE_ORDER_UPPER_FIELD_FIRST= 2,
-	D_DXGI_MODE_SCANLINE_ORDER_LOWER_FIELD_FIRST= 3
-} D_DXGI_MODE_SCANLINE_ORDER ;
-
-typedef enum tagD_DXGI_MODE_SCALING
-{
-	D_DXGI_MODE_SCALING_UNSPECIFIED				= 0,
-	D_DXGI_MODE_SCALING_CENTERED				= 1,
-	D_DXGI_MODE_SCALING_STRETCHED				= 2
-} D_DXGI_MODE_SCALING;
-
-typedef enum tagD_DXGI_MODE_ROTATION
-{
-	D_DXGI_MODE_ROTATION_UNSPECIFIED			= 0,
-	D_DXGI_MODE_ROTATION_IDENTITY				= 1,
-	D_DXGI_MODE_ROTATION_ROTATE90				= 2,
-	D_DXGI_MODE_ROTATION_ROTATE180				= 3,
-	D_DXGI_MODE_ROTATION_ROTATE270				= 4
-} D_DXGI_MODE_ROTATION ;
-
-typedef enum tagD_DXGI_FORMAT
-{
-	D_DXGI_FORMAT_UNKNOWN						= 0,
-	D_DXGI_FORMAT_R32G32B32A32_TYPELESS			= 1,
-	D_DXGI_FORMAT_R32G32B32A32_FLOAT			= 2,
-	D_DXGI_FORMAT_R32G32B32A32_UINT				= 3,
-	D_DXGI_FORMAT_R32G32B32A32_SINT				= 4,
-	D_DXGI_FORMAT_R32G32B32_TYPELESS			= 5,
-	D_DXGI_FORMAT_R32G32B32_FLOAT				= 6,
-	D_DXGI_FORMAT_R32G32B32_UINT				= 7,
-	D_DXGI_FORMAT_R32G32B32_SINT				= 8,
-	D_DXGI_FORMAT_R16G16B16A16_TYPELESS			= 9,
-	D_DXGI_FORMAT_R16G16B16A16_FLOAT			= 10,
-	D_DXGI_FORMAT_R16G16B16A16_UNORM			= 11,
-	D_DXGI_FORMAT_R16G16B16A16_UINT				= 12,
-	D_DXGI_FORMAT_R16G16B16A16_SNORM			= 13,
-	D_DXGI_FORMAT_R16G16B16A16_SINT				= 14,
-	D_DXGI_FORMAT_R32G32_TYPELESS				= 15,
-	D_DXGI_FORMAT_R32G32_FLOAT					= 16,
-	D_DXGI_FORMAT_R32G32_UINT					= 17,
-	D_DXGI_FORMAT_R32G32_SINT					= 18,
-	D_DXGI_FORMAT_R32G8X24_TYPELESS				= 19,
-	D_DXGI_FORMAT_D32_FLOAT_S8X24_UINT			= 20,
-	D_DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS		= 21,
-	D_DXGI_FORMAT_X32_TYPELESS_G8X24_UINT		= 22,
-	D_DXGI_FORMAT_R10G10B10A2_TYPELESS			= 23,
-	D_DXGI_FORMAT_R10G10B10A2_UNORM				= 24,
-	D_DXGI_FORMAT_R10G10B10A2_UINT				= 25,
-	D_DXGI_FORMAT_R11G11B10_FLOAT				= 26,
-	D_DXGI_FORMAT_R8G8B8A8_TYPELESS				= 27,
-	D_DXGI_FORMAT_R8G8B8A8_UNORM				= 28,
-	D_DXGI_FORMAT_R8G8B8A8_UNORM_SRGB			= 29,
-	D_DXGI_FORMAT_R8G8B8A8_UINT					= 30,
-	D_DXGI_FORMAT_R8G8B8A8_SNORM				= 31,
-	D_DXGI_FORMAT_R8G8B8A8_SINT					= 32,
-	D_DXGI_FORMAT_R16G16_TYPELESS				= 33,
-	D_DXGI_FORMAT_R16G16_FLOAT					= 34,
-	D_DXGI_FORMAT_R16G16_UNORM					= 35,
-	D_DXGI_FORMAT_R16G16_UINT					= 36,
-	D_DXGI_FORMAT_R16G16_SNORM					= 37,
-	D_DXGI_FORMAT_R16G16_SINT					= 38,
-	D_DXGI_FORMAT_R32_TYPELESS					= 39,
-	D_DXGI_FORMAT_D32_FLOAT						= 40,
-	D_DXGI_FORMAT_R32_FLOAT						= 41,
-	D_DXGI_FORMAT_R32_UINT						= 42,
-	D_DXGI_FORMAT_R32_SINT						= 43,
-	D_DXGI_FORMAT_R24G8_TYPELESS				= 44,
-	D_DXGI_FORMAT_D24_UNORM_S8_UINT				= 45,
-	D_DXGI_FORMAT_R24_UNORM_X8_TYPELESS			= 46,
-	D_DXGI_FORMAT_X24_TYPELESS_G8_UINT			= 47,
-	D_DXGI_FORMAT_R8G8_TYPELESS					= 48,
-	D_DXGI_FORMAT_R8G8_UNORM					= 49,
-	D_DXGI_FORMAT_R8G8_UINT						= 50,
-	D_DXGI_FORMAT_R8G8_SNORM					= 51,
-	D_DXGI_FORMAT_R8G8_SINT						= 52,
-	D_DXGI_FORMAT_R16_TYPELESS					= 53,
-	D_DXGI_FORMAT_R16_FLOAT						= 54,
-	D_DXGI_FORMAT_D16_UNORM						= 55,
-	D_DXGI_FORMAT_R16_UNORM						= 56,
-	D_DXGI_FORMAT_R16_UINT						= 57,
-	D_DXGI_FORMAT_R16_SNORM						= 58,
-	D_DXGI_FORMAT_R16_SINT						= 59,
-	D_DXGI_FORMAT_R8_TYPELESS					= 60,
-	D_DXGI_FORMAT_R8_UNORM						= 61,
-	D_DXGI_FORMAT_R8_UINT						= 62,
-	D_DXGI_FORMAT_R8_SNORM						= 63,
-	D_DXGI_FORMAT_R8_SINT						= 64,
-	D_DXGI_FORMAT_A8_UNORM						= 65,
-	D_DXGI_FORMAT_R1_UNORM						= 66,
-	D_DXGI_FORMAT_R9G9B9E5_SHAREDEXP			= 67,
-	D_DXGI_FORMAT_R8G8_B8G8_UNORM				= 68,
-	D_DXGI_FORMAT_G8R8_G8B8_UNORM				= 69,
-	D_DXGI_FORMAT_BC1_TYPELESS					= 70,
-	D_DXGI_FORMAT_BC1_UNORM						= 71,
-	D_DXGI_FORMAT_BC1_UNORM_SRGB				= 72,
-	D_DXGI_FORMAT_BC2_TYPELESS					= 73,
-	D_DXGI_FORMAT_BC2_UNORM						= 74,
-	D_DXGI_FORMAT_BC2_UNORM_SRGB				= 75,
-	D_DXGI_FORMAT_BC3_TYPELESS					= 76,
-	D_DXGI_FORMAT_BC3_UNORM						= 77,
-	D_DXGI_FORMAT_BC3_UNORM_SRGB				= 78,
-	D_DXGI_FORMAT_BC4_TYPELESS					= 79,
-	D_DXGI_FORMAT_BC4_UNORM						= 80,
-	D_DXGI_FORMAT_BC4_SNORM						= 81,
-	D_DXGI_FORMAT_BC5_TYPELESS					= 82,
-	D_DXGI_FORMAT_BC5_UNORM						= 83,
-	D_DXGI_FORMAT_BC5_SNORM						= 84,
-	D_DXGI_FORMAT_B5G6R5_UNORM					= 85,
-	D_DXGI_FORMAT_B5G5R5A1_UNORM				= 86,
-	D_DXGI_FORMAT_B8G8R8A8_UNORM				= 87,
-	D_DXGI_FORMAT_B8G8R8X8_UNORM				= 88,
-	D_DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM	= 89,
-	D_DXGI_FORMAT_B8G8R8A8_TYPELESS				= 90,
-	D_DXGI_FORMAT_B8G8R8A8_UNORM_SRGB			= 91,
-	D_DXGI_FORMAT_B8G8R8X8_TYPELESS				= 92,
-	D_DXGI_FORMAT_B8G8R8X8_UNORM_SRGB			= 93,
-	D_DXGI_FORMAT_BC6H_TYPELESS					= 94,
-	D_DXGI_FORMAT_BC6H_UF16						= 95,
-	D_DXGI_FORMAT_BC6H_SF16						= 96,
-	D_DXGI_FORMAT_BC7_TYPELESS					= 97,
-	D_DXGI_FORMAT_BC7_UNORM						= 98,
-	D_DXGI_FORMAT_BC7_UNORM_SRGB				= 99,
-	D_DXGI_FORMAT_AYUV							= 100,
-	D_DXGI_FORMAT_Y410							= 101,
-	D_DXGI_FORMAT_Y416							= 102,
-	D_DXGI_FORMAT_NV12							= 103,
-	D_DXGI_FORMAT_P010							= 104,
-	D_DXGI_FORMAT_P016							= 105,
-	D_DXGI_FORMAT_420_OPAQUE					= 106,
-	D_DXGI_FORMAT_YUY2							= 107,
-	D_DXGI_FORMAT_Y210							= 108,
-	D_DXGI_FORMAT_Y216							= 109,
-	D_DXGI_FORMAT_NV11							= 110,
-	D_DXGI_FORMAT_AI44							= 111,
-	D_DXGI_FORMAT_IA44							= 112,
-	D_DXGI_FORMAT_P8							= 113,
-	D_DXGI_FORMAT_A8P8							= 114,
-	D_DXGI_FORMAT_B4G4R4A4_UNORM				= 115,
-	D_DXGI_FORMAT_FORCE_UINT					= 0xffffffff
-} D_DXGI_FORMAT ;
-
-typedef enum tagD_D3D_DRIVER_TYPE
-{
-	D_D3D_DRIVER_TYPE_UNKNOWN					= 0,
-	D_D3D_DRIVER_TYPE_HARDWARE					= ( D_D3D_DRIVER_TYPE_UNKNOWN + 1 ) ,
-	D_D3D_DRIVER_TYPE_REFERENCE					= ( D_D3D_DRIVER_TYPE_HARDWARE + 1 ) ,
-	D_D3D_DRIVER_TYPE_NULL						= ( D_D3D_DRIVER_TYPE_REFERENCE + 1 ) ,
-	D_D3D_DRIVER_TYPE_SOFTWARE					= ( D_D3D_DRIVER_TYPE_NULL + 1 ) ,
-	D_D3D_DRIVER_TYPE_WARP						= ( D_D3D_DRIVER_TYPE_SOFTWARE + 1 ) 
-} D_D3D_DRIVER_TYPE ;
-
-typedef enum tagD_D3D_FEATURE_LEVEL
-{
-	D_D3D_FEATURE_LEVEL_9_1						= 0x9100,
-	D_D3D_FEATURE_LEVEL_9_2						= 0x9200,
-	D_D3D_FEATURE_LEVEL_9_3						= 0x9300,
-	D_D3D_FEATURE_LEVEL_10_0					= 0xa000,
-	D_D3D_FEATURE_LEVEL_10_1					= 0xa100,
-	D_D3D_FEATURE_LEVEL_11_0					= 0xb000,
-	D_D3D_FEATURE_LEVEL_11_1					= 0xb100
-} D_D3D_FEATURE_LEVEL ;
-
-typedef enum tagD_D3D11_RESOURCE_DIMENSION
-{
-	D_D3D11_RESOURCE_DIMENSION_UNKNOWN			= 0,
-	D_D3D11_RESOURCE_DIMENSION_BUFFER			= 1,
-	D_D3D11_RESOURCE_DIMENSION_TEXTURE1D		= 2,
-	D_D3D11_RESOURCE_DIMENSION_TEXTURE2D		= 3,
-	D_D3D11_RESOURCE_DIMENSION_TEXTURE3D		= 4
-} D_D3D11_RESOURCE_DIMENSION ;
-
-typedef enum tagD_D3D11_SRV_DIMENSION
-{
-	D_D3D11_SRV_DIMENSION_UNKNOWN				= 0,
-	D_D3D11_SRV_DIMENSION_BUFFER				= 1,
-	D_D3D11_SRV_DIMENSION_TEXTURE1D				= 2,
-	D_D3D11_SRV_DIMENSION_TEXTURE1DARRAY		= 3,
-	D_D3D11_SRV_DIMENSION_TEXTURE2D				= 4,
-	D_D3D11_SRV_DIMENSION_TEXTURE2DARRAY		= 5,
-	D_D3D11_SRV_DIMENSION_TEXTURE2DMS			= 6,
-	D_D3D11_SRV_DIMENSION_TEXTURE2DMSARRAY		= 7,
-	D_D3D11_SRV_DIMENSION_TEXTURE3D				= 8,
-	D_D3D11_SRV_DIMENSION_TEXTURECUBE			= 9,
-	D_D3D11_SRV_DIMENSION_TEXTURECUBEARRAY		= 10,
-	D_D3D11_SRV_DIMENSION_BUFFEREX				= 11
-} D_D3D11_SRV_DIMENSION ;
-
-typedef enum tagD_D3D11_DSV_DIMENSION
-{
-	D_D3D11_DSV_DIMENSION_UNKNOWN				= 0,
-	D_D3D11_DSV_DIMENSION_TEXTURE1D				= 1,
-	D_D3D11_DSV_DIMENSION_TEXTURE1DARRAY		= 2,
-	D_D3D11_DSV_DIMENSION_TEXTURE2D				= 3,
-	D_D3D11_DSV_DIMENSION_TEXTURE2DARRAY		= 4,
-	D_D3D11_DSV_DIMENSION_TEXTURE2DMS			= 5,
-	D_D3D11_DSV_DIMENSION_TEXTURE2DMSARRAY		= 6
-} D_D3D11_DSV_DIMENSION ;
-
-typedef enum tagD_D3D11_RTV_DIMENSION
-{
-	D_D3D11_RTV_DIMENSION_UNKNOWN				= 0,
-	D_D3D11_RTV_DIMENSION_BUFFER				= 1,
-	D_D3D11_RTV_DIMENSION_TEXTURE1D				= 2,
-	D_D3D11_RTV_DIMENSION_TEXTURE1DARRAY		= 3,
-	D_D3D11_RTV_DIMENSION_TEXTURE2D				= 4,
-	D_D3D11_RTV_DIMENSION_TEXTURE2DARRAY		= 5,
-	D_D3D11_RTV_DIMENSION_TEXTURE2DMS			= 6,
-	D_D3D11_RTV_DIMENSION_TEXTURE2DMSARRAY		= 7,
-	D_D3D11_RTV_DIMENSION_TEXTURE3D				= 8
-} D_D3D11_RTV_DIMENSION ;
-
-typedef enum tagD_D3D11_UAV_DIMENSION
-{
-	D_D3D11_UAV_DIMENSION_UNKNOWN				= 0,
-	D_D3D11_UAV_DIMENSION_BUFFER				= 1,
-	D_D3D11_UAV_DIMENSION_TEXTURE1D				= 2,
-	D_D3D11_UAV_DIMENSION_TEXTURE1DARRAY		= 3,
-	D_D3D11_UAV_DIMENSION_TEXTURE2D				= 4,
-	D_D3D11_UAV_DIMENSION_TEXTURE2DARRAY		= 5,
-	D_D3D11_UAV_DIMENSION_TEXTURE3D				= 8
-} D_D3D11_UAV_DIMENSION ;
-
-typedef enum tagD_D3D11_USAGE
-{
-	D_D3D11_USAGE_DEFAULT						= 0,
-	D_D3D11_USAGE_IMMUTABLE						= 1,
-	D_D3D11_USAGE_DYNAMIC						= 2,
-	D_D3D11_USAGE_STAGING						= 3
-} D_D3D11_USAGE ;
-
-typedef enum tagD_D3D11_INPUT_CLASSIFICATION
-{
-	D_D3D11_INPUT_PER_VERTEX_DATA				= 0,
-	D_D3D11_INPUT_PER_INSTANCE_DATA				= 1
-} D_D3D11_INPUT_CLASSIFICATION;
-
-#define	D_D3D11_APPEND_ALIGNED_ELEMENT			( 0xffffffff )
-
-typedef enum tagD_D3D11_STANDARD_MULTISAMPLE_QUALITY_LEVELS
-{
-	D_D3D11_STANDARD_MULTISAMPLE_PATTERN		= 0xffffffff,
-	D_D3D11_CENTER_MULTISAMPLE_PATTERN			= 0xfffffffe
-} D_D3D11_STANDARD_MULTISAMPLE_QUALITY_LEVELS;
-
-typedef enum tagD_D3D11_DEVICE_CONTEXT_TYPE
-{
-	D_D3D11_DEVICE_CONTEXT_IMMEDIATE			= 0,
-	D_D3D11_DEVICE_CONTEXT_DEFERRED				= ( D_D3D11_DEVICE_CONTEXT_IMMEDIATE + 1 ) 
-} D_D3D11_DEVICE_CONTEXT_TYPE;
-
-typedef enum tagD_D3D11_BLEND
-{
-	D_D3D11_BLEND_ZERO							= 1,
-	D_D3D11_BLEND_ONE							= 2,
-	D_D3D11_BLEND_SRC_COLOR						= 3,
-	D_D3D11_BLEND_INV_SRC_COLOR					= 4,
-	D_D3D11_BLEND_SRC_ALPHA						= 5,
-	D_D3D11_BLEND_INV_SRC_ALPHA					= 6,
-	D_D3D11_BLEND_DEST_ALPHA					= 7,
-	D_D3D11_BLEND_INV_DEST_ALPHA				= 8,
-	D_D3D11_BLEND_DEST_COLOR					= 9,
-	D_D3D11_BLEND_INV_DEST_COLOR				= 10,
-	D_D3D11_BLEND_SRC_ALPHA_SAT					= 11,
-	D_D3D11_BLEND_BLEND_FACTOR					= 14,
-	D_D3D11_BLEND_INV_BLEND_FACTOR				= 15,
-	D_D3D11_BLEND_SRC1_COLOR					= 16,
-	D_D3D11_BLEND_INV_SRC1_COLOR				= 17,
-	D_D3D11_BLEND_SRC1_ALPHA					= 18,
-	D_D3D11_BLEND_INV_SRC1_ALPHA				= 19
-} D_D3D11_BLEND ;
-
-typedef enum tagD_D3D11_BLEND_OP
-{
-	D_D3D11_BLEND_OP_ADD						= 1,
-	D_D3D11_BLEND_OP_SUBTRACT					= 2,
-	D_D3D11_BLEND_OP_REV_SUBTRACT				= 3,
-	D_D3D11_BLEND_OP_MIN						= 4,
-	D_D3D11_BLEND_OP_MAX						= 5
-} D_D3D11_BLEND_OP ;
-
-typedef enum tagD_D3D11_COMPARISON_FUNC
-{
-	D_D3D11_COMPARISON_NEVER					= 1,
-	D_D3D11_COMPARISON_LESS						= 2,
-	D_D3D11_COMPARISON_EQUAL					= 3,
-	D_D3D11_COMPARISON_LESS_EQUAL				= 4,
-	D_D3D11_COMPARISON_GREATER					= 5,
-	D_D3D11_COMPARISON_NOT_EQUAL				= 6,
-	D_D3D11_COMPARISON_GREATER_EQUAL			= 7,
-	D_D3D11_COMPARISON_ALWAYS					= 8
-} D_D3D11_COMPARISON_FUNC ;
-
-typedef enum tagD_D3D11_DEPTH_WRITE_MASK
-{
-	D_D3D11_DEPTH_WRITE_MASK_ZERO				= 0,
-	D_D3D11_DEPTH_WRITE_MASK_ALL				= 1
-} D_D3D11_DEPTH_WRITE_MASK ;
-
-typedef enum D_D3D11_STENCIL_OP
-{
-	D_D3D11_STENCIL_OP_KEEP						= 1,
-	D_D3D11_STENCIL_OP_ZERO						= 2,
-	D_D3D11_STENCIL_OP_REPLACE					= 3,
-	D_D3D11_STENCIL_OP_INCR_SAT					= 4,
-	D_D3D11_STENCIL_OP_DECR_SAT					= 5,
-	D_D3D11_STENCIL_OP_INVERT					= 6,
-	D_D3D11_STENCIL_OP_INCR						= 7,
-	D_D3D11_STENCIL_OP_DECR						= 8
-} D_D3D11_STENCIL_OP ;
-
-typedef enum tagD_D3D11_FILL_MODE
-{
-	D_D3D11_FILL_WIREFRAME						= 2,
-	D_D3D11_FILL_SOLID							= 3
-} D_D3D11_FILL_MODE ;
-
-typedef enum tagD_D3D11_CULL_MODE
-{
-	D_D3D11_CULL_NONE							= 1,
-	D_D3D11_CULL_FRONT							= 2,
-	D_D3D11_CULL_BACK							= 3
-} D_D3D11_CULL_MODE ;
-
-typedef enum tagD_D3D11_PRIMITIVE_TOPOLOGY
-{
-	D_D3D11_PRIMITIVE_TOPOLOGY_UNDEFINED					= 0,
-	D_D3D11_PRIMITIVE_TOPOLOGY_POINTLIST					= 1,
-	D_D3D11_PRIMITIVE_TOPOLOGY_LINELIST						= 2,
-	D_D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP					= 3,
-	D_D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST					= 4,
-	D_D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP				= 5,
-	D_D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ					= 10,
-	D_D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ				= 11,
-	D_D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST_ADJ				= 12,
-	D_D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP_ADJ			= 13,
-	D_D3D11_PRIMITIVE_TOPOLOGY_1_CONTROL_POINT_PATCHLIST	= 33,
-	D_D3D11_PRIMITIVE_TOPOLOGY_2_CONTROL_POINT_PATCHLIST	= 34,
-	D_D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST	= 35,
-	D_D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST	= 36,
-	D_D3D11_PRIMITIVE_TOPOLOGY_5_CONTROL_POINT_PATCHLIST	= 37,
-	D_D3D11_PRIMITIVE_TOPOLOGY_6_CONTROL_POINT_PATCHLIST	= 38,
-	D_D3D11_PRIMITIVE_TOPOLOGY_7_CONTROL_POINT_PATCHLIST	= 39,
-	D_D3D11_PRIMITIVE_TOPOLOGY_8_CONTROL_POINT_PATCHLIST	= 40,
-	D_D3D11_PRIMITIVE_TOPOLOGY_9_CONTROL_POINT_PATCHLIST	= 41,
-	D_D3D11_PRIMITIVE_TOPOLOGY_10_CONTROL_POINT_PATCHLIST	= 42,
-	D_D3D11_PRIMITIVE_TOPOLOGY_11_CONTROL_POINT_PATCHLIST	= 43,
-	D_D3D11_PRIMITIVE_TOPOLOGY_12_CONTROL_POINT_PATCHLIST	= 44,
-	D_D3D11_PRIMITIVE_TOPOLOGY_13_CONTROL_POINT_PATCHLIST	= 45,
-	D_D3D11_PRIMITIVE_TOPOLOGY_14_CONTROL_POINT_PATCHLIST	= 46,
-	D_D3D11_PRIMITIVE_TOPOLOGY_15_CONTROL_POINT_PATCHLIST	= 47,
-	D_D3D11_PRIMITIVE_TOPOLOGY_16_CONTROL_POINT_PATCHLIST	= 48,
-	D_D3D11_PRIMITIVE_TOPOLOGY_17_CONTROL_POINT_PATCHLIST	= 49,
-	D_D3D11_PRIMITIVE_TOPOLOGY_18_CONTROL_POINT_PATCHLIST	= 50,
-	D_D3D11_PRIMITIVE_TOPOLOGY_19_CONTROL_POINT_PATCHLIST	= 51,
-	D_D3D11_PRIMITIVE_TOPOLOGY_20_CONTROL_POINT_PATCHLIST	= 52,
-	D_D3D11_PRIMITIVE_TOPOLOGY_21_CONTROL_POINT_PATCHLIST	= 53,
-	D_D3D11_PRIMITIVE_TOPOLOGY_22_CONTROL_POINT_PATCHLIST	= 54,
-	D_D3D11_PRIMITIVE_TOPOLOGY_23_CONTROL_POINT_PATCHLIST	= 55,
-	D_D3D11_PRIMITIVE_TOPOLOGY_24_CONTROL_POINT_PATCHLIST	= 56,
-	D_D3D11_PRIMITIVE_TOPOLOGY_25_CONTROL_POINT_PATCHLIST	= 57,
-	D_D3D11_PRIMITIVE_TOPOLOGY_26_CONTROL_POINT_PATCHLIST	= 58,
-	D_D3D11_PRIMITIVE_TOPOLOGY_27_CONTROL_POINT_PATCHLIST	= 59,
-	D_D3D11_PRIMITIVE_TOPOLOGY_28_CONTROL_POINT_PATCHLIST	= 60,
-	D_D3D11_PRIMITIVE_TOPOLOGY_29_CONTROL_POINT_PATCHLIST	= 61,
-	D_D3D11_PRIMITIVE_TOPOLOGY_30_CONTROL_POINT_PATCHLIST	= 62,
-	D_D3D11_PRIMITIVE_TOPOLOGY_31_CONTROL_POINT_PATCHLIST	= 63,
-	D_D3D11_PRIMITIVE_TOPOLOGY_32_CONTROL_POINT_PATCHLIST	= 64
-} D_D3D11_PRIMITIVE_TOPOLOGY;
-
-typedef enum tagD_D3D11_FILTER
-{
-	D_D3D11_FILTER_MIN_MAG_MIP_POINT							= 0,
-	D_D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR						= 0x1,
-	D_D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT				= 0x4,
-	D_D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR						= 0x5,
-	D_D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT						= 0x10,
-	D_D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR				= 0x11,
-	D_D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT						= 0x14,
-	D_D3D11_FILTER_MIN_MAG_MIP_LINEAR							= 0x15,
-	D_D3D11_FILTER_ANISOTROPIC									= 0x55,
-	D_D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT					= 0x80,
-	D_D3D11_FILTER_COMPARISON_MIN_MAG_POINT_MIP_LINEAR			= 0x81,
-	D_D3D11_FILTER_COMPARISON_MIN_POINT_MAG_LINEAR_MIP_POINT	= 0x84,
-	D_D3D11_FILTER_COMPARISON_MIN_POINT_MAG_MIP_LINEAR			= 0x85,
-	D_D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_MIP_POINT			= 0x90,
-	D_D3D11_FILTER_COMPARISON_MIN_LINEAR_MAG_POINT_MIP_LINEAR	= 0x91,
-	D_D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT			= 0x94,
-	D_D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR				= 0x95,
-	D_D3D11_FILTER_COMPARISON_ANISOTROPIC						= 0xd5
-} D_D3D11_FILTER ;
-
-typedef enum tagD_D3D11_FILTER_TYPE
-{
-	D_D3D11_FILTER_TYPE_POINT					= 0,
-	D_D3D11_FILTER_TYPE_LINEAR					= 1
-} D_D3D11_FILTER_TYPE ;
-
-#define	D_D3D11_FILTER_TYPE_MASK				( 0x3 )
-#define	D_D3D11_MIN_FILTER_SHIFT				( 4 )
-#define	D_D3D11_MAG_FILTER_SHIFT				( 2 )
-#define	D_D3D11_MIP_FILTER_SHIFT				( 0 )
-#define	D_D3D11_COMPARISON_FILTERING_BIT		( 0x80 )
-#define	D_D3D11_ANISOTROPIC_FILTERING_BIT		( 0x40 )
-#define D_D3D11_ENCODE_BASIC_FILTER( min, mag, mip, bComparison )												\
-									( ( D_D3D11_FILTER ) (														\
-									( ( bComparison ) ? D_D3D11_COMPARISON_FILTERING_BIT : 0 ) |				\
-									( ( ( min ) & D_D3D11_FILTER_TYPE_MASK ) << D_D3D11_MIN_FILTER_SHIFT ) |	\
-									( ( ( mag ) & D_D3D11_FILTER_TYPE_MASK ) << D_D3D11_MAG_FILTER_SHIFT ) |	\
-									( ( ( mip ) & D_D3D11_FILTER_TYPE_MASK ) << D_D3D11_MIP_FILTER_SHIFT ) ) )   
-#define D_D3D11_ENCODE_ANISOTROPIC_FILTER( bComparison )										\
-									( ( D_D3D11_FILTER ) (										\
-									D_D3D11_ANISOTROPIC_FILTERING_BIT |							\
-									D_D3D11_ENCODE_BASIC_FILTER( D_D3D11_FILTER_TYPE_LINEAR,	\
-														D_D3D11_FILTER_TYPE_LINEAR,				\
-														D_D3D11_FILTER_TYPE_LINEAR,				\
-														bComparison ) ) )                   
-#define D_D3D11_DECODE_MIN_FILTER( d3d11Filter )		( ( D_D3D11_FILTER_TYPE )( ( ( d3d11Filter ) >> D_D3D11_MIN_FILTER_SHIFT ) & D_D3D11_FILTER_TYPE_MASK ) ) 
-#define D_D3D11_DECODE_MAG_FILTER( d3d11Filter )		( ( D_D3D11_FILTER_TYPE )( ( ( d3d11Filter ) >> D_D3D11_MAG_FILTER_SHIFT ) & D_D3D11_FILTER_TYPE_MASK ) ) 
-#define D_D3D11_DECODE_MIP_FILTER( d3d11Filter )		( ( D_D3D11_FILTER_TYPE )( ( ( d3d11Filter ) >> D_D3D11_MIP_FILTER_SHIFT ) & D_D3D11_FILTER_TYPE_MASK ) ) 
-#define D_D3D11_DECODE_IS_COMPARISON_FILTER( d3d11Filter )		( ( d3d11Filter ) & D_D3D11_COMPARISON_FILTERING_BIT )                         
-#define D_D3D11_DECODE_IS_ANISOTROPIC_FILTER( d3d11Filter )															\
-									( ( ( d3d11Filter ) & D_D3D11_ANISOTROPIC_FILTERING_BIT ) &&					\
-									( D_D3D11_FILTER_TYPE_LINEAR == D_D3D11_DECODE_MIN_FILTER( d3d11Filter ) ) &&   \
-									( D_D3D11_FILTER_TYPE_LINEAR == D_D3D11_DECODE_MAG_FILTER( d3d11Filter ) ) &&   \
-									( D_D3D11_FILTER_TYPE_LINEAR == D_D3D11_DECODE_MIP_FILTER( d3d11Filter ) ) )      
-
-typedef enum tagD_D3D11_TEXTURE_ADDRESS_MODE
-{
-	D_D3D11_TEXTURE_ADDRESS_WRAP				= 1,
-	D_D3D11_TEXTURE_ADDRESS_MIRROR				= 2,
-	D_D3D11_TEXTURE_ADDRESS_CLAMP				= 3,
-	D_D3D11_TEXTURE_ADDRESS_BORDER				= 4,
-	D_D3D11_TEXTURE_ADDRESS_MIRROR_ONCE			= 5
-} D_D3D11_TEXTURE_ADDRESS_MODE ;
-
-typedef enum tagD_D3D11_ASYNC_GETDATA_FLAG
-{
-	D_D3D11_ASYNC_GETDATA_DONOTFLUSH			= 0x1
-} D_D3D11_ASYNC_GETDATA_FLAG ;
-
-typedef enum tagD_D3D11_QUERY
-{
-	D_D3D11_QUERY_EVENT							= 0,
-	D_D3D11_QUERY_OCCLUSION						= ( D_D3D11_QUERY_EVENT + 1 ) ,
-	D_D3D11_QUERY_TIMESTAMP						= ( D_D3D11_QUERY_OCCLUSION + 1 ) ,
-	D_D3D11_QUERY_TIMESTAMP_DISJOINT			= ( D_D3D11_QUERY_TIMESTAMP + 1 ) ,
-	D_D3D11_QUERY_PIPELINE_STATISTICS			= ( D_D3D11_QUERY_TIMESTAMP_DISJOINT + 1 ) ,
-	D_D3D11_QUERY_OCCLUSION_PREDICATE			= ( D_D3D11_QUERY_PIPELINE_STATISTICS + 1 ) ,
-	D_D3D11_QUERY_SO_STATISTICS					= ( D_D3D11_QUERY_OCCLUSION_PREDICATE + 1 ) ,
-	D_D3D11_QUERY_SO_OVERFLOW_PREDICATE			= ( D_D3D11_QUERY_SO_STATISTICS + 1 ) ,
-	D_D3D11_QUERY_SO_STATISTICS_STREAM0			= ( D_D3D11_QUERY_SO_OVERFLOW_PREDICATE + 1 ) ,
-	D_D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM0	= ( D_D3D11_QUERY_SO_STATISTICS_STREAM0 + 1 ) ,
-	D_D3D11_QUERY_SO_STATISTICS_STREAM1			= ( D_D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM0 + 1 ) ,
-	D_D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM1	= ( D_D3D11_QUERY_SO_STATISTICS_STREAM1 + 1 ) ,
-	D_D3D11_QUERY_SO_STATISTICS_STREAM2			= ( D_D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM1 + 1 ) ,
-	D_D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM2	= ( D_D3D11_QUERY_SO_STATISTICS_STREAM2 + 1 ) ,
-	D_D3D11_QUERY_SO_STATISTICS_STREAM3			= ( D_D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM2 + 1 ) ,
-	D_D3D11_QUERY_SO_OVERFLOW_PREDICATE_STREAM3	= ( D_D3D11_QUERY_SO_STATISTICS_STREAM3 + 1 ) 
-} D_D3D11_QUERY ;
-
-typedef enum tagD_D3D11_QUERY_MISC_FLAG
-{
-	D_D3D11_QUERY_MISC_PREDICATEHINT			= 0x1
-} D_D3D11_QUERY_MISC_FLAG ;
-
-typedef enum tagD_D3D11_COUNTER
-{
-	D_D3D11_COUNTER_DEVICE_DEPENDENT_0			= 0x40000000
-} D_D3D11_COUNTER;
-
-typedef enum tagD_D3D11_COUNTER_TYPE
-{
-	D_D3D11_COUNTER_TYPE_FLOAT32				= 0,
-	D_D3D11_COUNTER_TYPE_UINT16					= ( D_D3D11_COUNTER_TYPE_FLOAT32 + 1 ) ,
-	D_D3D11_COUNTER_TYPE_UINT32					= ( D_D3D11_COUNTER_TYPE_UINT16 + 1 ) ,
-	D_D3D11_COUNTER_TYPE_UINT64					= ( D_D3D11_COUNTER_TYPE_UINT32 + 1 ) 
-} D_D3D11_COUNTER_TYPE;
-
-typedef enum tagD_D3D11_MAP
-{
-	D_D3D11_MAP_READ							= 1,
-	D_D3D11_MAP_WRITE							= 2,
-	D_D3D11_MAP_READ_WRITE						= 3,
-	D_D3D11_MAP_WRITE_DISCARD					= 4,
-	D_D3D11_MAP_WRITE_NO_OVERWRITE				= 5
-} D_D3D11_MAP;
-
-typedef enum tagD_D3D11_FEATURE
-{
-	D_D3D11_FEATURE_THREADING					= 0,
-	D_D3D11_FEATURE_DOUBLES						= ( D_D3D11_FEATURE_THREADING + 1 ) ,
-	D_D3D11_FEATURE_FORMAT_SUPPORT				= ( D_D3D11_FEATURE_DOUBLES + 1 ) ,
-	D_D3D11_FEATURE_FORMAT_SUPPORT2				= ( D_D3D11_FEATURE_FORMAT_SUPPORT + 1 ) ,
-	D_D3D11_FEATURE_D3D10_X_HARDWARE_OPTIONS	= ( D_D3D11_FEATURE_FORMAT_SUPPORT2 + 1 ) 
-} D_D3D11_FEATURE;
-
-
-
-
-
-
-
-typedef struct tagD_DXGI_RATIONAL
-{
-	UINT										Numerator ;
-	UINT										Denominator ;
-} D_DXGI_RATIONAL ;
-
-typedef struct tagD_DXGI_ADAPTER_DESC
-{
-	WCHAR										Description[ 128 ] ;
-	UINT										VendorId ;
-	UINT										DeviceId ;
-	UINT										SubSysId ;
-	UINT										Revision ;
-	SIZE_T										DedicatedVideoMemory ;
-	SIZE_T										DedicatedSystemMemory ;
-	SIZE_T										SharedSystemMemory ;
-	LUID										AdapterLuid ;
-} D_DXGI_ADAPTER_DESC ;
-
-typedef struct tagD_D3D11_TEX1D_DSV
-{
-	UINT										MipSlice ;
-} D_D3D11_TEX1D_DSV ;
-
-typedef struct tagD_D3D11_TEX1D_ARRAY_DSV
-{
-	UINT										MipSlice ;
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX1D_ARRAY_DSV ;
-
-typedef struct tagD_D3D11_TEX2D_DSV
-{
-	UINT										MipSlice ;
-} D_D3D11_TEX2D_DSV ;
-
-typedef struct tagD_D3D11_TEX2D_ARRAY_DSV
-{
-	UINT										MipSlice ;
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX2D_ARRAY_DSV ;
-
-typedef struct tagD_D3D11_TEX2DMS_DSV
-{
-	UINT										UnusedField_NothingToDefine ;
-} D_D3D11_TEX2DMS_DSV ;
-
-typedef struct tagD_D3D11_TEX2DMS_ARRAY_DSV
-{
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX2DMS_ARRAY_DSV ;
-
-typedef enum tagD_D3D11_DSV_FLAG
-{
-	D_D3D11_DSV_READ_ONLY_DEPTH					= 0x1L,
-	D_D3D11_DSV_READ_ONLY_STENCIL				= 0x2L
-} D_D3D11_DSV_FLAG ;
-
-typedef struct tagD_D3D11_DEPTH_STENCIL_VIEW_DESC
-{
-	D_DXGI_FORMAT								Format ;
-	D_D3D11_DSV_DIMENSION						ViewDimension ;
-	UINT										Flags ;
-	union 
-	{
-		D_D3D11_TEX1D_DSV						Texture1D ;
-		D_D3D11_TEX1D_ARRAY_DSV					Texture1DArray ;
-		D_D3D11_TEX2D_DSV						Texture2D ;
-		D_D3D11_TEX2D_ARRAY_DSV					Texture2DArray ;
-		D_D3D11_TEX2DMS_DSV						Texture2DMS ;
-		D_D3D11_TEX2DMS_ARRAY_DSV				Texture2DMSArray ;
-	} ;
-} D_D3D11_DEPTH_STENCIL_VIEW_DESC ;
-
-typedef struct tagD_DXGI_OUTPUT_DESC
-{
-	WCHAR										DeviceName[ 32 ] ;
-	RECT										DesktopCoordinates ;
-	BOOL										AttachedToDesktop ;
-	D_DXGI_MODE_ROTATION						Rotation ;
-	D_HMONITOR									Monitor ;
-} D_DXGI_OUTPUT_DESC ;
-
-typedef struct tagD_DXGI_RGB
-{
-	float										Red ;
-	float										Green ;
-	float										Blue ;
-} D_DXGI_RGB;
-
-typedef struct tagD_DXGI_GAMMA_CONTROL
-{
-	D_DXGI_RGB									Scale ;
-	D_DXGI_RGB									Offset ;
-	D_DXGI_RGB									GammaCurve[ 1025 ] ;
-} D_DXGI_GAMMA_CONTROL ;
-
-typedef struct tagD_DXGI_GAMMA_CONTROL_CAPABILITIES
-{
-	BOOL										ScaleAndOffsetSupported ;
-	float										MaxConvertedValue ;
-	float										MinConvertedValue ;
-	UINT										NumGammaControlPoints ;
-	float										ControlPointPositions[1025] ;
-} D_DXGI_GAMMA_CONTROL_CAPABILITIES;
-
-typedef struct tagD_DXGI_FRAME_STATISTICS
-{
-	UINT										PresentCount ;
-	UINT										PresentRefreshCount ;
-	UINT										SyncRefreshCount ;
-	LARGE_INTEGER								SyncQPCTime ;
-	LARGE_INTEGER								SyncGPUTime ;
-} D_DXGI_FRAME_STATISTICS ;
-
-typedef struct tagD_DXGI_MAPPED_RECT
-{
-	INT											Pitch ;
-	BYTE *										pBits ;
-} D_DXGI_MAPPED_RECT ;
-
-typedef struct tagD_DXGI_SAMPLE_DESC
-{
-	UINT										Count ;
-	UINT										Quality ;
-} D_DXGI_SAMPLE_DESC ;
-
-typedef struct tagD_DXGI_MODE_DESC
-{
-	UINT										Width ;
-	UINT										Height ;
-	D_DXGI_RATIONAL								RefreshRate ;
-	D_DXGI_FORMAT								Format ;
-	D_DXGI_MODE_SCANLINE_ORDER					ScanlineOrdering ;
-	D_DXGI_MODE_SCALING							Scaling ;
-} D_DXGI_MODE_DESC ;
-
-typedef struct tagD_DXGI_SWAP_CHAIN_DESC
-{
-	D_DXGI_MODE_DESC							BufferDesc ;
-	D_DXGI_SAMPLE_DESC							SampleDesc ;
-	D_DXGI_USAGE								BufferUsage ;
-	UINT										BufferCount ;
-	HWND										OutputWindow ;
-	BOOL										Windowed ;
-	D_DXGI_SWAP_EFFECT							SwapEffect ;
-	UINT										Flags ;
-} D_DXGI_SWAP_CHAIN_DESC ;
-
-typedef struct tagD_DXGI_SURFACE_DESC
-{
-	UINT										Width ;
-	UINT										Height ;
-	D_DXGI_FORMAT								Format ;
-	D_DXGI_SAMPLE_DESC							SampleDesc ;
-} D_DXGI_SURFACE_DESC ;
-
-
-typedef struct tagD_D3D11_TEXTURE1D_DESC
-{
-	UINT										Width ;
-	UINT										MipLevels ;
-	UINT										ArraySize ;
-	D_DXGI_FORMAT								Format ;
-	D_D3D11_USAGE								Usage ;
-	UINT										BindFlags ;
-	UINT										CPUAccessFlags ;
-	UINT										MiscFlags ;
-} D_D3D11_TEXTURE1D_DESC ;
-
-typedef struct tagD_D3D11_TEXTURE2D_DESC
-{
-	UINT										Width ;
-	UINT										Height ;
-	UINT										MipLevels ;
-	UINT										ArraySize ;
-	D_DXGI_FORMAT								Format ;
-	D_DXGI_SAMPLE_DESC							SampleDesc ;
-	D_D3D11_USAGE								Usage ;
-	UINT										BindFlags ;
-	UINT										CPUAccessFlags ;
-	UINT										MiscFlags ;
-} D_D3D11_TEXTURE2D_DESC ;
-
-typedef struct tagD_D3D11_TEXTURE3D_DESC
-{
-	UINT										Width ;
-	UINT										Height ;
-	UINT										Depth ;
-	UINT										MipLevels ;
-	D_DXGI_FORMAT								Format ;
-	D_D3D11_USAGE								Usage ;
-	UINT										BindFlags ;
-	UINT										CPUAccessFlags ;
-	UINT										MiscFlags ;
-} D_D3D11_TEXTURE3D_DESC ;
-
-typedef struct tagD_D3D11_BUFFER_SRV
-{
-	union 
-	{
-		UINT									FirstElement ;
-		UINT									ElementOffset ;
-	} ;
-
-	union 
-	{
-		UINT									NumElements ;
-		UINT									ElementWidth ;
-	} ;
-} D_D3D11_BUFFER_SRV;
-
-typedef enum tagD_D3D11_BUFFEREX_SRV_FLAG
-{
-	D_D3D11_BUFFEREX_SRV_FLAG_RAW	= 0x1
-} D_D3D11_BUFFEREX_SRV_FLAG;
-
-typedef struct tagD_D3D11_BUFFEREX_SRV
-{
-	UINT										FirstElement ;
-	UINT										NumElements ;
-	UINT										Flags ;
-} D_D3D11_BUFFEREX_SRV;
-
-typedef struct tagD_D3D11_TEX1D_SRV
-{
-	UINT										MostDetailedMip ;
-	UINT										MipLevels ;
-} D_D3D11_TEX1D_SRV;
-
-typedef struct tagD_D3D11_TEX1D_ARRAY_SRV
-{
-	UINT										MostDetailedMip ;
-	UINT										MipLevels ;
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX1D_ARRAY_SRV;
-
-typedef struct tagD_D3D11_TEX2D_SRV
-{
-	UINT										MostDetailedMip ;
-	UINT										MipLevels ;
-} D_D3D11_TEX2D_SRV;
-
-typedef struct tagD_D3D11_TEX2D_ARRAY_SRV
-{
-	UINT										MostDetailedMip ;
-	UINT										MipLevels ;
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX2D_ARRAY_SRV;
-
-typedef struct tagD_D3D11_TEX3D_SRV
-{
-	UINT										MostDetailedMip ;
-	UINT										MipLevels ;
-} D_D3D11_TEX3D_SRV;
-
-typedef struct tagD_D3D11_TEXCUBE_SRV
-{
-	UINT										MostDetailedMip ;
-	UINT										MipLevels ;
-} D_D3D11_TEXCUBE_SRV;
-
-typedef struct tagD_D3D11_TEXCUBE_ARRAY_SRV
-{
-	UINT										MostDetailedMip ;
-	UINT										MipLevels ;
-	UINT										First2DArrayFace ;
-	UINT										NumCubes ;
-} D_D3D11_TEXCUBE_ARRAY_SRV;
-
-typedef struct tagD_D3D11_TEX2DMS_SRV
-{
-	UINT										UnusedField_NothingToDefine ;
-} D_D3D11_TEX2DMS_SRV;
-
-typedef struct tagD_D3D11_TEX2DMS_ARRAY_SRV
-{
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX2DMS_ARRAY_SRV;
-
-typedef struct tagD_D3D11_SHADER_RESOURCE_VIEW_DESC
-{
-	D_DXGI_FORMAT								Format ;
-	D_D3D11_SRV_DIMENSION						ViewDimension ;
-	union 
-	{
-		D_D3D11_BUFFER_SRV						Buffer ;
-		D_D3D11_TEX1D_SRV						Texture1D ;
-		D_D3D11_TEX1D_ARRAY_SRV					Texture1DArray ;
-		D_D3D11_TEX2D_SRV						Texture2D ;
-		D_D3D11_TEX2D_ARRAY_SRV					Texture2DArray ;
-		D_D3D11_TEX2DMS_SRV						Texture2DMS ;
-		D_D3D11_TEX2DMS_ARRAY_SRV				Texture2DMSArray ;
-		D_D3D11_TEX3D_SRV						Texture3D ;
-		D_D3D11_TEXCUBE_SRV						TextureCube ;
-		D_D3D11_TEXCUBE_ARRAY_SRV				TextureCubeArray ;
-		D_D3D11_BUFFEREX_SRV					BufferEx ;
-	} ;
-} D_D3D11_SHADER_RESOURCE_VIEW_DESC;
-
-typedef enum tagD_D3D11_BUFFER_UAV_FLAG
-{
-	D_D3D11_BUFFER_UAV_FLAG_RAW					= 0x1,
-	D_D3D11_BUFFER_UAV_FLAG_APPEND				= 0x2,
-	D_D3D11_BUFFER_UAV_FLAG_COUNTER				= 0x4
-} D_D3D11_BUFFER_UAV_FLAG;
-
-typedef struct tagD_D3D11_BUFFER_UAV
-{
-	UINT										FirstElement ;
-	UINT										NumElements ;
-	UINT										Flags ;
-} D_D3D11_BUFFER_UAV ;
-
-typedef struct tagD_D3D11_TEX1D_UAV
-{
-	UINT										MipSlice ;
-} D_D3D11_TEX1D_UAV ;
-
-typedef struct tagD_D3D11_TEX1D_ARRAY_UAV
-{
-	UINT										MipSlice ;
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX1D_ARRAY_UAV ;
-
-typedef struct tagD_D3D11_TEX2D_UAV
-{
-	UINT										MipSlice ;
-} D_D3D11_TEX2D_UAV ;
-
-typedef struct tagD_D3D11_TEX2D_ARRAY_UAV
-{
-	UINT										MipSlice ;
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX2D_ARRAY_UAV ;
-
-typedef struct tagD_D3D11_TEX3D_UAV
-{
-	UINT										MipSlice ;
-	UINT										FirstWSlice ;
-	UINT										WSize ;
-} D_D3D11_TEX3D_UAV ;
-
-typedef struct tagD_D3D11_UNORDERED_ACCESS_VIEW_DESC
-{
-	D_DXGI_FORMAT								Format ;
-	D_D3D11_UAV_DIMENSION						ViewDimension ;
-	union 
-	{
-		D_D3D11_BUFFER_UAV						Buffer ;
-		D_D3D11_TEX1D_UAV						Texture1D ;
-		D_D3D11_TEX1D_ARRAY_UAV					Texture1DArray ;
-		D_D3D11_TEX2D_UAV						Texture2D ;
-		D_D3D11_TEX2D_ARRAY_UAV					Texture2DArray ;
-		D_D3D11_TEX3D_UAV						Texture3D ;
-	}  ;
-} D_D3D11_UNORDERED_ACCESS_VIEW_DESC ;
-
-typedef struct tagD_D3D11_BUFFER_RTV
-{
-	union 
-	{
-		UINT									FirstElement ;
-		UINT									ElementOffset ;
-	} ;
-	union 
-	{
-		UINT									NumElements ;
-		UINT									ElementWidth ;
-	} ;
-} D_D3D11_BUFFER_RTV ;
-
-typedef struct tagD_D3D11_TEX1D_RTV
-{
-	UINT										MipSlice ;
-} D_D3D11_TEX1D_RTV ;
-
-typedef struct tagD_D3D11_TEX1D_ARRAY_RTV
-{
-	UINT										MipSlice ;
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX1D_ARRAY_RTV ;
-
-typedef struct tagD_D3D11_TEX2D_RTV
-{
-	UINT										MipSlice ;
-} D_D3D11_TEX2D_RTV ;
-
-typedef struct tagD_D3D11_TEX2DMS_RTV
-{
-	UINT										UnusedField_NothingToDefine ;
-} D_D3D11_TEX2DMS_RTV ;
-
-typedef struct tagD_D3D11_TEX2D_ARRAY_RTV
-{
-	UINT										MipSlice ;
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX2D_ARRAY_RTV ;
-
-typedef struct tagD_D3D11_TEX2DMS_ARRAY_RTV
-{
-	UINT										FirstArraySlice ;
-	UINT										ArraySize ;
-} D_D3D11_TEX2DMS_ARRAY_RTV ;
-
-typedef struct tagD_D3D11_TEX3D_RTV
-{
-	UINT										MipSlice ;
-	UINT										FirstWSlice ;
-	UINT										WSize ;
-} D_D3D11_TEX3D_RTV ;
-
-typedef struct tagD_D3D11_RENDER_TARGET_VIEW_DESC
-{
-	D_DXGI_FORMAT								Format ;
-	D_D3D11_RTV_DIMENSION						ViewDimension ;
-	union 
-	{
-		D_D3D11_BUFFER_RTV						Buffer ;
-		D_D3D11_TEX1D_RTV						Texture1D ;
-		D_D3D11_TEX1D_ARRAY_RTV					Texture1DArray ;
-		D_D3D11_TEX2D_RTV						Texture2D ;
-		D_D3D11_TEX2D_ARRAY_RTV					Texture2DArray ;
-		D_D3D11_TEX2DMS_RTV						Texture2DMS ;
-		D_D3D11_TEX2DMS_ARRAY_RTV				Texture2DMSArray ;
-		D_D3D11_TEX3D_RTV						Texture3D ;
-	} ;
-} D_D3D11_RENDER_TARGET_VIEW_DESC;
-
-typedef struct tagD_D3D11_SUBRESOURCE_DATA
-{
-	const void *								pSysMem ;
-	UINT										SysMemPitch ;
-	UINT										SysMemSlicePitch ;
-} D_D3D11_SUBRESOURCE_DATA;
-
-typedef struct tagD_D3D11_BUFFER_DESC
-{
-	UINT										ByteWidth ;
-	D_D3D11_USAGE								Usage ;
-	UINT										BindFlags ;
-	UINT										CPUAccessFlags ;
-	UINT										MiscFlags ;
-	UINT										StructureByteStride ;
-} D_D3D11_BUFFER_DESC ;
-
-typedef struct D_D3D11_INPUT_ELEMENT_DESC
-{
-	LPCSTR										SemanticName ;
-	UINT										SemanticIndex ;
-	D_DXGI_FORMAT								Format ;
-	UINT										InputSlot ;
-	UINT										AlignedByteOffset ;
-	D_D3D11_INPUT_CLASSIFICATION				InputSlotClass ;
-	UINT										InstanceDataStepRate ;
-} D_D3D11_INPUT_ELEMENT_DESC ;
-
-typedef struct D_D3D11_CLASS_INSTANCE_DESC
-{
-	UINT										InstanceId ;
-	UINT										InstanceIndex ;
-	UINT										TypeId ;
-	UINT										ConstantBuffer ;
-	UINT										BaseConstantBufferOffset ;
-	UINT										BaseTexture ;
-	UINT										BaseSampler ;
-	BOOL										Created ;
-} D_D3D11_CLASS_INSTANCE_DESC ;
-
-typedef struct tagD_D3D11_SO_DECLARATION_ENTRY
-{
-	UINT										Stream ;
-	LPCSTR										SemanticName ;
-	UINT										SemanticIndex ;
-	BYTE										StartComponent ;
-	BYTE										ComponentCount ;
-	BYTE										OutputSlot ;
-} D_D3D11_SO_DECLARATION_ENTRY ;
-
-typedef enum tagD_D3D11_COLOR_WRITE_ENABLE
-{
-	D_D3D11_COLOR_WRITE_ENABLE_RED				= 1,
-	D_D3D11_COLOR_WRITE_ENABLE_GREEN			= 2,
-	D_D3D11_COLOR_WRITE_ENABLE_BLUE				= 4,
-	D_D3D11_COLOR_WRITE_ENABLE_ALPHA			= 8,
-	D_D3D11_COLOR_WRITE_ENABLE_ALL				= ( ( ( D_D3D11_COLOR_WRITE_ENABLE_RED | D_D3D11_COLOR_WRITE_ENABLE_GREEN )  | D_D3D11_COLOR_WRITE_ENABLE_BLUE )  | D_D3D11_COLOR_WRITE_ENABLE_ALPHA ) 
-} D_D3D11_COLOR_WRITE_ENABLE ;
-
-typedef struct D_D3D11_RENDER_TARGET_BLEND_DESC
-{
-	BOOL										BlendEnable ;
-	D_D3D11_BLEND								SrcBlend ;
-	D_D3D11_BLEND								DestBlend ;
-	D_D3D11_BLEND_OP							BlendOp ;
-	D_D3D11_BLEND								SrcBlendAlpha ;
-	D_D3D11_BLEND								DestBlendAlpha ;
-	D_D3D11_BLEND_OP							BlendOpAlpha ;
-	D_UINT8										RenderTargetWriteMask ;
-} D_D3D11_RENDER_TARGET_BLEND_DESC ;
-
-typedef struct D_D3D11_BLEND_DESC
-{
-	BOOL										AlphaToCoverageEnable ;
-	BOOL										IndependentBlendEnable ;
-	D_D3D11_RENDER_TARGET_BLEND_DESC			RenderTarget[ 8 ] ;
-} D_D3D11_BLEND_DESC ;
-
-typedef struct tagD_D3D11_DEPTH_STENCILOP_DESC
-{
-	D_D3D11_STENCIL_OP							StencilFailOp ;
-	D_D3D11_STENCIL_OP							StencilDepthFailOp ;
-	D_D3D11_STENCIL_OP							StencilPassOp ;
-	D_D3D11_COMPARISON_FUNC						StencilFunc ;
-} D_D3D11_DEPTH_STENCILOP_DESC ;
-
-typedef struct tagD_D3D11_DEPTH_STENCIL_DESC
-{
-	BOOL										DepthEnable ;
-	D_D3D11_DEPTH_WRITE_MASK					DepthWriteMask ;
-	D_D3D11_COMPARISON_FUNC						DepthFunc ;
-	BOOL										StencilEnable ;
-	D_UINT8										StencilReadMask ;
-	D_UINT8										StencilWriteMask ;
-	D_D3D11_DEPTH_STENCILOP_DESC				FrontFace ;
-	D_D3D11_DEPTH_STENCILOP_DESC				BackFace ;
-} D_D3D11_DEPTH_STENCIL_DESC ;
-
-typedef struct tagD_D3D11_RASTERIZER_DESC
-{
-	D_D3D11_FILL_MODE							FillMode ;
-	D_D3D11_CULL_MODE							CullMode ;
-	BOOL										FrontCounterClockwise ;
-	INT											DepthBias ;
-	FLOAT										DepthBiasClamp ;
-	FLOAT										SlopeScaledDepthBias ;
-	BOOL										DepthClipEnable ;
-	BOOL										ScissorEnable ;
-	BOOL										MultisampleEnable ;
-	BOOL										AntialiasedLineEnable ;
-} D_D3D11_RASTERIZER_DESC ;
-
-typedef struct tagD_D3D11_SAMPLER_DESC
-{
-	D_D3D11_FILTER								Filter;
-	D_D3D11_TEXTURE_ADDRESS_MODE				AddressU;
-	D_D3D11_TEXTURE_ADDRESS_MODE				AddressV;
-	D_D3D11_TEXTURE_ADDRESS_MODE				AddressW;
-	FLOAT										MipLODBias;
-	UINT										MaxAnisotropy;
-	D_D3D11_COMPARISON_FUNC						ComparisonFunc;
-	FLOAT										BorderColor[ 4 ];
-	FLOAT										MinLOD;
-	FLOAT										MaxLOD;
-} D_D3D11_SAMPLER_DESC ;
-
-typedef struct tagD_D3D11_QUERY_DESC
-{
-	D_D3D11_QUERY								Query ;
-	UINT										MiscFlags ;
-} D_D3D11_QUERY_DESC ;
-
-typedef struct tagD_D3D11_COUNTER_DESC
-{
-	D_D3D11_COUNTER								Counter ;
-	UINT										MiscFlags ;
-}  D_D3D11_COUNTER_DESC ;
-
-typedef struct tagD_D3D11_MAPPED_SUBRESOURCE
-{
-	void *										pData ;
-	UINT										RowPitch ;
-	UINT										DepthPitch ;
-} D_D3D11_MAPPED_SUBRESOURCE ;
-
-typedef struct tagD_D3D11_VIEWPORT
-{
-	FLOAT										TopLeftX ;
-	FLOAT										TopLeftY ;
-	FLOAT										Width ;
-	FLOAT										Height ;
-	FLOAT										MinDepth ;
-	FLOAT										MaxDepth ;
-} D_D3D11_VIEWPORT ;
-
-typedef RECT D_D3D11_RECT ;
-
-typedef struct tagD_D3D11_BOX
-{
-	UINT										left ;
-	UINT										top ;
-	UINT										front ;
-	UINT										right ;
-	UINT										bottom ;
-	UINT										back ;
-} D_D3D11_BOX ;
-
-typedef struct D_D3D11_COUNTER_INFO
-{
-	D_D3D11_COUNTER								LastDeviceDependentCounter ;
-	UINT										NumSimultaneousCounters ;
-	D_UINT8										NumDetectableParallelUnits ;
-} D_D3D11_COUNTER_INFO;
-
-
-
-
-class D_ID3D11Device ;
-class D_ID3D11ClassLinkage ;
-
-class D_IDXGIObject : public IUnknown
-{
-public:
-	virtual HRESULT __stdcall SetPrivateData			( REFGUID Name, UINT DataSize, const void *pData ) = 0 ;
-	virtual HRESULT __stdcall SetPrivateDataInterface	( REFGUID Name, const IUnknown *pUnknown ) = 0 ;
-	virtual HRESULT __stdcall GetPrivateData			( REFGUID Name, UINT *pDataSize, void *pData ) = 0 ;
-	virtual HRESULT __stdcall GetParent					( REFIID riid, void **ppParent ) = 0 ;
-};
-
-class D_IDXGIDeviceSubObject : public D_IDXGIObject
-{
-public:
-	virtual HRESULT __stdcall GetDevice					( REFIID riid, void **ppDevice ) = 0 ;
-};
-
-class D_IDXGISurface : public D_IDXGIDeviceSubObject
-{
-public:
-	virtual HRESULT __stdcall GetDesc					( D_DXGI_SURFACE_DESC *pDesc ) = 0 ;
-	virtual HRESULT __stdcall Map						( D_DXGI_MAPPED_RECT *pLockedRect, UINT MapFlags ) = 0 ;
-	virtual HRESULT __stdcall Unmap						( void ) = 0 ;
-};
-
-class D_IDXGIOutput : public D_IDXGIObject
-{
-public:
-	virtual HRESULT __stdcall GetDesc					( D_DXGI_OUTPUT_DESC *pDesc ) = 0 ;
-	virtual HRESULT __stdcall GetDisplayModeList		( D_DXGI_FORMAT EnumFormat, UINT Flags, UINT *pNumModes, D_DXGI_MODE_DESC *pDesc ) = 0 ;
-	virtual HRESULT __stdcall FindClosestMatchingMode	( const D_DXGI_MODE_DESC *pModeToMatch, D_DXGI_MODE_DESC *pClosestMatch, IUnknown *pConcernedDevice ) = 0 ;
-	virtual HRESULT __stdcall WaitForVBlank				( void ) = 0 ;
-	virtual HRESULT __stdcall TakeOwnership				( IUnknown *pDevice, BOOL Exclusive ) = 0 ;
-	virtual void	__stdcall ReleaseOwnership			( void ) = 0 ;
-	virtual HRESULT __stdcall GetGammaControlCapabilities( D_DXGI_GAMMA_CONTROL_CAPABILITIES *pGammaCaps ) = 0 ;
-	virtual HRESULT __stdcall SetGammaControl			( const D_DXGI_GAMMA_CONTROL *pArray ) = 0 ;
-	virtual HRESULT __stdcall GetGammaControl			( D_DXGI_GAMMA_CONTROL *pArray ) = 0 ;
-	virtual HRESULT __stdcall SetDisplaySurface			( D_IDXGISurface *pScanoutSurface ) = 0 ;
-	virtual HRESULT __stdcall GetDisplaySurfaceData		( D_IDXGISurface *pDestination ) = 0 ;
-	virtual HRESULT __stdcall GetFrameStatistics		( D_DXGI_FRAME_STATISTICS *pStats ) = 0 ;
-};
-
-class D_IDXGIAdapter : public D_IDXGIObject
-{
-public:
-	virtual HRESULT __stdcall EnumOutputs				( UINT Output, D_IDXGIOutput **ppOutput ) = 0 ;
-	virtual HRESULT __stdcall GetDesc					( D_DXGI_ADAPTER_DESC *pDesc ) = 0 ;
-	virtual HRESULT __stdcall CheckInterfaceSupport		( REFGUID InterfaceName, LARGE_INTEGER *pUMDVersion ) = 0 ;
-};
-
-class D_IDXGISwapChain : public D_IDXGIDeviceSubObject
-{
-public:
-	virtual HRESULT __stdcall Present					( UINT SyncInterval, UINT Flags ) = 0 ;
-	virtual HRESULT __stdcall GetBuffer					( UINT Buffer, REFIID riid, void **ppSurface ) = 0 ;
-	virtual HRESULT __stdcall SetFullscreenState		( BOOL Fullscreen, D_IDXGIOutput *pTarget ) = 0 ;
-	virtual HRESULT __stdcall GetFullscreenState		( BOOL *pFullscreen, D_IDXGIOutput **ppTarget ) = 0 ;
-	virtual HRESULT __stdcall GetDesc					( D_DXGI_SWAP_CHAIN_DESC *pDesc ) = 0 ;
-	virtual HRESULT __stdcall ResizeBuffers				( UINT BufferCount, UINT Width, UINT Height, D_DXGI_FORMAT NewFormat, UINT SwapChainFlags ) = 0 ;
-	virtual HRESULT __stdcall ResizeTarget				( const D_DXGI_MODE_DESC *pNewTargetParameters ) = 0 ;
-	virtual HRESULT __stdcall GetContainingOutput		( D_IDXGIOutput **ppOutput ) = 0 ;
-	virtual HRESULT __stdcall GetFrameStatistics		( D_DXGI_FRAME_STATISTICS *pStats ) = 0 ;
-	virtual HRESULT __stdcall GetLastPresentCount		( UINT *pLastPresentCount ) = 0 ;
-};
-
-class D_ID3D11DeviceChild : public IUnknown
-{
-public:
-	virtual void	__stdcall GetDevice					( D_ID3D11Device **ppDevice ) = 0 ;
-	virtual HRESULT __stdcall GetPrivateData			( REFGUID guid, UINT *pDataSize, void *pData ) = 0 ;
-	virtual HRESULT __stdcall SetPrivateData			( REFGUID guid, UINT DataSize, const void *pData ) = 0 ;
-	virtual HRESULT __stdcall SetPrivateDataInterface	( REFGUID guid, const IUnknown *pData ) = 0 ;
-};
-
-class D_ID3D11Resource : public D_ID3D11DeviceChild
-{
-public:
-	virtual void	__stdcall GetType					( D_D3D11_RESOURCE_DIMENSION *pResourceDimension ) = 0 ;
-	virtual void	__stdcall SetEvictionPriority		( UINT EvictionPriority ) = 0 ;
-	virtual UINT	__stdcall GetEvictionPriority		( void ) = 0 ;
-};
-
-class D_ID3D11Buffer : public D_ID3D11Resource
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_BUFFER_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11Texture1D : public D_ID3D11Resource
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_TEXTURE1D_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11Texture2D : public D_ID3D11Resource
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_TEXTURE2D_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11Texture3D : public D_ID3D11Resource
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_TEXTURE3D_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11View : public D_ID3D11DeviceChild
-{
-public:
-	virtual void	__stdcall GetResource				( D_ID3D11Resource **ppResource ) = 0 ;
-};
-
-class D_ID3D11InputLayout : public D_ID3D11DeviceChild
-{
-public:
-};
-
-class D_ID3D11ShaderResourceView : public D_ID3D11View
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_SHADER_RESOURCE_VIEW_DESC *pDesc ) = 0 ;
-
-};
-
-class D_ID3D11UnorderedAccessView : public D_ID3D11View
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_UNORDERED_ACCESS_VIEW_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11RenderTargetView : public D_ID3D11View
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_RENDER_TARGET_VIEW_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11DepthStencilView : public D_ID3D11View
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_DEPTH_STENCIL_VIEW_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11ClassInstance : public D_ID3D11DeviceChild
-{
-public:
-	virtual void	__stdcall GetClassLinkage			( D_ID3D11ClassLinkage **ppLinkage ) = 0 ;
-	virtual void	__stdcall GetDesc					( D_D3D11_CLASS_INSTANCE_DESC *pDesc ) = 0 ;
-	virtual void	__stdcall GetInstanceName			( LPSTR pInstanceName, SIZE_T *pBufferLength ) = 0 ;
-	virtual void	__stdcall GetTypeName				( LPSTR pTypeName, SIZE_T *pBufferLength ) = 0 ;
-};
-
-class D_ID3D11ClassLinkage : public D_ID3D11DeviceChild
-{
-public:
-	virtual HRESULT __stdcall GetClassInstance			( LPCSTR pClassInstanceName, UINT InstanceIndex, D_ID3D11ClassInstance **ppInstance ) = 0 ;
-	virtual HRESULT __stdcall CreateClassInstance		( LPCSTR pClassTypeName, UINT ConstantBufferOffset, UINT ConstantVectorOffset, UINT TextureOffset, UINT SamplerOffset, D_ID3D11ClassInstance **ppInstance ) = 0 ;
-};
-
-class D_ID3D11VertexShader : public D_ID3D11DeviceChild
-{
-public:
-};
-
-class D_ID3D11GeometryShader : public D_ID3D11DeviceChild
-{
-public:
-};
-
-class D_ID3D11PixelShader : public D_ID3D11DeviceChild
-{
-public:
-};
-
-class D_ID3D11HullShader : public D_ID3D11DeviceChild
-{
-public:
-};
-
-class D_ID3D11DomainShader : public D_ID3D11DeviceChild
-{
-public:
-};
-
-class D_ID3D11ComputeShader : public D_ID3D11DeviceChild
-{
-public:
-};
-
-class D_ID3D11BlendState : public D_ID3D11DeviceChild
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_BLEND_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11DepthStencilState : public D_ID3D11DeviceChild
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_DEPTH_STENCIL_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11RasterizerState : public D_ID3D11DeviceChild
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_RASTERIZER_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11SamplerState : public D_ID3D11DeviceChild
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_SAMPLER_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11Asynchronous : public D_ID3D11DeviceChild
-{
-public:
-	virtual UINT	__stdcall GetDataSize				( void ) = 0 ;
-};
-
-class D_ID3D11Query : public D_ID3D11Asynchronous
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_QUERY_DESC *pDesc ) = 0 ;
-};
-
-class D_ID3D11Predicate : public D_ID3D11Query
-{
-public:
-};
-
-class D_ID3D11Counter : public D_ID3D11Asynchronous
-{
-public:
-	virtual void	__stdcall GetDesc					( D_D3D11_COUNTER_DESC *pDesc ) = 0 ;
-    
-};
-
-class D_ID3D11CommandList : public D_ID3D11DeviceChild
-{
-public:
-	virtual UINT	__stdcall GetContextFlags			( void ) = 0 ;
-};
-
-class D_ID3D11DeviceContext : public D_ID3D11DeviceChild
-{
-public:
-	virtual void	__stdcall VSSetConstantBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer *const *ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall PSSetShaderResources		( UINT StartSlot, UINT NumViews,   D_ID3D11ShaderResourceView *const *ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall PSSetShader				( D_ID3D11PixelShader *pPixelShader, D_ID3D11ClassInstance *const *ppClassInstances, UINT NumClassInstances ) = 0 ;
-	virtual void	__stdcall PSSetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState *const *ppSamplers ) = 0 ;
-	virtual void	__stdcall VSSetShader				( D_ID3D11VertexShader *pVertexShader, D_ID3D11ClassInstance *const *ppClassInstances, UINT NumClassInstances ) = 0 ;
-	virtual void	__stdcall DrawIndexed				( UINT IndexCount, UINT StartIndexLocation, INT BaseVertexLocation ) = 0 ;
-	virtual void	__stdcall Draw						( UINT VertexCount, UINT StartVertexLocation ) = 0 ;
-	virtual HRESULT __stdcall Map						( D_ID3D11Resource *pResource, UINT Subresource, D_D3D11_MAP MapType, UINT MapFlags, D_D3D11_MAPPED_SUBRESOURCE *pMappedResource ) = 0 ;
-	virtual void	__stdcall Unmap						( D_ID3D11Resource *pResource, UINT Subresource ) = 0 ;
-	virtual void	__stdcall PSSetConstantBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer *const *ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall IASetInputLayout			( D_ID3D11InputLayout *pInputLayout ) = 0 ;
-	virtual void	__stdcall IASetVertexBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer *const *ppVertexBuffers, const UINT *pStrides, const UINT *pOffsets ) = 0 ;
-	virtual void	__stdcall IASetIndexBuffer			( D_ID3D11Buffer *pIndexBuffer, D_DXGI_FORMAT Format, UINT Offset ) = 0 ;
-	virtual void	__stdcall DrawIndexedInstanced		( UINT IndexCountPerInstance, UINT InstanceCount, UINT StartIndexLocation, INT BaseVertexLocation, UINT StartInstanceLocation ) = 0 ;
-	virtual void	__stdcall DrawInstanced				( UINT VertexCountPerInstance, UINT InstanceCount, UINT StartVertexLocation, UINT StartInstanceLocation ) = 0 ; 
-	virtual void	__stdcall GSSetConstantBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer *const *ppConstantBuffers ) = 0 ; 
-	virtual void	__stdcall GSSetShader				( D_ID3D11GeometryShader *pShader, D_ID3D11ClassInstance *const *ppClassInstances, UINT NumClassInstances ) = 0 ;
-	virtual void	__stdcall IASetPrimitiveTopology	( D_D3D11_PRIMITIVE_TOPOLOGY Topology ) = 0 ;
-	virtual void	__stdcall VSSetShaderResources		( UINT StartSlot, UINT NumViews, D_ID3D11ShaderResourceView *const *ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall VSSetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState *const *ppSamplers ) = 0 ;
-	virtual void	__stdcall Begin						( D_ID3D11Asynchronous *pAsync ) = 0 ;
-	virtual void	__stdcall End						( D_ID3D11Asynchronous *pAsync ) = 0 ;
-	virtual HRESULT __stdcall GetData					( D_ID3D11Asynchronous *pAsync, void *pData,UINT DataSize, UINT GetDataFlags ) = 0 ;
-	virtual void	__stdcall SetPredication			( D_ID3D11Predicate *pPredicate, BOOL PredicateValue ) = 0 ;
-	virtual void	__stdcall GSSetShaderResources		( UINT StartSlot, UINT NumViews, D_ID3D11ShaderResourceView *const *ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall GSSetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState *const *ppSamplers ) = 0 ;
-	virtual void	__stdcall OMSetRenderTargets		( UINT NumViews, D_ID3D11RenderTargetView *const *ppRenderTargetViews, D_ID3D11DepthStencilView *pDepthStencilView ) = 0 ;
-	virtual void	__stdcall OMSetRenderTargetsAndUnorderedAccessViews( UINT NumRTVs, D_ID3D11RenderTargetView *const *ppRenderTargetViews, D_ID3D11DepthStencilView *pDepthStencilView, UINT UAVStartSlot, UINT NumUAVs, D_ID3D11UnorderedAccessView *const *ppUnorderedAccessViews, const UINT *pUAVInitialCounts ) = 0 ;
-	virtual void	__stdcall OMSetBlendState			( D_ID3D11BlendState *pBlendState, const FLOAT BlendFactor[ 4 ], UINT SampleMask ) = 0 ;
-	virtual void	__stdcall OMSetDepthStencilState	( D_ID3D11DepthStencilState *pDepthStencilState, UINT StencilRef ) = 0 ;
-	virtual void	__stdcall SOSetTargets				( UINT NumBuffers, D_ID3D11Buffer *const *ppSOTargets, const UINT *pOffsets ) = 0 ;
-	virtual void	__stdcall DrawAuto					( void ) = 0 ;
-	virtual void	__stdcall DrawIndexedInstancedIndirect( D_ID3D11Buffer *pBufferForArgs, UINT AlignedByteOffsetForArgs ) = 0 ;
-	virtual void	__stdcall DrawInstancedIndirect		( D_ID3D11Buffer *pBufferForArgs, UINT AlignedByteOffsetForArgs ) = 0 ;
-	virtual void	__stdcall Dispatch					( UINT ThreadGroupCountX, UINT ThreadGroupCountY, UINT ThreadGroupCountZ ) = 0 ;
-	virtual void	__stdcall DispatchIndirect			( D_ID3D11Buffer *pBufferForArgs, UINT AlignedByteOffsetForArgs ) = 0 ;
-	virtual void	__stdcall RSSetState				( D_ID3D11RasterizerState *pRasterizerState ) = 0 ;
-	virtual void	__stdcall RSSetViewports			( UINT NumViewports, const D_D3D11_VIEWPORT *pViewports ) = 0 ;
-	virtual void	__stdcall RSSetScissorRects			( UINT NumRects, const D_D3D11_RECT *pRects ) = 0 ;
-	virtual void	__stdcall CopySubresourceRegion		( D_ID3D11Resource *pDstResource, UINT DstSubresource, UINT DstX, UINT DstY, UINT DstZ, D_ID3D11Resource *pSrcResource, UINT SrcSubresource, const D_D3D11_BOX *pSrcBox ) = 0 ;
-	virtual void	__stdcall CopyResource				( D_ID3D11Resource *pDstResource, D_ID3D11Resource *pSrcResource ) = 0 ;
-	virtual void	__stdcall UpdateSubresource			( D_ID3D11Resource *pDstResource, UINT DstSubresource, const D_D3D11_BOX *pDstBox, const void *pSrcData, UINT SrcRowPitch, UINT SrcDepthPitch ) = 0 ;
-	virtual void	__stdcall CopyStructureCount		( D_ID3D11Buffer *pDstBuffer, UINT DstAlignedByteOffset, D_ID3D11UnorderedAccessView *pSrcView ) = 0 ;
-	virtual void	__stdcall ClearRenderTargetView		( D_ID3D11RenderTargetView *pRenderTargetView, const FLOAT ColorRGBA[ 4 ] ) = 0 ;
-	virtual void	__stdcall ClearUnorderedAccessViewUint( D_ID3D11UnorderedAccessView *pUnorderedAccessView, const UINT Values[ 4 ] ) = 0 ;
-	virtual void	__stdcall ClearUnorderedAccessViewFloat( D_ID3D11UnorderedAccessView *pUnorderedAccessView, const FLOAT Values[ 4 ] ) = 0 ;
-	virtual void	__stdcall ClearDepthStencilView		( D_ID3D11DepthStencilView *pDepthStencilView, UINT ClearFlags, FLOAT Depth, D_UINT8 Stencil ) = 0 ;
-	virtual void	__stdcall GenerateMips				( D_ID3D11ShaderResourceView *pShaderResourceView ) = 0 ;
-	virtual void	__stdcall SetResourceMinLOD			( D_ID3D11Resource *pResource, FLOAT MinLOD ) = 0 ;
-	virtual FLOAT	__stdcall GetResourceMinLOD			( D_ID3D11Resource *pResource ) = 0 ;
-	virtual void	__stdcall ResolveSubresource		( D_ID3D11Resource *pDstResource, UINT DstSubresource, D_ID3D11Resource *pSrcResource, UINT SrcSubresource, D_DXGI_FORMAT Format ) = 0 ;
-	virtual void	__stdcall ExecuteCommandList		( D_ID3D11CommandList *pCommandList, BOOL RestoreContextState ) = 0 ;
-	virtual void	__stdcall HSSetShaderResources		( UINT StartSlot, UINT NumViews, D_ID3D11ShaderResourceView *const *ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall HSSetShader				( D_ID3D11HullShader *pHullShader, D_ID3D11ClassInstance *const *ppClassInstances, UINT NumClassInstances ) = 0 ;
-	virtual void	__stdcall HSSetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState *const *ppSamplers ) = 0 ;
-	virtual void	__stdcall HSSetConstantBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer *const *ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall DSSetShaderResources		( UINT StartSlot, UINT NumViews, D_ID3D11ShaderResourceView *const *ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall DSSetShader				( D_ID3D11DomainShader *pDomainShader, D_ID3D11ClassInstance *const *ppClassInstances, UINT NumClassInstances ) = 0 ;
-	virtual void	__stdcall DSSetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState *const *ppSamplers ) = 0 ;
-	virtual void	__stdcall DSSetConstantBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer *const *ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall CSSetShaderResources		( UINT StartSlot, UINT NumViews, D_ID3D11ShaderResourceView *const *ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall CSSetUnorderedAccessViews	( UINT StartSlot, UINT NumUAVs, D_ID3D11UnorderedAccessView *const *ppUnorderedAccessViews, const UINT *pUAVInitialCounts ) = 0 ;
-	virtual void	__stdcall CSSetShader				( D_ID3D11ComputeShader *pComputeShader, D_ID3D11ClassInstance *const *ppClassInstances, UINT NumClassInstances ) = 0 ;
-	virtual void	__stdcall CSSetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState *const *ppSamplers ) = 0 ;
-	virtual void	__stdcall CSSetConstantBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer *const *ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall VSGetConstantBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer **ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall PSGetShaderResources		( UINT StartSlot, UINT NumViews, D_ID3D11ShaderResourceView **ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall PSGetShader				( D_ID3D11PixelShader **ppPixelShader, D_ID3D11ClassInstance **ppClassInstances, UINT *pNumClassInstances ) = 0 ;
-	virtual void	__stdcall PSGetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState **ppSamplers ) = 0 ;
-	virtual void	__stdcall VSGetShader				(  D_ID3D11VertexShader **ppVertexShader, D_ID3D11ClassInstance **ppClassInstances, UINT *pNumClassInstances ) = 0 ;
-	virtual void	__stdcall PSGetConstantBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer **ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall IAGetInputLayout			( D_ID3D11InputLayout **ppInputLayout ) = 0 ;
-	virtual void	__stdcall IAGetVertexBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer **ppVertexBuffers, UINT *pStrides, UINT *pOffsets ) = 0 ;
-	virtual void	__stdcall IAGetIndexBuffer			( D_ID3D11Buffer **pIndexBuffer, D_DXGI_FORMAT *Format, UINT *Offset ) = 0 ;
-	virtual void	__stdcall GSGetConstantBuffers		( UINT StartSlot, UINT NumBuffers, D_ID3D11Buffer **ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall GSGetShader				( D_ID3D11GeometryShader **ppGeometryShader, D_ID3D11ClassInstance **ppClassInstances, UINT *pNumClassInstances ) = 0 ;
-	virtual void	__stdcall IAGetPrimitiveTopology	( D_D3D11_PRIMITIVE_TOPOLOGY *pTopology ) = 0 ;
-	virtual void	__stdcall VSGetShaderResources		( UINT StartSlot, UINT NumViews, D_ID3D11ShaderResourceView **ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall VSGetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState **ppSamplers ) = 0 ;
-	virtual void	__stdcall GetPredication			( D_ID3D11Predicate **ppPredicate, BOOL *pPredicateValue ) = 0 ;
-	virtual void	__stdcall GSGetShaderResources		( UINT StartSlot, UINT NumViews, D_ID3D11ShaderResourceView **ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall GSGetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState **ppSamplers ) = 0 ;
-	virtual void	__stdcall OMGetRenderTargets		( UINT NumViews, D_ID3D11RenderTargetView **ppRenderTargetViews, D_ID3D11DepthStencilView **ppDepthStencilView ) = 0 ;
-	virtual void	__stdcall OMGetRenderTargetsAndUnorderedAccessViews( UINT NumRTVs, D_ID3D11RenderTargetView **ppRenderTargetViews, D_ID3D11DepthStencilView **ppDepthStencilView, UINT UAVStartSlot, UINT NumUAVs, D_ID3D11UnorderedAccessView **ppUnorderedAccessViews ) = 0 ;
-	virtual void	__stdcall OMGetBlendState			( D_ID3D11BlendState **ppBlendState, FLOAT BlendFactor[ 4 ], UINT *pSampleMask ) = 0 ;
-	virtual void	__stdcall OMGetDepthStencilState	( D_ID3D11DepthStencilState **ppDepthStencilState, UINT *pStencilRef ) = 0 ;
-	virtual void	__stdcall SOGetTargets				( UINT NumBuffers, D_ID3D11Buffer **ppSOTargets ) = 0 ;
-	virtual void	__stdcall RSGetState				( D_ID3D11RasterizerState **ppRasterizerState ) = 0 ;
-	virtual void	__stdcall RSGetViewports			( UINT *pNumViewports, D_D3D11_VIEWPORT *pViewports ) = 0 ;
-	virtual void	__stdcall RSGetScissorRects			( UINT *pNumRects, D_D3D11_RECT *pRects ) = 0 ;
-	virtual void	__stdcall HSGetShaderResources		( UINT StartSlot, UINT NumViews,    D_ID3D11ShaderResourceView **ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall HSGetShader				( D_ID3D11HullShader **ppHullShader, D_ID3D11ClassInstance **ppClassInstances, UINT *pNumClassInstances ) = 0 ;
-	virtual void	__stdcall HSGetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState **ppSamplers ) = 0 ;
-	virtual void	__stdcall HSGetConstantBuffers		( UINT StartSlot, UINT NumBuffers,  D_ID3D11Buffer **ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall DSGetShaderResources		( UINT StartSlot, UINT NumViews,    D_ID3D11ShaderResourceView **ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall DSGetShader				( D_ID3D11DomainShader **ppDomainShader, D_ID3D11ClassInstance **ppClassInstances, UINT *pNumClassInstances ) = 0 ;
-	virtual void	__stdcall DSGetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState **ppSamplers ) = 0 ;
-	virtual void	__stdcall DSGetConstantBuffers		( UINT StartSlot, UINT NumBuffers,  D_ID3D11Buffer **ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall CSGetShaderResources		( UINT StartSlot, UINT NumViews,    D_ID3D11ShaderResourceView **ppShaderResourceViews ) = 0 ;
-	virtual void	__stdcall CSGetUnorderedAccessViews	( UINT StartSlot, UINT NumUAVs,     D_ID3D11UnorderedAccessView **ppUnorderedAccessViews ) = 0 ;
-	virtual void	__stdcall CSGetShader				( D_ID3D11ComputeShader **ppComputeShader, D_ID3D11ClassInstance **ppClassInstances, UINT *pNumClassInstances ) = 0 ;
-	virtual void	__stdcall CSGetSamplers				( UINT StartSlot, UINT NumSamplers, D_ID3D11SamplerState **ppSamplers ) = 0 ;
-	virtual void	__stdcall CSGetConstantBuffers		( UINT StartSlot, UINT NumBuffers,  D_ID3D11Buffer **ppConstantBuffers ) = 0 ;
-	virtual void	__stdcall ClearState				( void ) = 0 ;
-	virtual void	__stdcall Flush						( void ) = 0 ;
-	virtual D_D3D11_DEVICE_CONTEXT_TYPE __stdcall GetType( void ) = 0 ;
-	virtual UINT	__stdcall GetContextFlags			( void ) = 0 ;
-	virtual HRESULT __stdcall FinishCommandList			( BOOL RestoreDeferredContextState, D_ID3D11CommandList **ppCommandList ) = 0 ;
-};
-
-class D_ID3D11Device : public IUnknown
-{
-public:
-	virtual HRESULT __stdcall CreateBuffer				( const D_D3D11_BUFFER_DESC *pDesc, const D_D3D11_SUBRESOURCE_DATA *pInitialData, D_ID3D11Buffer **ppBuffer ) = 0 ;
-	virtual HRESULT __stdcall CreateTexture1D			( const D_D3D11_TEXTURE1D_DESC *pDesc, const D_D3D11_SUBRESOURCE_DATA *pInitialData, D_ID3D11Texture1D **ppTexture1D ) = 0 ;
-	virtual HRESULT __stdcall CreateTexture2D			( const D_D3D11_TEXTURE2D_DESC *pDesc, const D_D3D11_SUBRESOURCE_DATA *pInitialData, D_ID3D11Texture2D **ppTexture2D ) = 0 ;
-	virtual HRESULT __stdcall CreateTexture3D			( const D_D3D11_TEXTURE3D_DESC *pDesc, const D_D3D11_SUBRESOURCE_DATA *pInitialData, D_ID3D11Texture3D **ppTexture3D ) = 0 ;
-	virtual HRESULT __stdcall CreateShaderResourceView	( D_ID3D11Resource *pResource, const D_D3D11_SHADER_RESOURCE_VIEW_DESC *pDesc, D_ID3D11ShaderResourceView **ppSRView ) = 0 ;
-	virtual HRESULT __stdcall CreateUnorderedAccessView	( D_ID3D11Resource *pResource, const D_D3D11_UNORDERED_ACCESS_VIEW_DESC *pDesc, D_ID3D11UnorderedAccessView **ppUAView ) = 0 ;
-	virtual HRESULT __stdcall CreateRenderTargetView	( D_ID3D11Resource *pResource, const D_D3D11_RENDER_TARGET_VIEW_DESC *pDesc, D_ID3D11RenderTargetView **ppRTView ) = 0 ;
-	virtual HRESULT __stdcall CreateDepthStencilView	( D_ID3D11Resource *pResource, const D_D3D11_DEPTH_STENCIL_VIEW_DESC *pDesc, D_ID3D11DepthStencilView **ppDepthStencilView ) = 0 ;
-	virtual HRESULT __stdcall CreateInputLayout			( const D_D3D11_INPUT_ELEMENT_DESC *pInputElementDescs, UINT NumElements, const void *pShaderBytecodeWithInputSignature, SIZE_T BytecodeLength, D_ID3D11InputLayout **ppInputLayout ) = 0 ;
-	virtual HRESULT __stdcall CreateVertexShader		( const void *pShaderBytecode, SIZE_T BytecodeLength, D_ID3D11ClassLinkage *pClassLinkage, D_ID3D11VertexShader **ppVertexShader ) = 0 ;
-	virtual HRESULT __stdcall CreateGeometryShader		( const void *pShaderBytecode, SIZE_T BytecodeLength, D_ID3D11ClassLinkage *pClassLinkage, D_ID3D11GeometryShader **ppGeometryShader ) = 0 ;
-	virtual HRESULT __stdcall CreateGeometryShaderWithStreamOutput	( const void *pShaderBytecode, SIZE_T BytecodeLength, const D_D3D11_SO_DECLARATION_ENTRY *pSODeclaration, UINT NumEntries, const UINT *pBufferStrides, UINT NumStrides, UINT RasterizedStream, D_ID3D11ClassLinkage *pClassLinkage, D_ID3D11GeometryShader **ppGeometryShader ) = 0 ;
-	virtual HRESULT __stdcall CreatePixelShader			( const void *pShaderBytecode, SIZE_T BytecodeLength, D_ID3D11ClassLinkage *pClassLinkage, D_ID3D11PixelShader **ppPixelShader ) = 0 ;
-	virtual HRESULT __stdcall CreateHullShader			( const void *pShaderBytecode, SIZE_T BytecodeLength, D_ID3D11ClassLinkage *pClassLinkage, D_ID3D11HullShader **ppHullShader ) = 0 ;
-	virtual HRESULT __stdcall CreateDomainShader		( const void *pShaderBytecode, SIZE_T BytecodeLength, D_ID3D11ClassLinkage *pClassLinkage, D_ID3D11DomainShader **ppDomainShader ) = 0 ;
-	virtual HRESULT __stdcall CreateComputeShader		( const void *pShaderBytecode, SIZE_T BytecodeLength, D_ID3D11ClassLinkage *pClassLinkage, D_ID3D11ComputeShader **ppComputeShader ) = 0 ;
-	virtual HRESULT __stdcall CreateClassLinkage		( D_ID3D11ClassLinkage **ppLinkage ) = 0 ;
-	virtual HRESULT __stdcall CreateBlendState			( const D_D3D11_BLEND_DESC         *pBlendStateDesc,   D_ID3D11BlendState        **ppBlendState        ) = 0 ;
-	virtual HRESULT __stdcall CreateDepthStencilState	( const D_D3D11_DEPTH_STENCIL_DESC *pDepthStencilDesc, D_ID3D11DepthStencilState **ppDepthStencilState ) = 0 ;
-	virtual HRESULT __stdcall CreateRasterizerState		( const D_D3D11_RASTERIZER_DESC    *pRasterizerDesc,   D_ID3D11RasterizerState   **ppRasterizerState   ) = 0 ;
-	virtual HRESULT __stdcall CreateSamplerState		( const D_D3D11_SAMPLER_DESC       *pSamplerDesc,      D_ID3D11SamplerState      **ppSamplerState      ) = 0 ;
-	virtual HRESULT __stdcall CreateQuery				( const D_D3D11_QUERY_DESC         *pQueryDesc,        D_ID3D11Query             **ppQuery             ) = 0 ;
-	virtual HRESULT __stdcall CreatePredicate			( const D_D3D11_QUERY_DESC         *pPredicateDesc,    D_ID3D11Predicate         **ppPredicate         ) = 0 ;
-	virtual HRESULT __stdcall CreateCounter				( const D_D3D11_COUNTER_DESC       *pCounterDesc,      D_ID3D11Counter           **ppCounter           ) = 0 ;
-	virtual HRESULT __stdcall CreateDeferredContext		( UINT ContextFlags, D_ID3D11DeviceContext **ppDeferredContext ) = 0 ;
-	virtual HRESULT __stdcall OpenSharedResource		( HANDLE hResource, REFIID ReturnedInterface, void **ppResource ) = 0 ;
-	virtual HRESULT __stdcall CheckFormatSupport		( D_DXGI_FORMAT Format, UINT *pFormatSupport ) = 0 ;
-	virtual HRESULT __stdcall CheckMultisampleQualityLevels	( D_DXGI_FORMAT Format, UINT SampleCount, UINT *pNumQualityLevels ) = 0 ;
-	virtual void	__stdcall CheckCounterInfo			( D_D3D11_COUNTER_INFO *pCounterInfo ) = 0 ;
-	virtual HRESULT __stdcall CheckCounter				( const D_D3D11_COUNTER_DESC *pDesc, D_D3D11_COUNTER_TYPE *pType, UINT *pActiveCounters, LPSTR szName, UINT *pNameLength, LPSTR szUnits, UINT *pUnitsLength, LPSTR szDescription, UINT *pDescriptionLength ) = 0 ;
-	virtual HRESULT __stdcall CheckFeatureSupport		( D_D3D11_FEATURE Feature, void *pFeatureSupportData, UINT FeatureSupportDataSize ) = 0 ;
-	virtual HRESULT __stdcall GetPrivateData			( REFGUID guid, UINT *pDataSize, void *pData ) = 0 ;
-	virtual HRESULT __stdcall SetPrivateData			( REFGUID guid, UINT DataSize, const void *pData ) = 0 ;
-	virtual HRESULT __stdcall SetPrivateDataInterface	( REFGUID guid, const IUnknown *pData ) = 0 ;
-	virtual D_D3D_FEATURE_LEVEL __stdcall GetFeatureLevel( void ) = 0 ;
-	virtual UINT	__stdcall GetCreationFlags			( void ) = 0 ;
-	virtual HRESULT __stdcall GetDeviceRemovedReason	( void ) = 0 ;
-	virtual void	__stdcall GetImmediateContext		( D_ID3D11DeviceContext **ppImmediateContext ) = 0 ;
-	virtual HRESULT __stdcall SetExceptionMode			( UINT RaiseFlags ) = 0 ;
-	virtual UINT	__stdcall GetExceptionMode			( void ) = 0 ;
-};
-
-typedef HRESULT ( CALLBACK *LPD_D3D11CREATEDEVICEANDSWAPCHAIN )( 
-	D_IDXGIAdapter                *  pAdapter,
-	D_D3D_DRIVER_TYPE                DriverType,
-	HMODULE                          Software,
-	UINT                             Flags,
-	CONST D_D3D_FEATURE_LEVEL     *  pFeatureLevels,
-	UINT                             FeatureLevels,
-	UINT                             SDKVersion,
-	const D_DXGI_SWAP_CHAIN_DESC  *  pSwapChainDesc,
-	D_IDXGISwapChain              ** ppSwapChain,
-	D_ID3D11Device                ** ppDevice,
-	D_D3D_FEATURE_LEVEL           *  pFeatureLevel,
-	D_ID3D11DeviceContext         ** ppImmediateContext
-) ;
-
-
-
-// ÇcÇâÇíÇÖÇÉÇîÇRÇcÇXà»ëO -----------------------------------------------------
+// ÇcÇâÇíÇÖÇÉÇîÇRÇc -----------------------------------------------------------
 
 #define D_D3D_OK								(D_DD_OK)
 
@@ -3620,21 +1126,6 @@ typedef HRESULT ( CALLBACK *LPD_D3D11CREATEDEVICEANDSWAPCHAIN )(
 #define D_D3DPTEXTURECAPS_VOLUMEMAP_POW2		(0x00040000L)
 #define D_D3DPTEXTURECAPS_NOPROJECTEDBUMPENV	(0x00200000L)
 
-#define D_D3DPTFILTERCAPS_MINFPOINT				(0x00000100L)
-#define D_D3DPTFILTERCAPS_MINFLINEAR			(0x00000200L)
-#define D_D3DPTFILTERCAPS_MINFANISOTROPIC		(0x00000400L)
-#define D_D3DPTFILTERCAPS_MINFPYRAMIDALQUAD		(0x00000800L)
-#define D_D3DPTFILTERCAPS_MINFGAUSSIANQUAD		(0x00001000L)
-#define D_D3DPTFILTERCAPS_MIPFPOINT				(0x00010000L)
-#define D_D3DPTFILTERCAPS_MIPFLINEAR			(0x00020000L)
-#define D_D3DPTFILTERCAPS_CONVOLUTIONMONO		(0x00040000L)
-#define D_D3DPTFILTERCAPS_MAGFPOINT				(0x01000000L)
-#define D_D3DPTFILTERCAPS_MAGFLINEAR			(0x02000000L)
-#define D_D3DPTFILTERCAPS_MAGFANISOTROPIC		(0x04000000L)
-#define D_D3DPTFILTERCAPS_MAGFPYRAMIDALQUAD		(0x08000000L)
-#define D_D3DPTFILTERCAPS_MAGFGAUSSIANQUAD		(0x10000000L)
-
-
 #define D_D3DTA_DIFFUSE							(0x00000000)
 #define D_D3DTA_CURRENT							(0x00000001)
 #define D_D3DTA_TEXTURE							(0x00000002)
@@ -3642,7 +1133,6 @@ typedef HRESULT ( CALLBACK *LPD_D3D11CREATEDEVICEANDSWAPCHAIN )(
 #define D_D3DTA_SPECULAR						(0x00000004)
 #define D_D3DTA_TEMP							(0x00000005)
 #define D_D3DTA_COMPLEMENT						(0x00000010)
-#define D_D3DTA_ALPHAREPLICATE					(0x00000020)
 
 #define D_D3DFVF_XYZ							(0x002)
 #define D_D3DFVF_XYZRHW							(0x004)
@@ -3699,10 +1189,10 @@ typedef HRESULT ( CALLBACK *LPD_D3D11CREATEDEVICEANDSWAPCHAIN )(
 #define D_D3DFVF_TEXTUREFORMAT3					(( DWORD )1)
 #define D_D3DFVF_TEXTUREFORMAT4					(( DWORD )2)
 
-#define D_D3DFVF_TEXCOORDSIZE2( CoordIndex )	( D_D3DFVF_TEXTUREFORMAT2 << ( DWORD )( CoordIndex * 2 + 16 ) )
-#define D_D3DFVF_TEXCOORDSIZE1( CoordIndex )	( D_D3DFVF_TEXTUREFORMAT1 << ( DWORD )( CoordIndex * 2 + 16 ) )
 #define D_D3DFVF_TEXCOORDSIZE3( CoordIndex )	( D_D3DFVF_TEXTUREFORMAT3 << ( DWORD )( CoordIndex * 2 + 16 ) )
+#define D_D3DFVF_TEXCOORDSIZE2( CoordIndex )	( D_D3DFVF_TEXTUREFORMAT2                            )
 #define D_D3DFVF_TEXCOORDSIZE4( CoordIndex )	( D_D3DFVF_TEXTUREFORMAT4 << ( DWORD )( CoordIndex * 2 + 16 ) )
+#define D_D3DFVF_TEXCOORDSIZE1( CoordIndex )	( D_D3DFVF_TEXTUREFORMAT1 << ( DWORD )( CoordIndex * 2 + 16 ) )
 
 typedef enum tagD_D3DVERTEXBLENDFLAGS
 {
@@ -5477,7 +2967,7 @@ public :
 	virtual HRESULT __stdcall GetGPUThreadPriority		( INT* pPriority) = 0 ;
 	virtual HRESULT __stdcall SetGPUThreadPriority		( INT Priority) = 0 ;
 	virtual HRESULT __stdcall WaitForVBlank				( UINT iSwapChain) = 0 ;
-	virtual HRESULT __stdcall CheckResourceResidency	( D_IDirect3DResource9** pResourceArray,DWORD NumResources) = 0 ;
+	virtual HRESULT __stdcall CheckResourceResidency	( D_IDirect3DResource9** pResourceArray,UINT32 NumResources) = 0 ;
 	virtual HRESULT __stdcall SetMaximumFrameLatency	( UINT MaxLatency) = 0 ;
 	virtual HRESULT __stdcall GetMaximumFrameLatency	( UINT* pMaxLatency) = 0 ;
 	virtual HRESULT __stdcall CheckDeviceState			( HWND hDestinationWindow) = 0 ;
@@ -5626,46 +3116,6 @@ public :
 } ;
 
 #endif // __WINDOWS__
-
-// ÇwÇhÇéÇêÇïÇî ---------------------------------------------------------------
-
-#define D_XINPUT_GAMEPAD_DPAD_UP				(0x00000001)
-#define D_XINPUT_GAMEPAD_DPAD_DOWN				(0x00000002)
-#define D_XINPUT_GAMEPAD_DPAD_LEFT				(0x00000004)
-#define D_XINPUT_GAMEPAD_DPAD_RIGHT				(0x00000008)
-#define D_XINPUT_GAMEPAD_START					(0x00000010)
-#define D_XINPUT_GAMEPAD_BACK					(0x00000020)
-#define D_XINPUT_GAMEPAD_LEFT_THUMB				(0x00000040)
-#define D_XINPUT_GAMEPAD_RIGHT_THUMB			(0x00000080)
-#define D_XINPUT_GAMEPAD_LEFT_SHOULDER			(0x00000100)
-#define D_XINPUT_GAMEPAD_RIGHT_SHOULDER			(0x00000200)
-#define D_XINPUT_GAMEPAD_A						(0x00001000)
-#define D_XINPUT_GAMEPAD_B						(0x00002000)
-#define D_XINPUT_GAMEPAD_X						(0x00004000)
-#define D_XINPUT_GAMEPAD_Y						(0x00008000)
-
-typedef struct tagD_XINPUT_GAMEPAD
-{
-    WORD										wButtons;
-    BYTE										bLeftTrigger;
-    BYTE										bRightTrigger;
-    SHORT										sThumbLX;
-    SHORT										sThumbLY;
-    SHORT										sThumbRX;
-    SHORT										sThumbRY;
-} D_XINPUT_GAMEPAD ;
-
-typedef struct tagD_XINPUT_STATE
-{
-    DWORD										dwPacketNumber;
-    D_XINPUT_GAMEPAD							Gamepad;
-} D_XINPUT_STATE ;
-
-typedef struct tagD_XINPUT_VIBRATION
-{
-    WORD										wLeftMotorSpeed;
-    WORD										wRightMotorSpeed;
-} D_XINPUT_VIBRATION ;
 
 // ÇcÇâÇíÇÖÇÉÇîÇhÇéÇêÇïÇî -----------------------------------------------------
 
@@ -5901,80 +3351,75 @@ typedef struct tagD_XINPUT_VIBRATION
 #define D_DIEFT_DEADBAND						(0x00004000)
 #define D_DIEFT_STARTDELAY						(0x00008000)
 
-typedef struct tagD_DIDEVICEOBJECTINSTANCEA
+typedef struct D_DIDEVICEOBJECTINSTANCEA
 {
-	DWORD										dwSize;
-	GUID										guidType;
-	DWORD										dwOfs;
-	DWORD										dwType;
-	DWORD										dwFlags;
-	CHAR										tszName[MAX_PATH];
+	DWORD   dwSize;
+	GUID    guidType;
+	DWORD   dwOfs;
+	DWORD   dwType;
+	DWORD   dwFlags;
+	CHAR    tszName[MAX_PATH];
 //		#if(DIRECTINPUT_VERSION >= 0x0500)
-	DWORD										dwFFMaxForce;
-	DWORD										dwFFForceResolution;
-	WORD										wCollectionNumber;
-	WORD										wDesignatorIndex;
-	WORD										wUsagePage;
-	WORD										wUsage;
-	DWORD										dwDimension;
-	WORD										wExponent;
-	WORD										wReportId;
+	DWORD   dwFFMaxForce;
+	DWORD   dwFFForceResolution;
+	WORD    wCollectionNumber;
+	WORD    wDesignatorIndex;
+	WORD    wUsagePage;
+	WORD    wUsage;
+	DWORD   dwDimension;
+	WORD    wExponent;
+	WORD    wReportId;
 //		#endif
 } D_DIDEVICEOBJECTINSTANCEA;
 
-typedef struct tagD_DIDEVICEOBJECTINSTANCEW
+typedef struct D_DIDEVICEOBJECTINSTANCEW
 {
-	DWORD										dwSize;
-	GUID										guidType;
-	DWORD										dwOfs;
-	DWORD										dwType;
-	DWORD										dwFlags;
-	WCHAR										tszName[MAX_PATH];
+	DWORD   dwSize;
+	GUID    guidType;
+	DWORD   dwOfs;
+	DWORD   dwType;
+	DWORD   dwFlags;
+	WCHAR   tszName[MAX_PATH];
 //		#if(DIRECTINPUT_VERSION >= 0x0500)
-	DWORD										dwFFMaxForce;
-	DWORD										dwFFForceResolution;
-	WORD										wCollectionNumber;
-	WORD										wDesignatorIndex;
-	WORD										wUsagePage;
-	WORD										wUsage;
-	DWORD										dwDimension;
-	WORD										wExponent;
-	WORD										wReportId;
+	DWORD   dwFFMaxForce;
+	DWORD   dwFFForceResolution;
+	WORD    wCollectionNumber;
+	WORD    wDesignatorIndex;
+	WORD    wUsagePage;
+	WORD    wUsage;
+	DWORD   dwDimension;
+	WORD    wExponent;
+	WORD    wReportId;
 //		#endif
 } D_DIDEVICEOBJECTINSTANCEW;
 
-typedef struct tagD_DIDEVICEINSTANCEA
+typedef struct D_DIDEVICEINSTANCEA
 {
-	DWORD										dwSize;
-	GUID										guidInstance;
-	GUID										guidProduct;
-	DWORD										dwDevType;
-#ifdef UNICODE
-	WCHAR										tszInstanceName[MAX_PATH];
-	WCHAR										tszProductName[MAX_PATH];
-#else // UNICODE
-	CHAR										tszInstanceName[MAX_PATH];
-	CHAR										tszProductName[MAX_PATH];
-#endif // UNICODE
+	DWORD									dwSize;
+	GUID									guidInstance;
+	GUID									guidProduct;
+	DWORD									dwDevType;
+	CHAR									tszInstanceName[MAX_PATH];
+	CHAR									tszProductName[MAX_PATH];
 //		#if (DIRECTINPUT_VERSION >= 0x0500)
-	GUID										guidFFDriver;
-	WORD										wUsagePage;
-	WORD										wUsage;
+	GUID									guidFFDriver;
+	WORD									wUsagePage;
+	WORD									wUsage;
 //		#endif
 } D_DIDEVICEINSTANCEA ;
 
 typedef struct tagD_DIDEVICEINSTANCEW
 {
-	DWORD										dwSize;
-	GUID										guidInstance;
-	GUID										guidProduct;
-	DWORD										dwDevType;
-	WCHAR										tszInstanceName[MAX_PATH];
-	WCHAR										tszProductName[MAX_PATH];
+	DWORD									dwSize;
+	GUID									guidInstance;
+	GUID									guidProduct;
+	DWORD									dwDevType;
+	WCHAR									tszInstanceName[MAX_PATH];
+	WCHAR									tszProductName[MAX_PATH];
 //		#if (DIRECTINPUT_VERSION >= 0x0500)
-	GUID										guidFFDriver;
-	WORD										wUsagePage;
-	WORD										wUsage;
+	GUID									guidFFDriver;
+	WORD									wUsagePage;
+	WORD									wUsage;
 //		#endif
 } D_DIDEVICEINSTANCEW ;
 
@@ -6280,15 +3725,2460 @@ public :
 	virtual HRESULT __stdcall Download					( void ) = 0 ;
 	virtual HRESULT __stdcall Unload					( void ) = 0 ;
 	virtual HRESULT __stdcall NonUse03					( void ) = 0 ;				// Escape( LPDIEFFESCAPE ) = 0 ;
-} ;
+};
 
 #endif // __WINDOWS__
 
-#ifdef DX_USE_NAMESPACE
+}
 
-//}
+#ifdef __WINDOWS__
 
-#endif // DX_USE_NAMESPACE
+#ifndef DX_NON_MOVIE
+#ifndef DX_NON_DSHOW_MOVIE
+
+// ÇcÇâÇíÇÖÇÉÇîÇrÇàÇèÇó -------------------------------------------------------
+
+namespace DxLib
+{
+
+#define D_AMMSF_NOGRAPHTHREAD					(0x1)
+#define D_AMMSF_ADDDEFAULTRENDERER				(0x1)
+#define D_DDSFF_PROGRESSIVERENDER				(0x1)
+
+#define D_MS_SUCCESS_CODE(x)					MAKE_HRESULT(0, FACILITY_ITF, x)
+#define D_MS_S_PENDING							D_MS_SUCCESS_CODE(1)
+
+#define D_EC_COMPLETE							(0x01)
+#define D_EC_USERABORT							(0x02)
+#define D_EC_ERRORABORT							(0x03)
+#define D_EC_STREAM_ERROR_STOPPED				(0x06)
+#define D_EC_STREAM_ERROR_STILLPLAYING			(0x07)
+#define D_EC_ERROR_STILLPLAYING					(0x08)
+#define D_EC_END_OF_SEGMENT						(0x1C)
+
+typedef enum tagD_AM_SEEKING_SEEKINGFLAGS
+{
+	D_AM_SEEKING_NoPositioning					= 0,
+	D_AM_SEEKING_AbsolutePositioning			= 0x1,
+	D_AM_SEEKING_RelativePositioning			= 0x2,
+	D_AM_SEEKING_IncrementalPositioning			= 0x3,
+	D_AM_SEEKING_PositioningBitsMask			= 0x3,
+	D_AM_SEEKING_SeekToKeyFrame					= 0x4,
+	D_AM_SEEKING_ReturnTime						= 0x8,
+	D_AM_SEEKING_Segment						= 0x10,
+	D_AM_SEEKING_NoFlush						= 0x20
+} D_AM_SEEKING_SEEKING_FLAGS ;
+
+typedef enum tagD_STREAM_STATE
+{
+	D_STREAMSTATE_STOP 							= 0,
+	D_STREAMSTATE_RUN							= 1
+} D_STREAM_STATE ;
+
+typedef enum tagD_STREAM_TYPE
+{
+	D_STREAMTYPE_READ							= 0,
+	D_STREAMTYPE_WRITE 							= 1,
+	D_STREAMTYPE_TRANSFORM 						= 2
+} D_STREAM_TYPE ;
+
+typedef enum tagD_FILTERSTATE
+{
+	D_State_Stopped 							= 0,
+	D_State_Paused 								= D_State_Stopped + 1,
+	D_State_Running 							= D_State_Paused + 1
+} D_FILTER_STATE ;
+
+typedef enum tagD_VMR9Mode
+{
+	D_VMR9Mode_Windowed							= 0x1,
+	D_VMR9Mode_Windowless						= 0x2,
+	D_VMR9Mode_Renderless						= 0x4,
+	D_VMR9Mode_Mask								= 0x7
+} D_VMR9Mode ;
+
+typedef enum tagD_VMR9SurfaceAllocationFlags
+{
+	D_VMR9AllocFlag_3DRenderTarget				= 0x1,
+	D_VMR9AllocFlag_DXVATarget					= 0x2,
+	D_VMR9AllocFlag_TextureSurface				= 0x4,
+	D_VMR9AllocFlag_OffscreenSurface			= 0x8,
+	D_VMR9AllocFlag_UsageReserved				= 0xf0,
+	D_VMR9AllocFlag_UsageMask					= 0xff
+} D_VMR9SurfaceAllocationFlags ;
+
+typedef enum tagD_PIN_DIRECTION
+{
+	D_PINDIR_INPUT								= 0,
+	D_PINDIR_OUTPUT								= D_PINDIR_INPUT + 1
+} D_PIN_DIRECTION ;
+
+typedef DWORD 									D_OAEVENT ;
+typedef DWORD 									D_OAHWND ;
+typedef UINT 									D_MMRESULT ;
+typedef REFGUID 								D_REFMSPID ;
+typedef double									D_REFTIME ;
+typedef GUID 									D_MSPID ;
+typedef LONGLONG 								D_STREAM_TIME ;
+typedef	long									D_OAFilterState ;
+typedef DWORD_PTR								D_HEVENT;
+typedef DWORD_PTR								D_HSEMAPHORE;
+
+typedef void ( __stdcall *D_PAPCFUNC )( DWORD_PTR dwParam );
+
+typedef struct tagD_VMR9ALLOCATIONINFO
+{
+	DWORD										dwFlags;
+	DWORD										dwWidth;
+	DWORD										dwHeight;
+	D_D3DFORMAT									Format;
+	D_D3DPOOL									Pool;
+	DWORD										MinBuffers;
+	SIZE										szAspectRatio;
+	SIZE										szNativeSize;
+} D_VMR9ALLOCATIONINFO ;
+
+typedef struct tagD_VMR9PRESENTATIONINFO
+{
+	DWORD										dwFlags;
+	D_IDirect3DSurface9							*lpSurf;
+	D_REFERENCE_TIME							rtStart;
+	D_REFERENCE_TIME							rtEnd;
+	SIZE										szAspectRatio;
+	RECT										rcSrc;
+	RECT										rcDst;
+	DWORD										dwReserved1;
+	DWORD										dwReserved2;
+} D_VMR9PRESENTATIONINFO ;
+
+class D_AM_MEDIA_TYPE
+{
+public:
+	GUID										majortype;
+	GUID										subtype;
+	BOOL										bFixedSizeSamples;
+	BOOL										bTemporalCompression;
+	ULONG										lSampleSize;
+	GUID										formattype;
+	IUnknown									*pUnk;
+	ULONG										cbFormat;
+	BYTE										*pbFormat;
+};
+
+typedef struct tagD_PIN_INFO
+{
+	class D_IBaseFilter							*pFilter ;
+	D_PIN_DIRECTION								dir;
+	WCHAR										achName[ 128 ];
+} D_PIN_INFO;
+
+typedef struct tagD_FILTER_INFO
+{
+	WCHAR										achName[ 128 ];
+	class D_IFilterGraph						*pGraph;
+} D_FILTER_INFO;
+
+typedef struct tagD_ALLOCATOR_PROPERTIES
+{
+	long										cBuffers;
+	long										cbBuffer;
+	long										cbAlign;
+	long										cbPrefix;
+} D_ALLOCATOR_PROPERTIES;
+
+typedef enum tagD_QualityMessageType
+{
+	D_Famine									= 0,
+	D_Flood										= D_Famine + 1
+} D_QualityMessageType ;
+
+typedef struct tagD_Quality
+{
+	D_QualityMessageType						Type;
+	long										Proportion;
+	D_REFERENCE_TIME							Late;
+	D_REFERENCE_TIME							TimeStamp;
+} D_Quality;
+
+typedef enum tagD_AM_SAMPLE_PROPERTY_FLAGS
+{
+	AM_SAMPLE_SPLICEPOINT						= 0x1,
+	AM_SAMPLE_PREROLL							= 0x2,
+	AM_SAMPLE_DATADISCONTINUITY					= 0x4,
+	AM_SAMPLE_TYPECHANGED						= 0x8,
+	AM_SAMPLE_TIMEVALID							= 0x10,
+	AM_SAMPLE_TIMEDISCONTINUITY					= 0x40,
+	AM_SAMPLE_FLUSH_ON_PAUSE					= 0x80,
+	AM_SAMPLE_STOPVALID							= 0x100,
+	AM_SAMPLE_ENDOFSTREAM						= 0x200,
+	AM_STREAM_MEDIA								= 0,
+	AM_STREAM_CONTROL							= 1
+} D_AM_SAMPLE_PROPERTY_FLAGS ;
+
+typedef struct tagD_AM_SAMPLE2_PROPERTIES
+{
+	DWORD										cbData;
+	DWORD										dwTypeSpecificFlags;
+	DWORD										dwSampleFlags;
+	LONG										lActual;
+	D_REFERENCE_TIME							tStart;
+	D_REFERENCE_TIME							tStop;
+	DWORD										dwStreamId;
+	D_AM_MEDIA_TYPE								*pMediaType;
+	BYTE										*pbBuffer;
+	LONG										cbBuffer;
+} D_AM_SAMPLE2_PROPERTIES ;
+
+typedef struct tagD_REGFILTER
+{
+	CLSID										Clsid;
+	LPWSTR										Name;
+} D_REGFILTER;
+
+typedef struct tagD_REGPINTYPES
+{
+	const CLSID									*clsMajorType;
+	const CLSID									*clsMinorType;
+} D_REGPINTYPES;
+
+typedef struct tagD_REGFILTERPINS
+{
+	LPWSTR										strName;
+	BOOL										bRendered;
+	BOOL										bOutput;
+	BOOL										bZero;
+	BOOL										bMany;
+	const CLSID									*clsConnectsToFilter;
+	const WCHAR									*strConnectsToPin;
+	UINT										nMediaTypes;
+	const D_REGPINTYPES							*lpMediaType;
+} D_REGFILTERPINS;
+
+typedef D_REGFILTERPINS D_AMOVIESETUP_PIN, * D_PAMOVIESETUP_PIN, * FAR D_LPAMOVIESETUP_PIN ;
+
+typedef struct tagD_AMOVIESETUP_FILTER
+{
+	const CLSID									*clsID;
+	const WCHAR									*strName;
+	DWORD										dwMerit;
+	UINT										nPins;
+	const D_AMOVIESETUP_PIN						*lpPin;
+} D_AMOVIESETUP_FILTER, *D_PAMOVIESETUP_FILTER, * FAR D_LPAMOVIESETUP_FILTER;
+
+STDAPI D_AMGetWideString( LPCWSTR pszString, LPWSTR *ppszReturn ) ;
+
+class D_IEnumMediaTypes : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall Next						( ULONG cMediaTypes, D_AM_MEDIA_TYPE **ppMediaTypes, ULONG *pcFetched ) = 0;
+	virtual HRESULT __stdcall Skip						( ULONG cMediaTypes ) = 0;
+	virtual HRESULT __stdcall Reset						( void ) = 0;
+	virtual HRESULT __stdcall Clone						( D_IEnumMediaTypes **ppEnum ) = 0;
+};
+
+class D_IPin : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall Connect					( D_IPin *pReceivePin, const D_AM_MEDIA_TYPE *pmt ) = 0 ;
+	virtual HRESULT __stdcall ReceiveConnection			( D_IPin *pConnector, const D_AM_MEDIA_TYPE *pmt ) = 0 ;
+	virtual HRESULT __stdcall Disconnect				( void ) = 0 ;
+	virtual HRESULT __stdcall ConnectedTo				( D_IPin **pPin ) = 0 ;
+	virtual HRESULT __stdcall ConnectionMediaType		( D_AM_MEDIA_TYPE *pmt ) = 0 ;
+	virtual HRESULT __stdcall QueryPinInfo				( D_PIN_INFO *pInfo ) = 0 ;
+	virtual HRESULT __stdcall QueryDirection			( D_PIN_DIRECTION *pPinDir ) = 0 ;
+	virtual HRESULT __stdcall QueryId					( LPWSTR *Id ) = 0 ;
+	virtual HRESULT __stdcall QueryAccept				( const D_AM_MEDIA_TYPE *pmt ) = 0 ;
+	virtual HRESULT __stdcall EnumMediaTypes			( D_IEnumMediaTypes **ppEnum ) = 0 ;
+	virtual HRESULT __stdcall QueryInternalConnections	( D_IPin **apPin, ULONG *nPin ) = 0 ;
+	virtual HRESULT __stdcall EndOfStream				( void ) = 0 ;
+	virtual HRESULT __stdcall BeginFlush				( void ) = 0 ;
+	virtual HRESULT __stdcall EndFlush					( void ) = 0 ;
+	virtual HRESULT __stdcall NewSegment				( D_REFERENCE_TIME tStart, D_REFERENCE_TIME tStop, double dRate) = 0 ;
+};
+
+class D_IEnumPins : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall Next						( ULONG cPins, D_IPin **ppPins, ULONG *pcFetched ) = 0 ;
+	virtual HRESULT __stdcall Skip						( ULONG cPins ) = 0 ;
+	virtual HRESULT __stdcall Reset						( void ) = 0 ;
+	virtual HRESULT __stdcall Clone						( D_IEnumPins **ppEnum ) = 0 ;
+};
+
+class D_IReferenceClock : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall GetTime					( D_REFERENCE_TIME *pTime ) = 0 ;
+	virtual HRESULT __stdcall AdviseTime				( D_REFERENCE_TIME baseTime, D_REFERENCE_TIME streamTime, D_HEVENT hEvent, DWORD_PTR *pdwAdviseCookie ) = 0;
+	virtual HRESULT __stdcall AdvisePeriodic			( D_REFERENCE_TIME startTime, D_REFERENCE_TIME periodTime, D_HSEMAPHORE hSemaphore, DWORD_PTR *pdwAdviseCookie) = 0;
+	virtual HRESULT __stdcall Unadvise					( DWORD_PTR dwAdviseCookie) = 0;
+} ;
+
+class D_IMediaSample : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall GetPointer				( BYTE **ppBuffer) = 0;
+	virtual long    __stdcall GetSize					( void) = 0;
+	virtual HRESULT __stdcall GetTime					( D_REFERENCE_TIME *pTimeStart, D_REFERENCE_TIME *pTimeEnd) = 0;
+	virtual HRESULT __stdcall SetTime					( D_REFERENCE_TIME *pTimeStart, D_REFERENCE_TIME *pTimeEnd) = 0;
+	virtual HRESULT __stdcall IsSyncPoint				( void) = 0;
+	virtual HRESULT __stdcall SetSyncPoint				( BOOL bIsSyncPoint) = 0;
+	virtual HRESULT __stdcall IsPreroll					( void) = 0;
+	virtual HRESULT __stdcall SetPreroll				( BOOL bIsPreroll) = 0;
+	virtual long    __stdcall GetActualDataLength		( void) = 0;
+	virtual HRESULT __stdcall SetActualDataLength		( long __MIDL_0010) = 0;
+	virtual HRESULT __stdcall GetMediaType				( D_AM_MEDIA_TYPE **ppMediaType) = 0;
+	virtual HRESULT __stdcall SetMediaType				( D_AM_MEDIA_TYPE *pMediaType) = 0;
+	virtual HRESULT __stdcall IsDiscontinuity			( void) = 0;
+	virtual HRESULT __stdcall SetDiscontinuity			( BOOL bDiscontinuity) = 0;
+	virtual HRESULT __stdcall GetMediaTime				( LONGLONG *pTimeStart, LONGLONG *pTimeEnd) = 0;
+	virtual HRESULT __stdcall SetMediaTime				( LONGLONG *pTimeStart, LONGLONG *pTimeEnd) = 0;
+};
+
+class D_IMediaSample2 : public D_IMediaSample
+{
+public:
+    virtual HRESULT __stdcall GetProperties				( DWORD cbProperties, BYTE *pbProperties) = 0;
+    virtual HRESULT __stdcall SetProperties				( DWORD cbProperties, const BYTE *pbProperties) = 0;
+};
+
+class D_IMemAllocator : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall SetProperties				( D_ALLOCATOR_PROPERTIES *pRequest, D_ALLOCATOR_PROPERTIES *pActual) = 0;
+	virtual HRESULT __stdcall GetProperties				( D_ALLOCATOR_PROPERTIES *pProps) = 0;
+	virtual HRESULT __stdcall Commit					( void) = 0;
+	virtual HRESULT __stdcall Decommit					( void) = 0;
+	virtual HRESULT __stdcall GetBuffer					( D_IMediaSample **ppBuffer, D_REFERENCE_TIME *pStartTime, D_REFERENCE_TIME *pEndTime, DWORD dwFlags) = 0;
+	virtual HRESULT __stdcall ReleaseBuffer				( D_IMediaSample *pBuffer) = 0;
+};
+
+class D_IMemAllocatorNotifyCallbackTemp : public IUnknown
+{
+public:
+    virtual HRESULT __stdcall NotifyRelease				() = 0;
+};
+
+class D_IMemAllocatorCallbackTemp : public D_IMemAllocator
+{
+public:
+	virtual HRESULT __stdcall SetNotify					( D_IMemAllocatorNotifyCallbackTemp *pNotify) = 0;		
+	virtual HRESULT __stdcall GetFreeCount				( LONG *plBuffersFree) = 0;
+};
+
+class D_IMemInputPin : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall GetAllocator				( D_IMemAllocator **ppAllocator) = 0;
+	virtual HRESULT __stdcall NotifyAllocator			( D_IMemAllocator *pAllocator, BOOL bReadOnly) = 0;
+	virtual HRESULT __stdcall GetAllocatorRequirements	( D_ALLOCATOR_PROPERTIES *pProps) = 0;
+	virtual HRESULT __stdcall Receive					( D_IMediaSample *pSample) = 0;
+	virtual HRESULT __stdcall ReceiveMultiple			( D_IMediaSample **pSamples, long nSamples, long *nSamplesProcessed) = 0;
+	virtual HRESULT __stdcall ReceiveCanBlock			( void) = 0;
+};
+
+class D_IMediaFilter : public IPersist
+{
+public:
+	virtual HRESULT __stdcall Stop						( void ) = 0 ;
+	virtual HRESULT __stdcall Pause						( void ) = 0 ;
+	virtual HRESULT __stdcall Run						( D_REFERENCE_TIME tStart ) = 0 ;
+	virtual HRESULT __stdcall GetState					( DWORD dwMilliSecsTimeout, D_FILTER_STATE *State ) = 0 ;
+	virtual HRESULT __stdcall SetSyncSource				( D_IReferenceClock *pClock ) = 0 ;
+	virtual HRESULT __stdcall GetSyncSource				( D_IReferenceClock **pClock ) = 0 ;
+
+};
+
+class D_IBaseFilter : public D_IMediaFilter
+{
+public:
+	virtual HRESULT __stdcall EnumPins					( D_IEnumPins **ppEnum ) = 0 ;
+	virtual HRESULT __stdcall FindPin					( LPCWSTR Id, D_IPin **ppPin) = 0;
+	virtual HRESULT __stdcall QueryFilterInfo			( D_FILTER_INFO *pInfo) = 0;
+	virtual HRESULT __stdcall JoinFilterGraph			( class D_IFilterGraph *pGraph, LPCWSTR pName) = 0;
+	virtual HRESULT __stdcall QueryVendorInfo			( LPWSTR *pVendorInfo) = 0;
+
+};
+
+class D_IQualityControl : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall Notify					( D_IBaseFilter *pSelf, D_Quality q ) = 0 ;
+	virtual HRESULT __stdcall SetSink					( D_IQualityControl *piqc ) = 0 ;
+};
+
+class D_IQualProp : public IUnknown
+{
+public :
+	virtual HRESULT __stdcall get_FramesDroppedInRenderer( int *pcFrames) = 0 ;  // Out
+	virtual HRESULT __stdcall get_FramesDrawn			( int *pcFramesDrawn) = 0 ;         // Out
+	virtual HRESULT __stdcall get_AvgFrameRate			( int *piAvgFrameRate) = 0 ;       // Out
+	virtual HRESULT __stdcall get_Jitter				( int *iJitter) = 0 ;                    // Out
+	virtual HRESULT __stdcall get_AvgSyncOffset			( int *piAvg) = 0 ;               // Out
+	virtual HRESULT __stdcall get_DevSyncOffset			( int *piDev) = 0 ;               // Out
+} ;
+
+class D_IEnumFilters : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall Next						( ULONG cFilters, D_IBaseFilter **ppFilter, ULONG *pcFetched) = 0;
+	virtual HRESULT __stdcall Skip						( ULONG cFilters) = 0;
+	virtual HRESULT __stdcall Reset						( void) = 0;
+	virtual HRESULT __stdcall Clone						( D_IEnumFilters **ppEnum) = 0;
+};
+
+class D_IFilterGraph : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall AddFilter					( D_IBaseFilter *pFilter, LPCWSTR pName ) = 0 ;
+	virtual HRESULT __stdcall RemoveFilter				( D_IBaseFilter *pFilter) = 0;
+	virtual HRESULT __stdcall EnumFilters				( D_IEnumFilters **ppEnum) = 0;	
+	virtual HRESULT __stdcall FindFilterByName			( LPCWSTR pName, D_IBaseFilter **ppFilter) = 0;
+	virtual HRESULT __stdcall ConnectDirect				( D_IPin *ppinOut, D_IPin *ppinIn, const D_AM_MEDIA_TYPE *pmt) = 0;
+	virtual HRESULT __stdcall Reconnect					( D_IPin *ppin) = 0;
+	virtual HRESULT __stdcall Disconnect				( D_IPin *ppin) = 0;
+	virtual HRESULT __stdcall SetDefaultSyncSource		( void) = 0;
+	
+};
+
+class D_IGraphBuilder : public D_IFilterGraph
+{
+public:
+	virtual HRESULT __stdcall Connect					( D_IPin *ppinOut, D_IPin *ppinIn) = 0;
+	virtual HRESULT __stdcall Render					( D_IPin *ppinOut) = 0;
+	virtual HRESULT __stdcall RenderFile				( LPCWSTR lpcwstrFile, LPCWSTR lpcwstrPlayList ) = 0;
+	virtual HRESULT __stdcall AddSourceFilter			( LPCWSTR lpcwstrFileName, LPCWSTR lpcwstrFilterName, D_IBaseFilter **ppFilter) = 0;
+	virtual HRESULT __stdcall SetLogFile				( DWORD_PTR hFile) = 0;
+	virtual HRESULT __stdcall Abort						( void ) = 0;
+	virtual HRESULT __stdcall ShouldOperationContinue	( void ) = 0;
+};
+
+class D_IFilterGraph2 : public D_IGraphBuilder
+{
+public:
+	virtual HRESULT __stdcall AddSourceFilterForMoniker	( IMoniker *pMoniker, IBindCtx *pCtx, LPCWSTR lpcwstrFilterName, D_IBaseFilter **ppFilter) = 0;
+	virtual HRESULT __stdcall ReconnectEx				( D_IPin *ppin, const D_AM_MEDIA_TYPE *pmt) = 0;
+	virtual HRESULT __stdcall RenderEx					( D_IPin *pPinOut, DWORD dwFlags, DWORD *pvContext) = 0;
+};
+
+class D_IEnumRegFilters : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall Next						( ULONG cFilters, D_REGFILTER **apRegFilter, ULONG *pcFetched) = 0;
+	virtual HRESULT __stdcall Skip						( ULONG cFilters) = 0;
+	virtual HRESULT __stdcall Reset						( void) = 0;
+	virtual HRESULT __stdcall Clone						( D_IEnumRegFilters **ppEnum) = 0;
+};
+
+class D_IFilterMapper : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall RegisterFilter			( CLSID clsid, LPCWSTR Name, DWORD dwMerit) = 0;
+	virtual HRESULT __stdcall RegisterFilterInstance	( CLSID clsid, LPCWSTR Name, CLSID *MRId) = 0;
+	virtual HRESULT __stdcall RegisterPin				( CLSID Filter, LPCWSTR Name, BOOL bRendered, BOOL bOutput, BOOL bZero, BOOL bMany, CLSID ConnectsToFilter, LPCWSTR ConnectsToPin) = 0;
+	virtual HRESULT __stdcall RegisterPinType			( CLSID clsFilter, LPCWSTR strName, CLSID clsMajorType, CLSID clsSubType) = 0;
+	virtual HRESULT __stdcall UnregisterFilter			( CLSID Filter) = 0;
+	virtual HRESULT __stdcall UnregisterFilterInstance	( CLSID MRId) = 0;
+	virtual HRESULT __stdcall UnregisterPin				( CLSID Filter, LPCWSTR Name) = 0;
+	virtual HRESULT __stdcall EnumMatchingFilters		( D_IEnumRegFilters **ppEnum, DWORD dwMerit, BOOL bInputNeeded, CLSID clsInMaj, CLSID clsInSub, BOOL bRender, BOOL bOututNeeded, CLSID clsOutMaj, CLSID clsOutSub) = 0;
+};
+
+class D_IStreamSample : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall GetMediaStream			( class D_IMediaStream **ppMediaStream ) = 0 ;
+	virtual HRESULT __stdcall GetSampleTimes			( D_STREAM_TIME *pStartTime, D_STREAM_TIME *pEndTime, D_STREAM_TIME *pCurrentTime) = 0;
+	virtual HRESULT __stdcall SetSampleTimes			( const D_STREAM_TIME *pStartTime, const D_STREAM_TIME *pEndTime ) = 0;
+	virtual HRESULT __stdcall Update					( DWORD dwFlags, HANDLE hEvent, D_PAPCFUNC pfnAPC, DWORD_PTR dwAPCData) = 0;
+	virtual HRESULT __stdcall CompletionStatus			( DWORD dwFlags, DWORD dwMilliseconds) = 0;
+};
+
+class D_IDirectDrawStreamSample : public D_IStreamSample
+{
+public:
+	virtual HRESULT __stdcall GetSurface				( D_IDirectDrawSurface **ppDirectDrawSurface, RECT *pRect) = 0;
+	virtual HRESULT __stdcall NonUse03					( void ) = 0 ;				// SetRect( const RECT *pRect) = 0;
+};
+
+class D_IMultiMediaStream : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall NonUse00					( void ) = 0 ;				// GetInformation( DWORD *pdwFlags, STREAM_TYPE *pStreamType ) = 0 ;
+	virtual HRESULT __stdcall GetMediaStream			( D_REFMSPID idPurpose, class D_IMediaStream **ppMediaStream ) = 0 ;
+	virtual HRESULT __stdcall NonUse01					( void ) = 0 ;				// EnumMediaStreams( long Index, class IMediaStream **ppMediaStream ) = 0 ;
+	virtual HRESULT __stdcall GetState					( D_STREAM_STATE *pCurrentState ) = 0 ;
+	virtual HRESULT __stdcall SetState					( D_STREAM_STATE NewState ) = 0 ;
+	virtual HRESULT __stdcall GetTime					( D_STREAM_TIME *pCurrentTime ) = 0 ;
+	virtual HRESULT __stdcall NonUse02					( void ) = 0 ;				// GetDuration( D_STREAM_TIME *pDuration ) = 0 ;
+	virtual HRESULT __stdcall Seek						( D_STREAM_TIME SeekTime ) = 0 ;
+	virtual HRESULT __stdcall NonUse03					( void ) = 0 ;				// GetEndOfStreamEventHandle( HANDLE *phEOS ) = 0 ;
+} ;
+
+class D_IAMMultiMediaStream : public D_IMultiMediaStream
+{
+public:
+	virtual HRESULT __stdcall Initialize				( D_STREAM_TYPE StreamType, DWORD dwFlags, D_IGraphBuilder *pFilterGraph) = 0;	
+	virtual HRESULT __stdcall NonUse04					( void ) = 0 ;				// GetFilterGraph( IGraphBuilder **ppGraphBuilder) = 0;	
+	virtual HRESULT __stdcall NonUse05					( void ) = 0 ;				// GetFilter( IMediaStreamFilter **ppFilter) = 0;	
+	virtual HRESULT __stdcall AddMediaStream			( IUnknown *pStreamObject, const D_MSPID *PurposeId, DWORD dwFlags, D_IMediaStream **ppNewStream) = 0;
+	virtual HRESULT __stdcall OpenFile					( LPCWSTR pszFileName, DWORD dwFlags) = 0;
+	virtual HRESULT __stdcall NonUse06					( void ) = 0 ;				// OpenMoniker( IBindCtx *pCtx, IMoniker *pMoniker, DWORD dwFlags) = 0;
+	virtual HRESULT __stdcall NonUse07					( void ) = 0 ;				// Render( DWORD dwFlags) = 0;
+} ;
+
+class D_IMediaStream : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall NonUse00					( void ) = 0 ;				// GetMultiMediaStream( IMultiMediaStream **ppMultiMediaStream) = 0;
+	virtual HRESULT __stdcall NonUse01					( void ) = 0 ;				// GetInformation( MSPID *pPurposeId, STREAM_TYPE *pType) = 0;
+	virtual HRESULT __stdcall NonUse02					( void ) = 0 ;				// SetSameFormat( IMediaStream *pStreamThatHasDesiredFormat, DWORD dwFlags) = 0;
+	virtual HRESULT __stdcall NonUse03					( void ) = 0 ;				// AllocateSample( DWORD dwFlags, IStreamSample **ppSample) = 0;
+	virtual HRESULT __stdcall NonUse04					( void ) = 0 ;				// CreateSharedSample( IStreamSample *pExistingSample, DWORD dwFlags, IStreamSample **ppNewSample) = 0;
+	virtual HRESULT __stdcall NonUse05					( void ) = 0 ;				// SendEndOfStream( DWORD dwFlags) = 0;
+};
+
+class D_IAMMediaStream : public D_IMediaStream
+{
+public:
+	virtual HRESULT __stdcall NonUse06					( void ) = 0 ;				// Initialize( IUnknown *pSourceObject, DWORD dwFlags, REFMSPID PurposeId, const STREAM_TYPE StreamType) = 0;
+	virtual HRESULT __stdcall SetState( D_FILTER_STATE State) = 0;
+	virtual HRESULT __stdcall NonUse08					( void ) = 0 ;				// JoinAMMultiMediaStream( IAMMultiMediaStream *pAMMultiMediaStream) = 0;
+	virtual HRESULT __stdcall NonUse09					( void ) = 0 ;				// JoinFilter( IMediaStreamFilter *pMediaStreamFilter) = 0;
+	virtual HRESULT __stdcall NonUse10					( void ) = 0 ;				// JoinFilterGraph( IFilterGraph *pFilterGraph) = 0;
+};
+
+class D_IDirectDrawMediaStream : public D_IMediaStream
+{
+public:
+	virtual HRESULT __stdcall GetFormat					( D_DDSURFACEDESC *pDDSDCurrent, D_IDirectDrawPalette **ppDirectDrawPalette, D_DDSURFACEDESC *pDDSDDesired, DWORD *pdwFlags) = 0;
+	virtual HRESULT __stdcall NonUse06					( void ) = 0 ;				// SetFormat( const DDSURFACEDESC *pDDSurfaceDesc, IDirectDrawPalette *pDirectDrawPalette) = 0;
+	virtual HRESULT __stdcall NonUse07					( void ) = 0 ;				// GetDirectDraw( IDirectDraw **ppDirectDraw) = 0;
+	virtual HRESULT __stdcall NonUse08					( void ) = 0 ;				// SetDirectDraw( IDirectDraw *pDirectDraw) = 0;
+	virtual HRESULT __stdcall CreateSample				( D_IDirectDrawSurface *pSurface, const RECT *pRect, DWORD dwFlags, class D_IDirectDrawStreamSample **ppSample) = 0;
+	virtual HRESULT __stdcall GetTimePerFrame			( D_STREAM_TIME *pFrameTime) = 0;
+};
+
+class D_IMediaControl : public IDispatch
+{
+public:
+	virtual HRESULT __stdcall Run						( void ) = 0 ;
+	virtual HRESULT __stdcall Pause						( void ) = 0 ;
+	virtual HRESULT __stdcall Stop						( void ) = 0 ;
+	virtual HRESULT __stdcall GetState					( LONG msTimeout, D_OAFilterState *pfs ) = 0;
+	virtual HRESULT __stdcall RenderFile				( BSTR strFilename) = 0;
+	virtual HRESULT __stdcall AddSourceFilter			( BSTR strFilename, IDispatch **ppUnk) = 0;
+	virtual HRESULT __stdcall get_FilterCollection		( IDispatch **ppUnk) = 0;
+	virtual HRESULT __stdcall get_RegFilterCollection	( IDispatch **ppUnk) = 0;
+	virtual HRESULT __stdcall StopWhenReady				( void ) = 0 ;
+};
+
+class D_IMediaSeeking : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall GetCapabilities			( DWORD *pCapabilities) = 0;
+	virtual HRESULT __stdcall CheckCapabilities			( DWORD *pCapabilities) = 0;
+	virtual HRESULT __stdcall IsFormatSupported			( const GUID *pFormat) = 0;
+	virtual HRESULT __stdcall QueryPreferredFormat		( GUID *pFormat) = 0;
+	virtual HRESULT __stdcall GetTimeFormat				( GUID *pFormat ) = 0 ;
+	virtual HRESULT __stdcall IsUsingTimeFormat			( const GUID *pFormat) = 0;
+	virtual HRESULT __stdcall SetTimeFormat				( const GUID *pFormat ) = 0 ;
+	virtual HRESULT __stdcall GetDuration				( LONGLONG *pDuration) = 0;
+	virtual HRESULT __stdcall GetStopPosition			( LONGLONG *pStop) = 0 ;
+	virtual HRESULT __stdcall GetCurrentPosition		( LONGLONG *pCurrent) = 0 ;
+	virtual HRESULT __stdcall ConvertTimeFormat			( LONGLONG *pTarget, const GUID *pTargetFormat, LONGLONG Source, const GUID *pSourceFormat) = 0;
+	virtual HRESULT __stdcall SetPositions				( LONGLONG *pCurrent, DWORD dwCurrentFlags, LONGLONG *pStop, DWORD dwStopFlags) = 0;
+	virtual HRESULT __stdcall GetPositions				( LONGLONG *pCurrent, LONGLONG *pStop) = 0;
+	virtual HRESULT __stdcall GetAvailable				( LONGLONG *pEarliest, LONGLONG *pLatest) = 0;
+	virtual HRESULT __stdcall SetRate					( double dRate) = 0;
+	virtual HRESULT __stdcall GetRate					( double *pdRate) = 0;
+	virtual HRESULT __stdcall GetPreroll				( LONGLONG *pllPreroll) = 0;
+};
+
+class D_IMediaPosition : public IDispatch
+{
+public:
+	virtual HRESULT __stdcall get_Duration				( D_REFTIME *plength) = 0;
+	virtual HRESULT __stdcall put_CurrentPosition		( D_REFTIME llTime) = 0;
+	virtual HRESULT __stdcall get_CurrentPosition		( D_REFTIME *pllTime) = 0;
+	virtual HRESULT __stdcall get_StopTime				( D_REFTIME *pllTime) = 0;
+	virtual HRESULT __stdcall put_StopTime				( D_REFTIME llTime) = 0;
+	virtual HRESULT __stdcall get_PrerollTime			( D_REFTIME *pllTime) = 0;
+	virtual HRESULT __stdcall put_PrerollTime			( D_REFTIME llTime) = 0;
+	virtual HRESULT __stdcall put_Rate					( double dRate) = 0;
+	virtual HRESULT __stdcall get_Rate					( double *pdRate) = 0;
+	virtual HRESULT __stdcall CanSeekForward			( LONG *pCanSeekForward) = 0;
+	virtual HRESULT __stdcall CanSeekBackward			( LONG *pCanSeekBackward) = 0;
+};
+
+class D_ISampleGrabberCB : public IUnknown
+{
+public:
+	virtual HRESULT  __stdcall SampleCB					( double SampleTime, D_IMediaSample *pSample ) = 0;
+	virtual HRESULT  __stdcall BufferCB					( double SampleTime, BYTE *pBuffer, long BufferLen ) = 0;
+};
+
+class D_ISampleGrabber : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall SetOneShot				( BOOL OneShot) = 0;
+	virtual HRESULT __stdcall SetMediaType				( const D_AM_MEDIA_TYPE *pType) = 0;
+	virtual HRESULT __stdcall GetConnectedMediaType		( D_AM_MEDIA_TYPE *pType) = 0;
+	virtual HRESULT __stdcall SetBufferSamples			( BOOL BufferThem) = 0;
+	virtual HRESULT __stdcall GetCurrentBuffer			( long *pBufferSize, long *pBuffer) = 0;
+	virtual HRESULT __stdcall GetCurrentSample			( D_IMediaSample **ppSample) = 0;
+	virtual HRESULT __stdcall SetCallback				( D_ISampleGrabberCB *pCallback, long WhichMethodToCallback) = 0;
+};
+
+class D_IFileSinkFilter : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall SetFileName				( LPCOLESTR pszFileName, const D_AM_MEDIA_TYPE *pmt) = 0;
+	virtual HRESULT __stdcall GetCurFile				( LPOLESTR *ppszFileName, D_AM_MEDIA_TYPE *pmt) = 0;
+	
+};
+
+class D_IFileSinkFilter2 : public D_IFileSinkFilter
+{
+public:
+	virtual HRESULT __stdcall SetMode					( DWORD dwFlags) = 0;
+	virtual HRESULT __stdcall GetMode					( DWORD *pdwFlags) = 0;
+	
+};
+
+class D_IBasicAudio : public IDispatch
+{
+public:
+	virtual	HRESULT __stdcall put_Volume				( long lVolume) = 0;
+	virtual	HRESULT __stdcall get_Volume				( long *plVolume) = 0;
+	virtual	HRESULT __stdcall put_Balance				( long lBalance) = 0;
+	virtual	HRESULT __stdcall get_Balance				( long *plBalance) = 0;
+};
+
+class D_IMediaEvent : public IDispatch
+{
+public:
+	virtual HRESULT __stdcall NonUse00					( void ) = 0 ;				// GetEventHandle( OAEVENT *hEvent ) = 0 ;
+	virtual HRESULT __stdcall GetEvent					( long *lEventCode, LONG_PTR *lParam1, LONG_PTR *lParam2, long msTimeout) = 0;
+	virtual HRESULT __stdcall WaitForCompletion			( long msTimeout, long *pEvCode) = 0;
+	virtual HRESULT __stdcall NonUse02					( void ) = 0 ;				// CancelDefaultHandling( long lEvCode) = 0;
+	virtual HRESULT __stdcall NonUse03					( void ) = 0 ;				// RestoreDefaultHandling( long lEvCode) = 0;
+	virtual HRESULT __stdcall FreeEventParams			( long lEvCode, LONG_PTR lParam1, LONG_PTR lParam2) = 0;
+};
+
+class D_IMediaEventEx : public D_IMediaEvent
+{
+public:
+	virtual HRESULT __stdcall SetNotifyWindow			( D_OAHWND hwnd, long lMsg, LONG_PTR lInstanceData) = 0;
+	virtual HRESULT __stdcall NonUse04					( void ) = 0 ;				// SetNotifyFlags( long lNoNotifyFlags) = 0;
+	virtual HRESULT __stdcall NonUse05					( void ) = 0 ;				// GetNotifyFlags( long *lplNoNotifyFlags) = 0;
+};
+
+class D_IMediaEventSink : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall Notify					( long EventCode, LONG_PTR EventParam1, LONG_PTR EventParam2 ) = 0 ;
+};
+
+class D_IVMRSurfaceAllocatorNotify9 : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall AdviseSurfaceAllocator	( DWORD_PTR dwUserID, class D_IVMRSurfaceAllocator9 *lpIVRMSurfaceAllocator) = 0;
+	virtual HRESULT __stdcall SetD3DDevice				( D_IDirect3DDevice9 *lpD3DDevice, D_HMONITOR hMonitor) = 0;
+	virtual HRESULT __stdcall ChangeD3DDevice			( D_IDirect3DDevice9 *lpD3DDevice, D_HMONITOR hMonitor) = 0;
+	virtual HRESULT __stdcall AllocateSurfaceHelper		( D_VMR9ALLOCATIONINFO *lpAllocInfo, DWORD *lpNumBuffers, D_IDirect3DSurface9 **lplpSurface) = 0;
+	virtual HRESULT __stdcall NotifyEvent				( LONG EventCode, LONG_PTR Param1, LONG_PTR Param2) = 0;
+};
+
+class D_IVMRSurfaceAllocator9 : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall InitializeDevice			( DWORD_PTR dwUserID, D_VMR9ALLOCATIONINFO *lpAllocInfo, DWORD *lpNumBuffers) = 0;
+	virtual HRESULT __stdcall TerminateDevice			( DWORD_PTR dwID) = 0;
+	virtual HRESULT __stdcall GetSurface				( DWORD_PTR dwUserID, DWORD SurfaceIndex, DWORD SurfaceFlags, D_IDirect3DSurface9 **lplpSurface) = 0;
+	virtual HRESULT __stdcall AdviseNotify				( D_IVMRSurfaceAllocatorNotify9 *lpIVMRSurfAllocNotify) = 0;
+} ;
+
+class D_IVMRImagePresenter9 : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall StartPresenting			( DWORD_PTR dwUserID) = 0;
+	virtual HRESULT __stdcall StopPresenting			( DWORD_PTR dwUserID) = 0;
+	virtual HRESULT __stdcall PresentImage				( DWORD_PTR dwUserID, D_VMR9PRESENTATIONINFO *lpPresInfo) = 0;
+} ;
+
+class D_IVMRFilterConfig9 : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall NonUse00					( void ) = 0 ;				// SetImageCompositor( D_IVMRImageCompositor9 *lpVMRImgCompositor) = 0;
+	virtual HRESULT __stdcall SetNumberOfStreams		( DWORD dwMaxStreams) = 0;
+	virtual HRESULT __stdcall GetNumberOfStreams		( DWORD *pdwMaxStreams) = 0;
+	virtual HRESULT __stdcall SetRenderingPrefs			( DWORD dwRenderFlags) = 0;
+	virtual HRESULT __stdcall GetRenderingPrefs			( DWORD *pdwRenderFlags) = 0;
+	virtual HRESULT __stdcall SetRenderingMode			( DWORD Mode) = 0;
+	virtual HRESULT __stdcall GetRenderingMode			( DWORD *pMode) = 0;
+} ;
+
+class D_IAMovieSetup : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall Register					( void ) = 0 ;
+	virtual HRESULT __stdcall Unregister				( void ) = 0 ;
+};
+
+
+struct __D_POSITION { int unused; };
+typedef __D_POSITION* D_POSITION;
+
+interface D_INonDelegatingUnknown
+{
+	virtual HRESULT	__stdcall NonDelegatingQueryInterface( REFIID, LPVOID * ) = 0 ;
+	virtual ULONG	__stdcall NonDelegatingAddRef		( void ) = 0 ;
+	virtual ULONG	__stdcall NonDelegatingRelease		( void ) = 0 ;
+};
+
+class D_CBaseList 
+{
+public:
+	class CNode
+	{
+		CNode									*m_pPrev;
+		CNode									*m_pNext;
+		void									*m_pObject;
+	public:
+		CNode();
+			CNode			  *Prev						() const;
+			CNode			  *Next						() const;
+			void			  SetPrev					(CNode *p);
+			void			  SetNext					(CNode *p);
+			void			  *GetData					() const;
+			void			  SetData					(void *p);
+	};
+
+	class CNodeCache
+	{
+	public:
+		CNodeCache(INT iCacheSize);
+		~CNodeCache();
+
+			void			  AddToCache				(CNode *pNode);
+			CNode			  *RemoveFromCache			();
+	private:
+		INT										m_iCacheSize;
+		INT										m_iUsed;
+		CNode									*m_pHead;
+	};
+
+protected:
+	CNode										*m_pFirst;
+	CNode										*m_pLast;
+	LONG										m_Count;
+
+private:
+	CNodeCache									m_Cache;
+
+	D_CBaseList	(const D_CBaseList &refList);
+	D_CBaseList &operator=(const D_CBaseList &refList);
+
+public:
+	D_CBaseList(TCHAR *pName, INT iItems);
+	D_CBaseList(TCHAR *pName);
+#ifdef UNICODE
+	D_CBaseList(CHAR *pName, INT iItems);
+	D_CBaseList(CHAR *pName);
+#endif
+	~D_CBaseList();
+
+			void			  RemoveAll					();
+			D_POSITION		  GetHeadPositionI			() const;
+			D_POSITION		  GetTailPositionI			() const;
+			int				  GetCountI					() const;
+
+protected:
+			void			  *GetNextI					(D_POSITION& rp) const;
+			void			  *GetI						(D_POSITION p) const;
+			D_POSITION		  AddBeforeI				(D_POSITION p, void * pObj);
+			D_POSITION		  AddHeadI					(void * pObj);
+			D_POSITION		  AddAfterI					(D_POSITION p, void * pObj);
+			D_POSITION		  FindI						( void * pObj) const;
+			void			  *RemoveHeadI				();
+			void			  *RemoveTailI				();
+			void			  *RemoveI					(D_POSITION p);
+			D_POSITION		  AddTailI					(void * pObj);
+
+public:
+			D_POSITION		  Next						(D_POSITION pos) const ;
+			D_POSITION		  Prev						(D_POSITION pos) const ;
+			BOOL			  AddTail					(D_CBaseList *pList);
+			BOOL			  AddHead					(D_CBaseList *pList);
+			BOOL			  AddAfter					(D_POSITION p, D_CBaseList *pList);
+			BOOL			  AddBefore					(D_POSITION p, D_CBaseList *pList);
+			BOOL			  MoveToTail				(D_POSITION pos, D_CBaseList *pList);
+			BOOL			  MoveToHead				(D_POSITION pos, D_CBaseList *pList);
+			void			  Reverse					();
+};
+
+
+template < class OBJECT > class D_CGenericList : public D_CBaseList
+{
+public:
+	D_CGenericList(TCHAR *pName, INT iItems, BOOL bLock = TRUE, BOOL bAlert = FALSE) : D_CBaseList(pName, iItems) {
+		UNREFERENCED_PARAMETER(bAlert);
+		UNREFERENCED_PARAMETER(bLock);
+	};
+	D_CGenericList(TCHAR *pName) : D_CBaseList(pName) {};
+
+			D_POSITION		  GetHeadPosition			() const { return (D_POSITION)m_pFirst; }
+			D_POSITION		  GetTailPosition			() const { return (D_POSITION)m_pLast; }
+			int				  GetCount					() const { return m_Count; }
+			OBJECT			  *GetNext					( D_POSITION& rp) const { return (OBJECT *) GetNextI(rp); }
+			OBJECT			  *Get						( D_POSITION p) const { return (OBJECT *) GetI(p); }
+			OBJECT			  *GetHead					() const  { return Get(GetHeadPosition()); }
+			OBJECT			  *RemoveHead				() { return (OBJECT *) RemoveHeadI(); }
+			OBJECT			  *RemoveTail				() { return (OBJECT *) RemoveTailI(); }
+			OBJECT			  *Remove					( D_POSITION p) { return (OBJECT *) RemoveI(p); }
+			D_POSITION		  AddBefore					( D_POSITION p, OBJECT * pObj) { return AddBeforeI(p, pObj); }
+			D_POSITION		  AddAfter					( D_POSITION p, OBJECT * pObj)  { return AddAfterI(p, pObj); }
+			D_POSITION		  AddHead					( OBJECT * pObj) { return AddHeadI(pObj); }
+			D_POSITION		  AddTail					( OBJECT * pObj)  { return AddTailI(pObj); }
+			BOOL			  AddTail					( D_CGenericList<OBJECT> *pList) { return D_CBaseList::AddTail((D_CBaseList *) pList); }
+			BOOL			  AddHead					( D_CGenericList<OBJECT> *pList) { return D_CBaseList::AddHead((D_CBaseList *) pList); }
+			BOOL			  AddAfter					( D_POSITION p, D_CGenericList<OBJECT> *pList) { return D_CBaseList::AddAfter(p, (D_CBaseList *) pList); };
+			BOOL			  AddBefore					( D_POSITION p, D_CGenericList<OBJECT> *pList) { return D_CBaseList::AddBefore(p, (D_CBaseList *) pList); };
+			D_POSITION		  Find						( OBJECT * pObj) const { return FindI(pObj); }
+} ;
+
+
+class D_CBaseObject
+{
+private:
+	D_CBaseObject( const D_CBaseObject& objectSrc ) ;
+	void operator = ( const D_CBaseObject& objectSrc ) ;
+
+private:
+	static LONG m_cObjects;
+
+protected:
+#ifdef DEBUG
+	DWORD m_dwCookie;
+#endif
+
+public:
+	D_CBaseObject(const TCHAR *pName);
+#ifdef UNICODE
+	D_CBaseObject(const char *pName);
+#endif
+	~D_CBaseObject();
+
+	static LONG ObjectsActive(){ return m_cObjects; };
+};
+
+
+
+class 
+#ifndef DX_GCC_COMPILE
+__declspec( novtable )
+#endif
+ D_CUnknown : public D_INonDelegatingUnknown, public D_CBaseObject
+{
+private:
+	const IUnknown * m_pUnknown ;
+
+protected:
+	volatile LONG m_cRef;
+
+public:
+
+	D_CUnknown(const TCHAR *pName, IUnknown * pUnk);
+	virtual ~D_CUnknown() {};
+
+	D_CUnknown(TCHAR *pName, IUnknown * pUnk,HRESULT *phr);
+#ifdef UNICODE
+	D_CUnknown(const char *pName, IUnknown * pUnk);
+	D_CUnknown(char *pName, IUnknown * pUnk,HRESULT *phr);
+#endif
+
+	IUnknown * GetOwner() const { return ( IUnknown * )m_pUnknown; };
+
+	HRESULT	__stdcall NonDelegatingQueryInterface( REFIID, void ** ) ;
+	ULONG	__stdcall NonDelegatingAddRef() ;
+	ULONG	__stdcall NonDelegatingRelease() ;
+} ;
+
+
+
+
+class D_CCritSec
+{
+	D_CCritSec(const D_CCritSec &refCritSec);
+	D_CCritSec &operator=(const D_CCritSec &refCritSec);
+
+	CRITICAL_SECTION m_CritSec;
+
+#ifdef DEBUG
+public:
+	DWORD   m_currentOwner;
+	DWORD   m_lockCount;
+	BOOL    m_fTrace;        // Trace this one
+public:
+	D_CCritSec();
+	~D_CCritSec();
+	void Lock();
+	void Unlock();
+#else
+public:
+	D_CCritSec() { InitializeCriticalSection( &m_CritSec ) ; } ;
+	~D_CCritSec(){ DeleteCriticalSection( &m_CritSec ) ; } ;
+	void Lock()  { EnterCriticalSection( &m_CritSec ) ; } ;
+	void Unlock(){ LeaveCriticalSection( &m_CritSec ) ; } ;
+#endif
+};
+
+class D_CAutoLock
+{
+	D_CAutoLock(const D_CAutoLock &refAutoLock);
+	D_CAutoLock &operator=(const D_CAutoLock &refAutoLock);
+
+protected:
+	D_CCritSec * m_pLock;
+
+public:
+	D_CAutoLock(D_CCritSec * plock)
+	{
+		m_pLock = plock;
+		m_pLock->Lock();
+	};
+
+	~D_CAutoLock() {
+		m_pLock->Unlock();
+	};
+};
+
+
+
+const LONGLONG MILLISECONDS = (1000);            // 10 ^ 3
+const LONGLONG NANOSECONDS = (1000000000);       // 10 ^ 9
+const LONGLONG UNITS = (NANOSECONDS / 100);      // 10 ^ 7
+
+#define MILLISECONDS_TO_100NS_UNITS(lMs) Int32x32To64((lMs), (UNITS / MILLISECONDS))
+
+class D_CRefTime
+{
+public:
+	D_REFERENCE_TIME							m_time;
+
+	inline D_CRefTime(){ m_time = 0; };
+	inline D_CRefTime(LONG msecs){ m_time = MILLISECONDS_TO_100NS_UNITS(msecs); };
+	inline D_CRefTime(D_REFERENCE_TIME rt){ m_time = rt; };
+	inline operator D_REFERENCE_TIME() const { return m_time; };
+	inline D_CRefTime& operator=(const D_CRefTime& rt){ m_time = rt.m_time; return *this; };
+	inline D_CRefTime& operator=(const LONGLONG ll){ m_time = ll; return *this; };
+	inline D_CRefTime& operator+=(const D_CRefTime& rt){ return (*this = *this + rt); };
+	inline D_CRefTime& operator-=(const D_CRefTime& rt){ return (*this = *this - rt); };
+	inline LONG Millisecs(void){ return (LONG)(m_time / (UNITS / MILLISECONDS)); };
+	inline LONGLONG GetUnits(void){ return m_time; };
+};
+
+class D_CMediaType : public D_AM_MEDIA_TYPE
+{
+public:
+	~D_CMediaType();
+	D_CMediaType();
+	D_CMediaType(const GUID * majortype);
+	D_CMediaType(const D_AM_MEDIA_TYPE&, HRESULT* phr = NULL);
+	D_CMediaType(const D_CMediaType&, HRESULT* phr = NULL);
+
+	D_CMediaType& operator=(const D_CMediaType&);
+	D_CMediaType& operator=(const D_AM_MEDIA_TYPE&);
+	BOOL operator == (const D_CMediaType&) const;
+	BOOL operator != (const D_CMediaType&) const;
+			HRESULT			  Set						(const D_CMediaType& rt);
+			HRESULT			  Set						(const D_AM_MEDIA_TYPE& rt);
+			BOOL			  IsValid					() const;
+			const GUID		  *Type						() const { return &majortype;} ;
+			void			  SetType					(const GUID *);
+			const GUID		  *Subtype					() const { return &subtype;} ;
+			void			  SetSubtype				(const GUID *);
+			BOOL			  IsFixedSize				() const {return bFixedSizeSamples; };
+			BOOL			  IsTemporalCompressed		() const {return bTemporalCompression; };
+			ULONG			  GetSampleSize				() const;
+			void			  SetSampleSize				(ULONG sz);
+			void			  SetVariableSize			();
+			void			  SetTemporalCompression	(BOOL bCompressed);
+			BYTE			  *Format					() const {return pbFormat; };
+			ULONG			  FormatLength				() const { return cbFormat; };
+			void			  SetFormatType				(const GUID *);
+			const GUID		  *FormatType				() const {return &formattype; };
+			BOOL			  SetFormat					(BYTE *pFormat, ULONG length);
+			void			  ResetFormatBuffer			();
+			BYTE			  *AllocFormatBuffer		(ULONG length);
+			BYTE			  *ReallocFormatBuffer		(ULONG length);
+			void			  InitMediaType				();
+			BOOL			  MatchesPartial			(const D_CMediaType* ppartial) const;
+			BOOL			  IsPartiallySpecified		(void) const;
+};
+
+class 
+#ifndef DX_GCC_COMPILE
+__declspec( novtable )
+#endif
+ D_CBaseFilter : public D_CUnknown, public D_IBaseFilter, public D_IAMovieSetup
+{
+friend class D_CBasePin;
+
+protected:
+	D_FILTER_STATE								m_State;
+	D_IReferenceClock							*m_pClock;
+	D_CRefTime									m_tStart;
+	CLSID										m_clsid;
+	D_CCritSec									*m_pLock;
+
+	WCHAR										*m_pName;
+	D_IFilterGraph								*m_pGraph;
+	D_IMediaEventSink							*m_pSink;
+	LONG										m_PinVersion;
+
+public:
+
+	D_CBaseFilter( const TCHAR *pName, IUnknown * pUnk, D_CCritSec  *pLock, REFCLSID   clsid);
+	D_CBaseFilter( const TCHAR *pName, IUnknown * pUnk, D_CCritSec  *pLock, REFCLSID   clsid, HRESULT   *phr);
+#ifdef UNICODE
+	D_CBaseFilter( const CHAR *pName, IUnknown * pUnk, D_CCritSec  *pLock, REFCLSID   clsid);
+	D_CBaseFilter( CHAR       *pName, IUnknown * pUnk, D_CCritSec  *pLock, REFCLSID   clsid, HRESULT   *phr);
+#endif
+	~D_CBaseFilter();
+			HRESULT	__stdcall QueryInterface			( REFIID riid, void **ppv ){ return GetOwner()->QueryInterface( riid,ppv ) ; } ;
+			ULONG	__stdcall AddRef					() { return GetOwner()->AddRef();  };
+			ULONG	__stdcall Release					(){ return GetOwner()->Release(); };
+
+			HRESULT	__stdcall NonDelegatingQueryInterface( REFIID riid, void ** ppv ) ;
+#ifdef DEBUG
+			ULONG	__stdcall NonDelegatingRelease		();
+#endif
+
+	// --- IPersist method ---
+			HRESULT	__stdcall GetClassID				(CLSID *pClsID);
+
+	// --- IMediaFilter methods ---
+			HRESULT	__stdcall GetState					( DWORD dwMSecs, D_FILTER_STATE *State ) ;
+			HRESULT	__stdcall SetSyncSource				( D_IReferenceClock *pClock ) ;
+			HRESULT	__stdcall GetSyncSource				( D_IReferenceClock **pClock ) ;
+			HRESULT	__stdcall Stop						();
+			HRESULT	__stdcall Pause						();
+			HRESULT	__stdcall Run						( D_REFERENCE_TIME tStart ) ;
+
+	// --- helper methods ---
+	virtual HRESULT			  StreamTime				(D_CRefTime& rtStream);
+			BOOL			  IsActive					(){ D_CAutoLock cObjectLock(m_pLock); return ((m_State == D_State_Paused) || (m_State == D_State_Running)); };
+			BOOL			  IsStopped					(){ return (m_State == D_State_Stopped); };
+
+	// --- IBaseFilter methods ---
+			HRESULT	__stdcall EnumPins					( D_IEnumPins ** ppEnum);
+			HRESULT	__stdcall FindPin					( LPCWSTR Id, D_IPin ** ppPin );
+			HRESULT	__stdcall QueryFilterInfo			( D_FILTER_INFO * pInfo);
+			HRESULT	__stdcall JoinFilterGraph			( D_IFilterGraph * pGraph, LPCWSTR pName);
+			HRESULT	__stdcall QueryVendorInfo			( LPWSTR* pVendorInfo );
+
+	// --- helper methods ---
+			HRESULT			  NotifyEvent				( long EventCode, LONG_PTR EventParam1, LONG_PTR EventParam2);
+			D_IFilterGraph	  *GetFilterGraph			() { return m_pGraph; }
+			HRESULT			  ReconnectPin				( D_IPin *pPin, D_AM_MEDIA_TYPE const *pmt ) ;
+	virtual LONG			  GetPinVersion				();
+			void			  IncrementPinVersion		();
+	virtual int				  GetPinCount				() = 0 ;
+	virtual class D_CBasePin  *GetPin					(int n) = 0 ;
+
+	// --- IAMovieSetup methods ---
+			HRESULT	__stdcall Register					();
+			HRESULT	__stdcall Unregister				();
+
+	// --- setup helper methods ---
+	virtual D_LPAMOVIESETUP_FILTER GetSetupData			(){ return NULL; }
+};
+
+class
+#ifndef DX_GCC_COMPILE
+ __declspec( novtable )
+#endif
+  D_CBasePin : public D_CUnknown, public D_IPin, public D_IQualityControl
+{
+protected:
+	WCHAR										*m_pName;
+	D_IPin										*m_Connected;
+	D_PIN_DIRECTION								m_dir;
+	D_CCritSec									*m_pLock;
+	bool										m_bRunTimeError;
+	bool										m_bCanReconnectWhenActive;
+	bool										m_bTryMyTypesFirst;
+	class D_CBaseFilter							*m_pFilter;
+	D_IQualityControl							*m_pQSink;
+	LONG										m_TypeVersion;
+	D_CMediaType								m_mt;
+	D_CRefTime									m_tStart;
+	D_CRefTime									m_tStop;
+	double										m_dRate;
+#ifdef DEBUG
+	LONG										m_cRef;
+#endif
+
+	// displays pin connection information
+#ifdef DEBUG
+			void DisplayPinInfo							( D_IPin *pReceivePin);
+			void DisplayTypeInfo						( D_IPin *pPin, const D_CMediaType *pmt);
+#else
+			void DisplayPinInfo							( D_IPin * /*pReceivePin*/) {};
+			void DisplayTypeInfo						( D_IPin * /*pPin*/, const D_CMediaType * /*pmt*/) {};
+#endif
+
+			HRESULT AttemptConnection					( D_IPin* pReceivePin, const D_CMediaType* pmt );
+			HRESULT TryMediaTypes						( D_IPin *pReceivePin, const D_CMediaType *pmt, D_IEnumMediaTypes *pEnum) ;
+			HRESULT AgreeMediaType						( D_IPin *pReceivePin, const D_CMediaType *pmt);
+
+public:
+//		D_CBasePin( TCHAR *pObjectName, D_CBaseFilter *pFilter, D_CCritSec *pLock, HRESULT *phr, LPCWSTR pName, D_PIN_DIRECTION dir ) ;
+//#ifdef UNICODE
+	D_CBasePin( CHAR *pObjectName, D_CBaseFilter *pFilter, D_CCritSec *pLock, HRESULT *phr, LPCWSTR pName, D_PIN_DIRECTION dir ) ;
+//#endif
+	virtual ~D_CBasePin();
+			HRESULT __stdcall QueryInterface			( REFIID riid, void **ppv ){ return GetOwner()->QueryInterface(riid,ppv); };
+			ULONG   __stdcall AddRef					(){ return GetOwner()->AddRef(); }; 
+			ULONG   __stdcall Release					(){ return GetOwner()->Release(); };
+
+			HRESULT __stdcall NonDelegatingQueryInterface( REFIID riid, void ** ppv);
+			ULONG   __stdcall NonDelegatingRelease		();
+			ULONG   __stdcall NonDelegatingAddRef		();
+
+	// --- IPin methods ---
+			HRESULT __stdcall Connect					( D_IPin * pReceivePin, const D_AM_MEDIA_TYPE *pmt );
+			HRESULT __stdcall ReceiveConnection			( D_IPin * pConnector, const D_AM_MEDIA_TYPE *pmt );
+			HRESULT __stdcall Disconnect				();
+			HRESULT __stdcall ConnectedTo				( D_IPin **pPin);
+			HRESULT __stdcall ConnectionMediaType		( D_AM_MEDIA_TYPE *pmt);
+			HRESULT __stdcall QueryPinInfo				( D_PIN_INFO * pInfo );
+			HRESULT __stdcall QueryDirection			( D_PIN_DIRECTION * pPinDir );
+			HRESULT __stdcall QueryId					( LPWSTR * Id );
+			HRESULT __stdcall QueryAccept				( const D_AM_MEDIA_TYPE *pmt );
+			HRESULT __stdcall EnumMediaTypes			( D_IEnumMediaTypes **ppEnum );
+			HRESULT __stdcall QueryInternalConnections	( D_IPin* * /*apPin*/, ULONG * /*nPin*/ ){ return E_NOTIMPL; }
+			HRESULT __stdcall EndOfStream				( void);
+			HRESULT __stdcall NewSegment				( D_REFERENCE_TIME tStart, D_REFERENCE_TIME tStop, double dRate ) ;
+
+	// IQualityControl methods
+			HRESULT __stdcall Notify					( D_IBaseFilter * pSender, D_Quality q  ) ;
+			HRESULT __stdcall SetSink					( D_IQualityControl * piqc ) ;
+
+	// --- helper methods ---
+			BOOL			  IsConnected				( void) {return (m_Connected != NULL); };
+			D_IPin			  *GetConnected				() { return m_Connected; };
+			BOOL			  IsStopped					(){ return (m_pFilter->m_State == D_State_Stopped ) ; };
+	virtual LONG			  GetMediaTypeVersion		();
+			void			  IncrementTypeVersion		();
+	virtual HRESULT			  Active					( void);
+	virtual HRESULT			  Inactive					( void);
+	virtual HRESULT			  Run						( D_REFERENCE_TIME tStart);
+	virtual HRESULT			  CheckMediaType			( const D_CMediaType *) = 0 ;
+	virtual HRESULT			  SetMediaType				( const D_CMediaType *);
+	virtual HRESULT			  CheckConnect				( D_IPin *);
+	virtual HRESULT			  BreakConnect				();
+	virtual HRESULT			  CompleteConnect			( D_IPin *pReceivePin);
+	virtual HRESULT			  GetMediaType				( int iPosition,D_CMediaType *pMediaType);
+			D_REFERENCE_TIME  CurrentStopTime			() { return m_tStop; }
+			D_REFERENCE_TIME  CurrentStartTime			() { return m_tStart; }
+			double			  CurrentRate				() { return m_dRate; }
+			LPWSTR			  Name						() { return m_pName; };
+			void			  SetReconnectWhenActive	( bool bCanReconnect){ m_bCanReconnectWhenActive = bCanReconnect; }
+			bool			  CanReconnectWhenActive	(){ return m_bCanReconnectWhenActive; }
+
+protected:
+	virtual HRESULT __stdcall DisconnectInternal		();
+};
+
+class D_CEnumPins : public D_IEnumPins
+{
+	typedef D_CGenericList<D_CBasePin> CPinList;
+	int											m_Position;
+	int											m_PinCount;
+	class D_CBaseFilter							*m_pFilter;
+	LONG										m_Version;
+	LONG										m_cRef;
+	CPinList									m_PinCache;
+
+#ifdef DEBUG
+	DWORD m_dwCookie;
+#endif
+			BOOL			  AreWeOutOfSync			() { return (m_pFilter->GetPinVersion() == m_Version ? FALSE : TRUE); };
+			HRESULT __stdcall Refresh					();
+
+public:
+	D_CEnumPins( class D_CBaseFilter *pFilter, D_CEnumPins *pEnumPins);
+	virtual ~D_CEnumPins();
+
+	// IUnknown
+			HRESULT __stdcall QueryInterface			(REFIID riid, void **ppv);
+			ULONG   __stdcall AddRef					();
+			ULONG   __stdcall Release					();
+
+	// D_IEnumPins
+			HRESULT __stdcall Next						( ULONG cPins, D_IPin ** ppPins, ULONG * pcFetched ) ;
+			HRESULT __stdcall Skip						( ULONG cPins ) ;
+			HRESULT __stdcall Reset						() ;
+			HRESULT __stdcall Clone						( D_IEnumPins **ppEnum ) ;
+};
+
+class
+#ifndef DX_GCC_COMPILE
+__declspec( novtable )
+#endif
+D_CBaseInputPin : public D_CBasePin,  public D_IMemInputPin
+{
+protected:
+	D_IMemAllocator								*m_pAllocator;
+	BYTE										m_bReadOnly;
+	BYTE										m_bFlushing;
+	D_AM_SAMPLE2_PROPERTIES						m_SampleProps;
+
+public:
+//		D_CBaseInputPin( TCHAR *pObjectName, D_CBaseFilter *pFilter, D_CCritSec *pLock,	HRESULT *phr, LPCWSTR pName);
+//#ifdef UNICODE
+	D_CBaseInputPin( CHAR *pObjectName, D_CBaseFilter *pFilter, D_CCritSec *pLock, HRESULT *phr, LPCWSTR pName);
+//#endif
+	virtual ~D_CBaseInputPin();
+			HRESULT	__stdcall QueryInterface			( REFIID riid, void **ppv ){ return GetOwner()->QueryInterface( riid,ppv ) ; } ;
+			ULONG	__stdcall AddRef					() { return GetOwner()->AddRef();  };
+			ULONG	__stdcall Release					(){ return GetOwner()->Release(); };
+
+			HRESULT	__stdcall NonDelegatingQueryInterface(REFIID riid, void **ppv);
+			HRESULT	__stdcall GetAllocator				( D_IMemAllocator ** ppAllocator);
+			HRESULT	__stdcall NotifyAllocator			( D_IMemAllocator * pAllocator, BOOL bReadOnly);
+			HRESULT	__stdcall Receive					( D_IMediaSample *pSample);
+			HRESULT	__stdcall ReceiveMultiple			( D_IMediaSample **pSamples, long nSamples, long *nSamplesProcessed);
+			HRESULT	__stdcall ReceiveCanBlock			();
+			HRESULT	__stdcall BeginFlush				( void);
+			HRESULT	__stdcall EndFlush					( void);
+			HRESULT	__stdcall GetAllocatorRequirements	( D_ALLOCATOR_PROPERTIES *pProps);
+			HRESULT			  BreakConnect				();
+			BOOL			  IsReadOnly				(){ return m_bReadOnly; };
+			BOOL			  IsFlushing				(){ return m_bFlushing; };
+	virtual HRESULT			  CheckStreaming			();
+			HRESULT			  PassNotify				( D_Quality& q);
+			HRESULT	__stdcall Notify					( D_IBaseFilter * pSender, D_Quality q);
+	virtual HRESULT			  Inactive					( void);
+	D_AM_SAMPLE2_PROPERTIES * SampleProps				() { /*ASSERT(m_SampleProps.cbData != 0);*/ return &m_SampleProps; }
+};
+
+class D_CRendererInputPin : public D_CBaseInputPin
+{
+protected:
+	class D_CBaseRenderer						*m_pRenderer;
+
+public:
+	D_CRendererInputPin( D_CBaseRenderer *pRenderer, HRESULT *phr, LPCWSTR Name );
+
+	// Overriden from the base pin classes
+			HRESULT			  BreakConnect				() ;
+			HRESULT			  CompleteConnect			( D_IPin *pReceivePin ) ;
+			HRESULT			  SetMediaType				( const D_CMediaType *pmt ) ;
+			HRESULT			  CheckMediaType			( const D_CMediaType *pmt ) ;
+			HRESULT			  Active					() ;
+			HRESULT			  Inactive					() ;
+
+	// Add rendering behaviour to interface functions
+			HRESULT	__stdcall QueryId(LPWSTR *Id);
+			HRESULT	__stdcall EndOfStream();
+			HRESULT	__stdcall BeginFlush();
+			HRESULT	__stdcall EndFlush();
+			HRESULT	__stdcall Receive(D_IMediaSample *pMediaSample);
+
+	// Helper
+	D_IMemAllocator inline		*Allocator				() const { return m_pAllocator; }
+};
+
+class D_CBaseDispatch
+{
+	ITypeInfo									*m_pti;
+
+public:
+
+	D_CBaseDispatch() : m_pti(NULL) {}
+	~D_CBaseDispatch();
+
+	/* IDispatch methods */
+			HRESULT	__stdcall GetTypeInfoCount			( UINT * pctinfo ) ;
+			HRESULT	__stdcall GetTypeInfo				( REFIID riid, UINT itinfo, LCID lcid, ITypeInfo ** pptinfo ) ;
+			HRESULT	__stdcall GetIDsOfNames				( REFIID riid, OLECHAR  ** rgszNames, UINT cNames, LCID lcid, DISPID * rgdispid ) ;
+};
+
+class
+#ifndef DX_GCC_COMPILE
+__declspec( novtable )
+#endif
+D_CMediaPosition : public D_IMediaPosition, public D_CUnknown
+{
+	D_CBaseDispatch								m_basedisp;
+
+public:
+	D_CMediaPosition( const TCHAR *, IUnknown *);
+	D_CMediaPosition( const TCHAR *, IUnknown *, HRESULT *phr);
+
+			HRESULT	__stdcall QueryInterface			( REFIID riid, void **ppv ){ return GetOwner()->QueryInterface( riid,ppv ) ; } ;
+			ULONG	__stdcall AddRef					() { return GetOwner()->AddRef();  };
+			ULONG	__stdcall Release					(){ return GetOwner()->Release(); };
+
+	// override this to publicise our interfaces
+			HRESULT	__stdcall NonDelegatingQueryInterface(REFIID riid, void **ppv);
+
+	/* IDispatch methods */
+			HRESULT	__stdcall GetTypeInfoCount			( UINT * pctinfo);
+			HRESULT	__stdcall GetTypeInfo				( UINT itinfo, LCID lcid, ITypeInfo ** pptinfo);
+			HRESULT	__stdcall GetIDsOfNames				( REFIID riid, OLECHAR  ** rgszNames, UINT cNames, LCID lcid, DISPID * rgdispid);
+			HRESULT	__stdcall Invoke					( DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr );
+};
+
+class D_CPosPassThru : public D_IMediaSeeking, public D_CMediaPosition
+{
+	D_IPin										*m_pPin;
+
+			HRESULT			  GetPeer					( D_IMediaPosition **ppMP ) ;
+			HRESULT			  GetPeerSeeking			( D_IMediaSeeking **ppMS ) ;
+public:
+	D_CPosPassThru(const TCHAR *, IUnknown *, HRESULT*, D_IPin *);
+
+			HRESULT	__stdcall QueryInterface			( REFIID riid, void **ppv ){ return GetOwner()->QueryInterface( riid,ppv ) ; } ;
+			ULONG	__stdcall AddRef					() { return GetOwner()->AddRef();  };
+			ULONG	__stdcall Release					(){ return GetOwner()->Release(); };
+			HRESULT			  ForceRefresh				(){ return S_OK; };
+
+	// override to return an accurate current position
+	virtual HRESULT			  GetMediaTime				( LONGLONG * /*pStartTime*/,LONGLONG * /*pEndTime*/) { return E_FAIL; }
+			HRESULT	__stdcall NonDelegatingQueryInterface( REFIID riid,void **ppv);
+
+	// IMediaSeeking methods
+			HRESULT	__stdcall GetCapabilities			( DWORD * pCapabilities );
+			HRESULT	__stdcall CheckCapabilities			( DWORD * pCapabilities );
+			HRESULT	__stdcall SetTimeFormat				( const GUID * pFormat);
+			HRESULT	__stdcall GetTimeFormat				( GUID *pFormat);
+			HRESULT	__stdcall IsUsingTimeFormat			( const GUID * pFormat);
+			HRESULT	__stdcall IsFormatSupported			( const GUID * pFormat);
+			HRESULT	__stdcall QueryPreferredFormat		( GUID *pFormat);
+			HRESULT	__stdcall ConvertTimeFormat			( LONGLONG * pTarget, const GUID * pTargetFormat, LONGLONG    Source, const GUID * pSourceFormat ); 
+			HRESULT	__stdcall SetPositions				( LONGLONG * pCurrent, DWORD CurrentFlags, LONGLONG * pStop, DWORD StopFlags );
+			HRESULT	__stdcall GetPositions				( LONGLONG * pCurrent, LONGLONG * pStop );
+			HRESULT	__stdcall GetCurrentPosition		( LONGLONG * pCurrent );
+			HRESULT	__stdcall GetStopPosition			( LONGLONG * pStop );
+			HRESULT	__stdcall SetRate					( double dRate);
+			HRESULT	__stdcall GetRate					( double * pdRate);
+			HRESULT	__stdcall GetDuration				( LONGLONG *pDuration);
+			HRESULT	__stdcall GetAvailable				( LONGLONG *pEarliest, LONGLONG *pLatest );
+			HRESULT	__stdcall GetPreroll				( LONGLONG *pllPreroll );
+
+	// D_IMediaPosition properties
+			HRESULT	__stdcall get_Duration				( D_REFTIME * plength);
+			HRESULT	__stdcall put_CurrentPosition		( D_REFTIME llTime);
+			HRESULT	__stdcall get_StopTime				( D_REFTIME * pllTime);
+			HRESULT	__stdcall put_StopTime				( D_REFTIME llTime);
+			HRESULT	__stdcall get_PrerollTime			( D_REFTIME * pllTime);
+			HRESULT	__stdcall put_PrerollTime			( D_REFTIME llTime);
+			HRESULT	__stdcall get_Rate					( double * pdRate);
+			HRESULT	__stdcall put_Rate					( double dRate);
+			HRESULT	__stdcall get_CurrentPosition		( D_REFTIME * pllTime);
+			HRESULT	__stdcall CanSeekForward			( LONG *pCanSeekForward);
+			HRESULT	__stdcall CanSeekBackward			( LONG *pCanSeekBackward ) ;
+
+private:
+			HRESULT			  GetSeekingLongLong		( HRESULT (__stdcall D_IMediaSeeking::*pMethod)( LONGLONG * ), LONGLONG * pll );
+};
+
+class D_CRendererPosPassThru : public D_CPosPassThru
+{
+	D_CCritSec									m_PositionLock;
+	LONGLONG									m_StartMedia;
+	LONGLONG									m_EndMedia;
+	BOOL										m_bReset;
+
+public:
+	D_CRendererPosPassThru( const TCHAR *, IUnknown *, HRESULT*, D_IPin * ) ;
+			HRESULT			  RegisterMediaTime			( D_IMediaSample *pMediaSample ) ;
+			HRESULT			  RegisterMediaTime			( LONGLONG StartTime,LONGLONG EndTime ) ;
+			HRESULT			  GetMediaTime				( LONGLONG *pStartTime,LONGLONG *pEndTime ) ;
+			HRESULT			  ResetMediaTime			() ;
+			HRESULT			  EOS						() ;
+};
+
+class D_CAMEvent
+{
+	D_CAMEvent(const D_CAMEvent &refEvent);
+	D_CAMEvent &operator=(const D_CAMEvent &refEvent);
+protected:
+	HANDLE										m_hEvent;
+public:
+	D_CAMEvent(BOOL fManualReset = FALSE);
+	~D_CAMEvent();
+
+	// Cast to HANDLE - we don't support this as an lvalue
+	operator HANDLE										() const { return m_hEvent; };
+			void			  Set						(){ /*EXECUTE_ASSERT*/(SetEvent(m_hEvent));};
+			BOOL			  Wait						( DWORD dwTimeout = INFINITE) { return (WaitForSingleObject(m_hEvent, dwTimeout) == WAIT_OBJECT_0); };
+			void			  Reset						(){ ResetEvent(m_hEvent); };
+			BOOL			  Check						(){ return Wait(0); };
+};
+
+class D_CBaseRenderer : public D_CBaseFilter
+{
+protected:
+	friend class D_CRendererInputPin;
+
+	friend void CALLBACK EndOfStreamTimer(UINT uID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2);
+
+	D_CRendererPosPassThru						*m_pPosition;
+	D_CAMEvent									m_RenderEvent;
+	D_CAMEvent									m_ThreadSignal;
+	D_CAMEvent									m_evComplete;
+	BOOL										m_bAbort;
+	BOOL										m_bStreaming;
+	DWORD_PTR									m_dwAdvise;
+	D_IMediaSample								*m_pMediaSample;
+	BOOL										m_bEOS;
+	BOOL										m_bEOSDelivered;
+	D_CRendererInputPin							*m_pInputPin;
+	D_CCritSec									m_InterfaceLock;
+	D_CCritSec									m_RendererLock;
+	D_IQualityControl							*m_pQSink;
+	BOOL										m_bRepaintStatus;
+	volatile BOOL								m_bInReceive;
+	D_REFERENCE_TIME							m_SignalTime;
+	UINT										m_EndOfStreamTimer;
+	D_CCritSec									m_ObjectCreationLock;
+
+public:
+	D_CBaseRenderer( REFCLSID RenderClass, TCHAR *pName, IUnknown * pUnk, HRESULT *phr ) ;
+	~D_CBaseRenderer();
+
+	virtual HRESULT			  GetMediaPositionInterface	( REFIID riid, void **ppv ) ;
+			HRESULT	__stdcall NonDelegatingQueryInterface( REFIID, void ** ) ;
+	virtual HRESULT			  SourceThreadCanWait		( BOOL bCanWait ) ;
+
+#ifdef DEBUG
+	// Debug only dump of the renderer state
+			void			  DisplayRendererState		() ;
+#endif
+	virtual HRESULT			  WaitForRenderTime			() ;
+	virtual HRESULT			  CompleteStateChange		( D_FILTER_STATE OldState ) ;
+
+	// Return internal information about this filter
+			BOOL			  IsEndOfStream				(){ return m_bEOS; };
+			BOOL			  IsEndOfStreamDelivered	(){ return m_bEOSDelivered; };
+			BOOL			  IsStreaming				(){ return m_bStreaming; };
+			void			  SetAbortSignal			( BOOL bAbort) { m_bAbort = bAbort; };
+	virtual void			  OnReceiveFirstSample		( D_IMediaSample * /*pMediaSample*/){ };
+			D_CAMEvent		  *GetRenderEvent			(){ return &m_RenderEvent ; } ;
+
+	// Permit access to the transition state
+			void			  Ready						(){ m_evComplete.Set() ; } ;
+			void			  NotReady					(){ m_evComplete.Reset() ; } ;
+			BOOL			  CheckReady				(){ return m_evComplete.Check() ; } ;
+	virtual int				  GetPinCount				() ;
+	virtual D_CBasePin		  *GetPin					( int n ) ;
+			D_FILTER_STATE	  GetRealState				() ;
+			void			  SendRepaint				() ;
+			void			  SendNotifyWindow			( D_IPin *pPin, HWND hwnd ) ;
+			BOOL			  OnDisplayChange			() ;
+			void			  SetRepaintStatus			( BOOL bRepaint ) ;
+
+	// Override the filter and pin interface functions
+			HRESULT	__stdcall Stop						() ;
+			HRESULT	__stdcall Pause						() ;
+			HRESULT	__stdcall Run						( D_REFERENCE_TIME StartTime ) ;
+			HRESULT	__stdcall GetState					( DWORD dwMSecs, D_FILTER_STATE *State ) ;
+			HRESULT	__stdcall FindPin					( LPCWSTR Id, D_IPin **ppPin ) ;
+
+	// These are available for a quality management implementation
+	virtual void			  OnRenderStart				( D_IMediaSample *pMediaSample ) ;
+	virtual void			  OnRenderEnd				( D_IMediaSample *pMediaSample ) ;
+	virtual HRESULT			  OnStartStreaming			(){ return NOERROR; } ;
+	virtual HRESULT			  OnStopStreaming			(){ return NOERROR; } ;
+	virtual void			  OnWaitStart				(){} ;
+	virtual void			  OnWaitEnd					(){} ;
+	virtual void			  PrepareRender				(){} ;
+
+#ifdef PERF
+	D_REFERENCE_TIME							m_trRenderStart ;
+	int											m_idBaseStamp;
+	int											m_idBaseRenderTime;
+	int											m_idBaseAccuracy;
+#endif
+
+	// Quality management implementation for scheduling rendering
+	virtual BOOL			  ScheduleSample			( D_IMediaSample *pMediaSample ) ;
+	virtual HRESULT			  GetSampleTimes			( D_IMediaSample *pMediaSample, D_REFERENCE_TIME *pStartTime, D_REFERENCE_TIME *pEndTime ) ;
+	virtual HRESULT			  ShouldDrawSampleNow		( D_IMediaSample *pMediaSample, D_REFERENCE_TIME *ptrStart, D_REFERENCE_TIME *ptrEnd ) ;
+
+	// Lots of end of stream complexities
+			void			  TimerCallback				() ;
+			void			  ResetEndOfStreamTimer		() ;
+			HRESULT			  NotifyEndOfStream			() ;
+	virtual HRESULT			  SendEndOfStream			() ;
+	virtual HRESULT			  ResetEndOfStream			() ;
+	virtual HRESULT			  EndOfStream				() ;
+
+	// Rendering is based around the clock
+			void			  SignalTimerFired			() ;
+	virtual HRESULT			  CancelNotification		() ;
+	virtual HRESULT			  ClearPendingSample		() ;
+
+	// Called when the filter changes state
+	virtual HRESULT			  Active					() ;
+	virtual HRESULT			  Inactive					() ;
+	virtual HRESULT			  StartStreaming			() ;
+	virtual HRESULT			  StopStreaming				() ;
+	virtual HRESULT			  BeginFlush				() ;
+	virtual HRESULT			  EndFlush					() ;
+
+	// Deal with connections and type changes
+	virtual HRESULT			  BreakConnect				() ;
+	virtual HRESULT			  SetMediaType				( const D_CMediaType *pmt ) ;
+	virtual HRESULT			  CompleteConnect			( D_IPin *pReceivePin ) ;
+
+	// These look after the handling of data samples
+	virtual HRESULT			  PrepareReceive			( D_IMediaSample *pMediaSample ) ;
+	virtual HRESULT			  Receive					( D_IMediaSample *pMediaSample ) ;
+	virtual BOOL			  HaveCurrentSample			() ;
+	virtual D_IMediaSample	  *GetCurrentSample			() ;
+	virtual HRESULT			  Render					( D_IMediaSample *pMediaSample ) ;
+
+	// Derived classes MUST override these
+	virtual HRESULT			  DoRenderSample			( D_IMediaSample *pMediaSample ) = 0 ;
+	virtual HRESULT			  CheckMediaType			( const D_CMediaType * ) = 0 ;
+
+	// Helper
+			void			  WaitForReceiveToComplete();
+};
+
+class D_CBaseVideoRenderer : public D_CBaseRenderer, public D_IQualProp, public D_IQualityControl
+{
+protected:
+	int											m_nNormal;
+#ifdef PERF
+	BOOL										m_bDrawLateFrames;
+#endif
+	BOOL										m_bSupplierHandlingQuality;
+	int											m_trThrottle;
+	int											m_trRenderAvg;
+	int											m_trRenderLast;
+	int											m_tRenderStart;
+	int											m_trEarliness;
+	int											m_trTarget;
+	int											m_trWaitAvg;
+	int											m_trFrameAvg;
+	int											m_trDuration;
+
+#ifdef PERF
+	int											m_idTimeStamp;
+	int											m_idEarliness;
+	int											m_idTarget;
+	int											m_idWaitReal;
+	int											m_idWait;
+	int											m_idFrameAccuracy;
+	int											m_idRenderAvg;
+	int											m_idSchLateTime;
+	int											m_idQualityRate;
+	int											m_idQualityTime;
+	int											m_idDecision;
+	int											m_idDuration;
+	int											m_idThrottle;
+#endif // PERF
+	D_REFERENCE_TIME							m_trRememberStampForPerf;
+#ifdef PERF
+	D_REFERENCE_TIME							m_trRememberFrameForPerf;
+
+	// debug...
+	int											m_idFrameAvg;
+	int											m_idWaitAvg;
+#endif
+	int											m_cFramesDropped;
+	int											m_cFramesDrawn;
+	LONGLONG									m_iTotAcc;
+	LONGLONG									m_iSumSqAcc;
+	D_REFERENCE_TIME							m_trLastDraw;
+	LONGLONG									m_iSumSqFrameTime;
+	LONGLONG									m_iSumFrameTime;
+	int											m_trLate;
+	int											m_trFrame;
+	int											m_tStreamingStart;
+#ifdef PERF
+	LONGLONG									m_llTimeOffset;
+#endif
+
+public:
+	D_CBaseVideoRenderer( REFCLSID RenderClass, TCHAR *pName, IUnknown * pUnk, HRESULT *phr ) ;
+	~D_CBaseVideoRenderer();
+
+	// IQualityControl methods - Notify allows audio-video throttling
+	virtual HRESULT __stdcall SetSink					( D_IQualityControl * piqc ) ;
+	virtual HRESULT __stdcall Notify					( D_IBaseFilter * pSelf, D_Quality q ) ;
+
+	// These provide a full video quality management implementation
+			void			  OnRenderStart				( D_IMediaSample *pMediaSample ) ;
+			void			  OnRenderEnd				( D_IMediaSample *pMediaSample ) ;
+			void			  OnWaitStart				();
+			void			  OnWaitEnd					();
+			HRESULT			  OnStartStreaming			();
+			HRESULT			  OnStopStreaming			();
+			void			  ThrottleWait				();
+
+	// Handle the statistics gathering for our quality management
+			void			  PreparePerformanceData	( int trLate, int trFrame ) ;
+	virtual void			  RecordFrameLateness		( int trLate, int trFrame ) ;
+	virtual void			  OnDirectRender			( D_IMediaSample *pMediaSample ) ;
+	virtual HRESULT			  ResetStreamingTimes		();
+	virtual BOOL			  ScheduleSample			( D_IMediaSample *pMediaSample ) ;
+	virtual HRESULT			  ShouldDrawSampleNow		( D_IMediaSample *pMediaSample, D_REFERENCE_TIME *ptrStart, D_REFERENCE_TIME *ptrEnd ) ;
+	virtual HRESULT			  SendQuality				( D_REFERENCE_TIME trLate, D_REFERENCE_TIME trRealStream ) ;
+	virtual HRESULT __stdcall JoinFilterGraph			( D_IFilterGraph * pGraph, LPCWSTR pName ) ;
+			HRESULT			  GetStdDev					( int nSamples, int *piResult, LONGLONG llSumSq, LONGLONG iTot ) ;
+
+public:
+	// IQualProp property page support
+	virtual HRESULT __stdcall get_FramesDroppedInRenderer( int *cFramesDropped ) ;
+	virtual HRESULT __stdcall get_FramesDrawn			( int *pcFramesDrawn ) ;
+	virtual HRESULT __stdcall get_AvgFrameRate			( int *piAvgFrameRate ) ;
+	virtual HRESULT __stdcall get_Jitter				( int *piJitter ) ;
+	virtual HRESULT __stdcall get_AvgSyncOffset			( int *piAvg ) ;
+	virtual HRESULT __stdcall get_DevSyncOffset			( int *piDev ) ;
+
+	// Implement an IUnknown interface and expose IQualProp
+	virtual HRESULT	__stdcall QueryInterface			( REFIID riid, void **ppv )	{ return GetOwner()->QueryInterface( riid,ppv ) ; } ;
+	virtual ULONG	__stdcall AddRef					()							{ return GetOwner()->AddRef();  } ;
+	virtual ULONG	__stdcall Release					()							{ return GetOwner()->Release(); } ;
+	virtual HRESULT __stdcall NonDelegatingQueryInterface( REFIID riid,VOID **ppv ) ;
+};
+
+class D_CEnumMediaTypes : public D_IEnumMediaTypes
+{
+	int											m_Position;
+	D_CBasePin									*m_pPin;
+	LONG										m_Version;
+	LONG										m_cRef;
+#ifdef DEBUG
+	DWORD										m_dwCookie;
+#endif
+
+	BOOL AreWeOutOfSync(){ return (m_pPin->GetMediaTypeVersion() == m_Version ? FALSE : TRUE); };
+
+public:
+	D_CEnumMediaTypes( D_CBasePin *pPin, D_CEnumMediaTypes *pEnumMediaTypes ) ;
+	virtual ~D_CEnumMediaTypes() ;
+
+	// IUnknown
+	virtual HRESULT __stdcall QueryInterface			( REFIID riid, void **ppv ) ;
+	virtual ULONG   __stdcall AddRef					() ;
+	virtual ULONG   __stdcall Release					() ;
+
+	// IEnumMediaTypes
+	virtual HRESULT __stdcall Next						( ULONG cMediaTypes, D_AM_MEDIA_TYPE ** ppMediaTypes, ULONG * pcFetched ) ;
+	virtual HRESULT __stdcall Skip						( ULONG cMediaTypes ) ;
+	virtual HRESULT __stdcall Reset						() ;
+	virtual HRESULT __stdcall Clone						( D_IEnumMediaTypes **ppEnum) ;
+};
+
+class D_CMovieRender : public D_CBaseVideoRenderer
+{
+public:
+	D_CMovieRender( IUnknown * pUnk, HRESULT *phr ) ;
+	~D_CMovieRender();
+
+	virtual HRESULT CheckMediaType						( const D_CMediaType *pMediaType ) ;
+	virtual HRESULT SetMediaType						( const D_CMediaType *pMediaType ) ;
+	virtual HRESULT DoRenderSample						( D_IMediaSample *pMediaSample ) ;
+
+	struct tagBASEIMAGE							*TempBaseImage ;
+	int											ImageType ;			// 0:RGB24   1:RGB32   2:YV12   3:NV12   4:YUY2   5:UYVY   6:YVYU   7:NV11
+	void										*ImageBuffer ;
+	BOOL										NewImageSet ;
+	BOOL										ImageReverse ;
+	DWORD										Width ;
+	DWORD										Height ;
+	DWORD										Pitch ;
+} ;
+
+#ifndef DX_NON_DSHOW_MP3
+
+class D_ISeekingPassThru : public IUnknown
+{
+public:
+	virtual HRESULT __stdcall Init						( BOOL bSupportRendering, D_IPin *pPin) = 0 ;
+};
+
+class D_CBaseOutputPin : public D_CBasePin
+{
+
+protected:
+
+	D_IMemAllocator								*m_pAllocator ;
+	D_IMemInputPin								*m_pInputPin ;
+
+public:
+
+	D_CBaseOutputPin( TCHAR *pObjectName, D_CBaseFilter *pFilter, D_CCritSec *pLock, HRESULT *phr, LPCWSTR pName);
+#ifdef UNICODE
+	D_CBaseOutputPin( CHAR  *pObjectName, D_CBaseFilter *pFilter, D_CCritSec *pLock, HRESULT *phr, LPCWSTR pName);
+#endif
+	virtual HRESULT			  CompleteConnect			( D_IPin *pReceivePin );
+	virtual HRESULT			  DecideAllocator			( D_IMemInputPin * pPin, D_IMemAllocator ** pAlloc );
+	virtual HRESULT			  DecideBufferSize			( D_IMemAllocator * pAlloc, D_ALLOCATOR_PROPERTIES * ppropInputRequest ) = 0 ;
+	virtual HRESULT			  GetDeliveryBuffer			( D_IMediaSample ** ppSample, D_REFERENCE_TIME * pStartTime, D_REFERENCE_TIME * pEndTime, DWORD dwFlags);
+	virtual HRESULT			  Deliver					( D_IMediaSample *);
+
+	// override this to control the connection
+	virtual HRESULT			  InitAllocator				( D_IMemAllocator **ppAlloc ) ;
+			HRESULT			  CheckConnect				( D_IPin *pPin ) ;
+			HRESULT			  BreakConnect				() ;
+
+	// override to call Commit and Decommit
+			HRESULT			  Active					() ;
+			HRESULT			  Inactive					() ;
+
+	STDMETHODIMP			  EndOfStream				() ;
+	virtual HRESULT			  DeliverEndOfStream		() ;
+
+	STDMETHODIMP			  BeginFlush				() ;
+	STDMETHODIMP			  EndFlush					() ;
+	virtual HRESULT			  DeliverBeginFlush			() ;
+	virtual HRESULT			  DeliverEndFlush			() ;
+	virtual HRESULT			  DeliverNewSegment			( D_REFERENCE_TIME tStart, D_REFERENCE_TIME tStop, double dRate ) ;
+};
+
+class D_CTransformInputPin : public D_CBaseInputPin
+{
+	friend class D_CTransformFilter;
+
+protected:
+	class D_CTransformFilter					*m_pTransformFilter ;
+
+public:
+//		D_CTransformInputPin( TCHAR *pObjectName, class D_CTransformFilter *pTransformFilter, HRESULT * phr, LPCWSTR pName);
+//	#ifdef UNICODE
+	D_CTransformInputPin( char  *pObjectName, class D_CTransformFilter *pTransformFilter, HRESULT * phr, LPCWSTR pName);
+//	#endif
+
+	STDMETHODIMP			  QueryId					( LPWSTR * Id ){ return D_AMGetWideString(L"In", Id); }
+
+			HRESULT			  CheckConnect				( D_IPin *pPin );
+			HRESULT			  BreakConnect				();
+			HRESULT			  CompleteConnect			( D_IPin *pReceivePin );
+
+			HRESULT			  CheckMediaType			( const D_CMediaType* mtIn ) ;
+			HRESULT			  SetMediaType				( const D_CMediaType* mt ) ;
+
+	// --- IMemInputPin -----
+	STDMETHODIMP			  Receive					( D_IMediaSample * pSample ) ;
+	STDMETHODIMP			  EndOfStream				() ;
+	STDMETHODIMP			  BeginFlush				() ;
+	STDMETHODIMP			  EndFlush					() ;
+	STDMETHODIMP			  NewSegment				( D_REFERENCE_TIME tStart, D_REFERENCE_TIME tStop, double dRate ) ;
+
+	virtual HRESULT			  CheckStreaming			() ;
+
+	// Media type
+public:
+			D_CMediaType	 &CurrentMediaType			(){ return m_mt; };
+};
+
+class D_CTransformOutputPin : public D_CBaseOutputPin
+{
+	friend class D_CTransformFilter;
+
+protected:
+	class D_CTransformFilter					*m_pTransformFilter ;
+
+public:
+	IUnknown									*m_pPosition ;
+
+//		D_CTransformOutputPin( TCHAR *pObjectName, class D_CTransformFilter *pTransformFilter, HRESULT *phr, LPCWSTR pName ) ;
+//	#ifdef UNICODE
+	D_CTransformOutputPin( CHAR  *pObjectName, class D_CTransformFilter *pTransformFilter, HRESULT * phr, LPCWSTR pName ) ;
+//	#endif
+	~D_CTransformOutputPin();
+
+	STDMETHODIMP			  NonDelegatingQueryInterface( REFIID riid, void **ppv ) ;
+	STDMETHODIMP			  QueryId					( LPWSTR * Id ){ return D_AMGetWideString( L"Out", Id ) ; }
+
+			HRESULT			  CheckConnect				( D_IPin *pPin ) ;
+			HRESULT			  BreakConnect				();
+			HRESULT			  CompleteConnect			( D_IPin *pReceivePin ) ;
+
+			HRESULT			  CheckMediaType			( const D_CMediaType* mtOut ) ;
+			HRESULT			  SetMediaType				( const D_CMediaType *pmt ) ;
+			HRESULT			  DecideBufferSize			( D_IMemAllocator * pAlloc, D_ALLOCATOR_PROPERTIES *pProp ) ;
+
+			HRESULT			  GetMediaType				( int iPosition, D_CMediaType *pMediaType ) ;
+
+	STDMETHODIMP			  Notify					( D_IBaseFilter * pSender, D_Quality q ) ;
+
+public:
+			D_CMediaType	 &CurrentMediaType			(){ return m_mt; } ;
+};
+
+class
+#ifndef DX_GCC_COMPILE
+__declspec(novtable)
+#endif
+D_CTransformFilter : public D_CBaseFilter
+{
+public:
+	virtual int				  GetPinCount				() ;
+	virtual D_CBasePin		 *GetPin					( int n ) ;
+	STDMETHODIMP			  FindPin					( LPCWSTR Id, D_IPin **ppPin ) ;
+
+	STDMETHODIMP			  Stop						() ;
+	STDMETHODIMP			  Pause						() ;
+
+//		D_CTransformFilter( TCHAR *, IUnknown *, REFCLSID clsid);
+//	#ifdef UNICODE
+	D_CTransformFilter( CHAR  *, IUnknown *, REFCLSID clsid);
+//	#endif
+	~D_CTransformFilter();
+
+	virtual HRESULT			  Transform					( D_IMediaSample * pIn, D_IMediaSample *pOut ) ;
+
+	virtual HRESULT			  CheckInputType			( const D_CMediaType* mtIn ) = 0 ;
+	virtual HRESULT			  CheckTransform			( const D_CMediaType* mtIn, const D_CMediaType* mtOut ) = 0 ;
+	virtual HRESULT			  DecideBufferSize			( D_IMemAllocator * pAllocator, D_ALLOCATOR_PROPERTIES *pprop ) = 0 ;
+
+	virtual HRESULT			  GetMediaType				( int iPosition, D_CMediaType *pMediaType ) = 0 ;
+
+	virtual HRESULT			  StartStreaming			() ;
+	virtual HRESULT			  StopStreaming				() ;
+	virtual HRESULT			  AlterQuality				( D_Quality q);
+	virtual HRESULT			  SetMediaType				( D_PIN_DIRECTION direction, const D_CMediaType *pmt ) ;
+	virtual HRESULT			  CheckConnect				( D_PIN_DIRECTION dir, D_IPin *pPin);
+	virtual HRESULT			  BreakConnect				( D_PIN_DIRECTION dir ) ;
+	virtual HRESULT			  CompleteConnect			( D_PIN_DIRECTION direction, D_IPin *pReceivePin ) ;
+	virtual HRESULT			  Receive					( D_IMediaSample *pSample ) ;
+			HRESULT			  InitializeOutputSample	( D_IMediaSample *pSample, D_IMediaSample **ppOutSample ) ;
+
+	virtual HRESULT			  EndOfStream				() ;
+	virtual HRESULT			  BeginFlush				() ;
+	virtual HRESULT			  EndFlush					() ;
+	virtual HRESULT			  NewSegment				( D_REFERENCE_TIME tStart, D_REFERENCE_TIME tStop, double dRate ) ;
+
+#ifdef PERF
+	virtual void			  RegisterPerfId			(){ m_idTransform = MSR_REGISTER( TEXT( "Transform" ) ) ; }
+#endif // PERF
+
+protected:
+
+#ifdef PERF
+	int											m_idTransform ;
+#endif
+	BOOL										m_bEOSDelivered ;
+	BOOL										m_bSampleSkipped ;
+	BOOL										m_bQualityChanged ;
+	D_CCritSec									m_csFilter ;
+	D_CCritSec									m_csReceive ;
+
+	friend class D_CTransformInputPin ;
+	friend class D_CTransformOutputPin ;
+	D_CTransformInputPin						*m_pInput ;
+	D_CTransformOutputPin						*m_pOutput ;
+};
+
+class D_CWavDestOutputPin : public D_CTransformOutputPin
+{
+public:
+	D_CWavDestOutputPin( D_CTransformFilter *pFilter, HRESULT * phr ) ;
+
+	STDMETHODIMP			  EnumMediaTypes			( D_IEnumMediaTypes **ppEnum ) ;
+			HRESULT			  CheckMediaType			( const D_CMediaType* pmt ) ;
+} ;
+
+class D_CWavDestFilter : public D_CTransformFilter
+{
+public:
+	virtual HRESULT	__stdcall QueryInterface			( REFIID riid, void **ppv )	{ return GetOwner()->QueryInterface( riid,ppv ) ; } ;
+	virtual ULONG	__stdcall AddRef					()							{ return GetOwner()->AddRef();  } ;
+	virtual ULONG	__stdcall Release					()							{ return GetOwner()->Release(); } ;
+
+	D_CWavDestFilter( IUnknown * pUnk, HRESULT *pHr) ;
+	~D_CWavDestFilter();
+
+	static	D_CUnknown * WINAPI CreateInstance			( IUnknown * punk, HRESULT *pHr ) ;
+			HRESULT			  Transform					( D_IMediaSample *pIn, D_IMediaSample *pOut ) ;
+			HRESULT			  Receive					( D_IMediaSample *pSample ) ;
+
+			HRESULT			  CheckInputType			( const D_CMediaType* mtIn ) ;
+			HRESULT			  CheckTransform			( const D_CMediaType *mtIn, const D_CMediaType *mtOut ) ;
+			HRESULT			  GetMediaType				( int iPosition, D_CMediaType *pMediaType ) ;
+
+			HRESULT			  DecideBufferSize			( D_IMemAllocator *pAlloc, D_ALLOCATOR_PROPERTIES *pProperties ) ;
+
+			HRESULT			  StartStreaming			() ;
+			HRESULT			  StopStreaming				() ;
+
+			HRESULT			  CompleteConnect			( D_PIN_DIRECTION /*direction*/, D_IPin * /*pReceivePin*/ ){ return S_OK; }
+
+private:
+			HRESULT			  Copy						( D_IMediaSample *pSource, D_IMediaSample *pDest ) const ;
+			HRESULT			  Transform					( D_IMediaSample *pMediaSample ) ;
+			HRESULT			  Transform					( D_AM_MEDIA_TYPE *pType, const signed char ContrastLevel ) const ;
+
+	ULONG										m_cbWavData;
+	ULONG										m_cbHeader;
+};
+
+class D_CMediaSample : public D_IMediaSample2    // The interface we support
+{
+protected:
+	friend class D_CBaseAllocator;
+
+	enum
+	{
+		Sample_SyncPoint       = 0x01,
+		Sample_Preroll         = 0x02,
+		Sample_Discontinuity   = 0x04,
+		Sample_TypeChanged     = 0x08,
+		Sample_TimeValid       = 0x10,
+		Sample_MediaTimeValid  = 0x20,
+		Sample_TimeDiscontinuity = 0x40,
+		Sample_StopValid       = 0x100,
+		Sample_ValidFlags      = 0x1FF
+	};
+
+	DWORD										m_dwFlags;
+	DWORD										m_dwTypeSpecificFlags;
+	LPBYTE										m_pBuffer;
+	LONG										m_lActual;
+	LONG										m_cbBuffer;
+	class D_CBaseAllocator						*m_pAllocator;
+	D_CMediaSample								*m_pNext;
+	D_REFERENCE_TIME							m_Start;
+	D_REFERENCE_TIME							m_End;
+	LONGLONG									m_MediaStart;
+	LONG										m_MediaEnd;
+	D_AM_MEDIA_TYPE								*m_pMediaType;
+	DWORD										m_dwStreamId;
+public:
+	LONG										m_cRef;
+
+public:
+//		D_CMediaSample( const TCHAR *pName, class D_CBaseAllocator *pAllocator, HRESULT *phr, LPBYTE pBuffer = NULL, LONG length = 0);
+//	#ifdef UNICODE
+	D_CMediaSample( const CHAR *pName, class D_CBaseAllocator *pAllocator, HRESULT *phr, LPBYTE pBuffer = NULL, LONG length = 0);
+//	#endif
+
+	virtual ~D_CMediaSample();
+
+	STDMETHODIMP			  QueryInterface			( REFIID riid, void **ppv );
+	STDMETHODIMP_(ULONG)	  AddRef					();
+	STDMETHODIMP_(ULONG)	  Release					();
+
+	HRESULT					  SetPointer				( BYTE * ptr, LONG cBytes );
+	STDMETHODIMP			  GetPointer				( BYTE ** ppBuffer ) ;
+	STDMETHODIMP_(LONG)		  GetSize					();
+	STDMETHODIMP			  GetTime					( D_REFERENCE_TIME * pTimeStart, D_REFERENCE_TIME * pTimeEnd );
+	STDMETHODIMP			  SetTime					( D_REFERENCE_TIME * pTimeStart, D_REFERENCE_TIME * pTimeEnd );
+	STDMETHODIMP			  IsSyncPoint				();
+	STDMETHODIMP			  SetSyncPoint				( BOOL bIsSyncPoint );
+	STDMETHODIMP			  IsPreroll					();
+	STDMETHODIMP			  SetPreroll				( BOOL bIsPreroll );
+
+	STDMETHODIMP_(LONG)		  GetActualDataLength		();
+	STDMETHODIMP			  SetActualDataLength		( LONG lActual );
+	STDMETHODIMP			  GetMediaType				( D_AM_MEDIA_TYPE **ppMediaType);
+	STDMETHODIMP			  SetMediaType				( D_AM_MEDIA_TYPE *pMediaType);
+	STDMETHODIMP			  IsDiscontinuity			();
+	STDMETHODIMP			  SetDiscontinuity			( BOOL bDiscontinuity);
+	STDMETHODIMP			  GetMediaTime				( LONGLONG * pTimeStart, LONGLONG * pTimeEnd );
+	STDMETHODIMP			  SetMediaTime				( LONGLONG * pTimeStart, LONGLONG * pTimeEnd );
+	STDMETHODIMP			  GetProperties				( DWORD cbProperties, BYTE * pbProperties );
+	STDMETHODIMP			  SetProperties				( DWORD cbProperties, const BYTE * pbProperties );
+};
+
+class
+#ifndef DX_GCC_COMPILE
+__declspec(novtable)
+#endif
+D_CBaseAllocator : public D_CUnknown, public D_IMemAllocatorCallbackTemp, public D_CCritSec
+{
+	class D_CSampleList;
+	friend class D_CSampleList;
+
+	static	D_CMediaSample*	  &NextSample				( D_CMediaSample *pSample ){ return pSample->m_pNext; };
+
+	class D_CSampleList
+	{
+	public:
+		D_CSampleList() : m_List(NULL), m_nOnList(0) {};
+			D_CMediaSample	  *Head						() const { return m_List; };
+			D_CMediaSample	  *Next						( D_CMediaSample *pSample) const { return D_CBaseAllocator::NextSample(pSample); };
+			int				  GetCount					() const { return m_nOnList; };
+			void			  Add						( D_CMediaSample *pSample) ;
+			D_CMediaSample	  *RemoveHead				() ;
+			void			  Remove					( D_CMediaSample *pSample);
+
+	public:
+		D_CMediaSample							*m_List;
+		int										m_nOnList;
+	};
+protected:
+
+	D_CSampleList								m_lFree;
+	HANDLE										m_hSem;
+	long										m_lWaiting;
+	long										m_lCount;
+	long										m_lAllocated;
+	long										m_lSize;
+	long										m_lAlignment;
+	long										m_lPrefix;
+	BOOL										m_bChanged;
+	BOOL										m_bCommitted;
+	BOOL										m_bDecommitInProgress;
+	D_IMemAllocatorNotifyCallbackTemp			*m_pNotify;
+	BOOL										m_fEnableReleaseCallback;
+
+	virtual void			  Free						() = 0 ;
+	virtual HRESULT			  Alloc						() ;
+
+public:
+	D_CBaseAllocator( const TCHAR *, IUnknown *, HRESULT *, BOOL bEvent = TRUE, BOOL fEnableReleaseCallback = FALSE);
+#ifdef UNICODE
+	D_CBaseAllocator( const CHAR *, IUnknown *, HRESULT *, BOOL bEvent = TRUE, BOOL fEnableReleaseCallback = FALSE);
+#endif
+	virtual ~D_CBaseAllocator();
+
+	virtual HRESULT	__stdcall QueryInterface			( REFIID riid, void **ppv )	{ return GetOwner()->QueryInterface( riid,ppv ) ; } ;
+	virtual ULONG	__stdcall AddRef					()							{ return GetOwner()->AddRef();  } ;
+	virtual ULONG	__stdcall Release					()							{ return GetOwner()->Release(); } ;
+
+	STDMETHODIMP			  NonDelegatingQueryInterface( REFIID riid, void **ppv );
+	STDMETHODIMP			  SetProperties				( D_ALLOCATOR_PROPERTIES* pRequest, D_ALLOCATOR_PROPERTIES* pActual);
+	STDMETHODIMP			  GetProperties				( D_ALLOCATOR_PROPERTIES* pProps);
+	STDMETHODIMP			  Commit					();
+	STDMETHODIMP			  Decommit					();
+	STDMETHODIMP			  GetBuffer					( D_IMediaSample **ppBuffer, D_REFERENCE_TIME * pStartTime, D_REFERENCE_TIME * pEndTime, DWORD dwFlags);
+	STDMETHODIMP			  ReleaseBuffer				( D_IMediaSample *pBuffer);
+	STDMETHODIMP			  SetNotify					( D_IMemAllocatorNotifyCallbackTemp *pNotify);
+	STDMETHODIMP			  GetFreeCount				( LONG *plBuffersFree);
+
+	void					  NotifySample				();
+	void					  SetWaiting				() { m_lWaiting++; };
+};
+
+class D_CMemAllocator : public D_CBaseAllocator
+{
+protected:
+	LPBYTE										m_pBuffer;
+
+			void			  Free						();
+			void			  ReallyFree				();
+			HRESULT			  Alloc						();
+
+public:
+	static D_CUnknown		 *CreateInstance			( IUnknown *, HRESULT * );
+	STDMETHODIMP			  SetProperties				( D_ALLOCATOR_PROPERTIES* pRequest, D_ALLOCATOR_PROPERTIES* pActual);
+//		D_CMemAllocator( const TCHAR *, IUnknown *, HRESULT *);
+//#ifdef UNICODE
+	D_CMemAllocator( const CHAR *, IUnknown *, HRESULT *);
+//#endif
+	~D_CMemAllocator();
+};
+
+class D_CAsyncRequest
+{
+	class D_CAsyncIo							*m_pIo;
+	class D_CAsyncStream						*m_pStream;
+	LONGLONG									m_llPos;
+	BOOL										m_bAligned;
+	LONG										m_lLength;
+	BYTE										*m_pBuffer;
+	LPVOID										m_pContext;
+	DWORD										m_dwUser;
+	HRESULT										m_hr;
+
+public:
+			HRESULT			  Request					( class D_CAsyncIo *pIo, class D_CAsyncStream *pStream, LONGLONG llPos, LONG lLength, BOOL bAligned, BYTE* pBuffer, LPVOID pContext, DWORD dwUser);
+			HRESULT			  Complete					();
+			HRESULT			  Cancel					(){ return S_OK; };
+			LPVOID			  GetContext				(){ return m_pContext; };
+			DWORD			  GetUser					(){ return m_dwUser; };
+			HRESULT			  GetHResult				() { return m_hr;	};
+			LONG			  GetActualLength			() { return m_lLength; };
+			LONGLONG		  GetStart					() { return m_llPos; };
+};
+
+class D_CAsyncStream
+{
+public:
+	virtual ~D_CAsyncStream() {};
+	virtual HRESULT			  SetPointer( LONGLONG llPos ) = 0;
+	virtual HRESULT			  Read( PBYTE pbBuffer, DWORD dwBytesToRead, BOOL bAlign, LPDWORD pdwBytesRead ) = 0;
+
+	virtual LONGLONG		  Size( LONGLONG *pSizeAvailable = NULL ) = 0;
+	virtual DWORD			  Alignment() = 0 ;
+	virtual void			  Lock() = 0;
+	virtual void			  Unlock() = 0;
+};
+
+typedef D_CGenericList< D_CAsyncRequest > D_CRequestList;
+
+class D_CAsyncIo
+{
+	D_CCritSec									m_csReader;
+	D_CAsyncStream								*m_pStream;
+
+	D_CCritSec									m_csLists;
+	BOOL										m_bFlushing;
+
+	D_CRequestList								m_listWork;
+	D_CRequestList								m_listDone;
+
+	D_CAMEvent									m_evWork;
+	D_CAMEvent									m_evDone;
+
+	LONG										m_cItemsOut;
+	BOOL										m_bWaiting;
+	D_CAMEvent									m_evAllDone;
+
+	D_CAMEvent									m_evStop;
+	HANDLE										m_hThread;
+
+			LONGLONG		  Size						(){ /*ASSERT(m_pStream != NULL);*/ return m_pStream->Size(); };
+			HRESULT			  StartThread				() ;
+			HRESULT			  CloseThread				();
+			D_CAsyncRequest	 *GetWorkItem				();
+			D_CAsyncRequest	 *GetDoneItem				();
+			HRESULT			  PutWorkItem				( D_CAsyncRequest* pRequest ) ;
+			HRESULT			  PutDoneItem				( D_CAsyncRequest* pRequest ) ;
+			void			  ProcessRequests			() ;
+
+	static	DWORD	WINAPI	  InitialThreadProc			(LPVOID pv){ D_CAsyncIo * pThis = (D_CAsyncIo*) pv; return pThis->ThreadProc(); };
+
+			DWORD			  ThreadProc				() ;
+
+public:
+
+	D_CAsyncIo( D_CAsyncStream *pStream );
+	~D_CAsyncIo();
+
+			HRESULT			  Open						( LPCTSTR pName);
+			HRESULT			  AsyncActive				();
+			HRESULT			  AsyncInactive				();
+			HRESULT			  Request					( LONGLONG llPos, LONG lLength, BOOL bAligned, BYTE* pBuffer, LPVOID pContext, DWORD dwUser);
+			HRESULT			  WaitForNext				( DWORD dwTimeout, LPVOID *ppContext, DWORD * pdwUser, LONG * pcbActual);
+			HRESULT			  SyncReadAligned			( LONGLONG llPos, LONG lLength, BYTE* pBuffer, LONG* pcbActual, PVOID pvContext);
+			HRESULT			  SyncRead					( LONGLONG llPos, LONG lLength, BYTE* pBuffer);
+			HRESULT			  Length					( LONGLONG *pllTotal, LONGLONG* pllAvailable);
+			HRESULT			  Alignment					( LONG* pl);
+			HRESULT			  BeginFlush				();
+			HRESULT			  EndFlush					();
+
+			LONG			  Alignment					(){	return m_pStream->Alignment();};
+			BOOL			  IsAligned					( LONG l)      {if ((l & (Alignment() -1)) == 0){return TRUE;} else {return FALSE;}};
+			BOOL			  IsAligned					( LONGLONG ll) {return IsAligned( (LONG) (ll & 0xffffffff));};
+			HANDLE			  StopEvent					() const { return m_evDone; }
+};
+
+class D_CMemStream : public D_CAsyncStream
+{
+public:
+	static	D_CUnknown *WINAPI CreateInstance			( LPBYTE pbData, LONGLONG llLength, DWORD dwKBPerSec = INFINITE );
+			void			   DeleteInstance			() ;
+
+	D_CMemStream( LPBYTE pbData, LONGLONG llLength, DWORD dwKBPerSec = INFINITE ) ;
+
+			HRESULT			  SetPointer				(LONGLONG llPos) ;
+			HRESULT			  Read						(PBYTE pbBuffer, DWORD dwBytesToRead, BOOL bAlign, LPDWORD pdwBytesRead ) ;
+			LONGLONG		  Size						(LONGLONG *pSizeAvailable) ;
+			DWORD			  Alignment					() ;
+			void			  Lock						() ;
+			void			  Unlock					() ;
+			LONGLONG		  GetPosition				() ;
+			LONGLONG		  GetLength					() ;
+
+private:
+	D_CCritSec									m_csLock;
+	const PBYTE									m_pbData;
+	const LONGLONG								m_llLength;
+	LONGLONG									m_llPosition;
+	DWORD										m_dwKBPerSec;
+	DWORD										m_dwTimeStart;
+};
+
+class D_IAsyncReader : public IUnknown
+{
+public:
+    virtual HRESULT __stdcall RequestAllocator			( D_IMemAllocator *pPreferred, D_ALLOCATOR_PROPERTIES *pProps, D_IMemAllocator **ppActual) = 0;
+    virtual HRESULT __stdcall Request					( D_IMediaSample *pSample, DWORD dwUser) = 0;
+    virtual HRESULT __stdcall WaitForNext				( DWORD dwTimeout, D_IMediaSample **ppSample, DWORD *pdwUser) = 0;
+    virtual HRESULT __stdcall SyncReadAligned			( D_IMediaSample *pSample) = 0;
+    virtual HRESULT __stdcall SyncRead					( LONGLONG llPosition, LONG lLength, BYTE *pBuffer) = 0;
+    virtual HRESULT __stdcall Length					( LONGLONG *pTotal, LONGLONG *pAvailable) = 0;
+    virtual HRESULT __stdcall BeginFlush				() = 0;
+    virtual HRESULT __stdcall EndFlush					() = 0;
+};
+
+class D_CAsyncOutputPin : public D_IAsyncReader, public D_CBasePin
+{
+protected:
+	class D_CAsyncReader						*m_pReader;
+	D_CAsyncIo									*m_pIo;
+	BOOL										m_bQueriedForAsyncReader;
+
+			HRESULT				  InitAllocator			( D_IMemAllocator **ppAlloc ) ;
+
+public:
+	D_CAsyncOutputPin( HRESULT * phr, class D_CAsyncReader *pReader, D_CAsyncIo *pIo, D_CCritSec * pLock);
+	~D_CAsyncOutputPin();
+
+	// --- CUnknown ---
+
+	virtual HRESULT	__stdcall QueryInterface			( REFIID riid, void **ppv )	{ return GetOwner()->QueryInterface( riid,ppv ) ; } ;
+	virtual ULONG	__stdcall AddRef					()							{ return GetOwner()->AddRef();  } ;
+	virtual ULONG	__stdcall Release					()							{ return GetOwner()->Release(); } ;
+			STDMETHODIMP	  NonDelegatingQueryInterface( REFIID, void** );
+
+	// --- IPin methods ---
+			STDMETHODIMP	  Connect					( D_IPin * pReceivePin, const D_AM_MEDIA_TYPE *pmt );
+
+	// --- CBasePin methods ---
+			HRESULT			  GetMediaType				( int iPosition, D_CMediaType *pMediaType ) ;
+			HRESULT			  CheckMediaType			( const D_CMediaType* pType ) ;
+			HRESULT			  CheckConnect				( D_IPin *pPin ){ m_bQueriedForAsyncReader = FALSE; return D_CBasePin::CheckConnect(pPin); }
+			HRESULT			  CompleteConnect			( D_IPin *pReceivePin ) ;
+			HRESULT			  BreakConnect				() ;
+			STDMETHODIMP	  RequestAllocator			( D_IMemAllocator* pPreferred, D_ALLOCATOR_PROPERTIES* pProps, D_IMemAllocator ** ppActual);
+			STDMETHODIMP	  Request					( D_IMediaSample* pSample, DWORD dwUser);
+			STDMETHODIMP	  WaitForNext				( DWORD dwTimeout, D_IMediaSample** ppSample, DWORD * pdwUser);
+			STDMETHODIMP	  SyncReadAligned			( D_IMediaSample* pSample);
+			STDMETHODIMP	  SyncRead					( LONGLONG llPosition, LONG lLength, BYTE* pBuffer);
+			STDMETHODIMP	  Length					( LONGLONG* pTotal, LONGLONG* pAvailable);
+			STDMETHODIMP	  BeginFlush				();
+			STDMETHODIMP	  EndFlush					();
+};
+
+class D_CAsyncReader : public D_CBaseFilter
+{
+
+protected:
+	D_CCritSec									m_csFilter;
+	D_CAsyncIo									m_Io;
+	D_CAsyncOutputPin							m_OutputPin;
+	D_CMediaType								m_mt;
+
+public:
+    
+	D_CAsyncReader( const TCHAR *pName, IUnknown * pUnk, D_CAsyncStream *pStream, HRESULT *phr);
+	~D_CAsyncReader();
+
+	// --- CBaseFilter methods ---
+			int				  GetPinCount				();
+			D_CBasePin		 *GetPin					(int n);
+
+	// --- Access our media type
+	const	D_CMediaType	 *LoadType					() const { return &m_mt;}
+	virtual HRESULT			  Connect					( D_IPin * pReceivePin, const D_AM_MEDIA_TYPE *pmt ){ return m_OutputPin.D_CBasePin::Connect( pReceivePin, pmt ) ; }
+} ;
+
+class D_CMemReader : public D_CAsyncReader
+{
+public:
+	D_CMemReader( D_CMemStream *pStream, D_CMediaType *pmt, HRESULT *phr) : D_CAsyncReader(TEXT("Mem Reader\0"), NULL, pStream, phr){ m_mt = *pmt; }
+
+			STDMETHODIMP	  Register					(){ return S_OK; }
+			STDMETHODIMP	  Unregister				(){ return S_OK; }
+	
+	static	D_CUnknown *WINAPI CreateInstance			(D_CMemStream *pStream, D_CMediaType *pmt, HRESULT *phr);
+			void			  DeleteInstance			() ;
+};
+
+
+
+
+
+
+typedef HRESULT ( *D_SAMPLECALLBACK )( D_IMediaSample * pSample, D_REFERENCE_TIME * StartTime, D_REFERENCE_TIME * StopTime, BOOL TypeChanged, void *CallbackData );
+
+class D_CTransInPlaceInputPin : public D_CTransformInputPin
+{
+
+protected:
+	class D_CTransInPlaceFilter * const			m_pTIPFilter;
+	BOOL										m_bReadOnly;
+
+public:
+
+//		D_CTransInPlaceInputPin( TCHAR               *pObjectName, D_CTransInPlaceFilter *pFilter, HRESULT             *phr, LPCWSTR              pName);
+	D_CTransInPlaceInputPin( char               *pObjectName, D_CTransInPlaceFilter *pFilter, HRESULT             *phr, LPCWSTR              pName);
+
+			STDMETHODIMP	  EnumMediaTypes			( D_IEnumMediaTypes **ppEnum );
+			HRESULT			  CheckMediaType			(const D_CMediaType* pmt);
+			STDMETHODIMP	  GetAllocator				(D_IMemAllocator ** ppAllocator);
+			STDMETHODIMP	  NotifyAllocator			(D_IMemAllocator * pAllocator, BOOL bReadOnly);
+			D_IMemAllocator	  *PeekAllocator			() const {  return m_pAllocator; }
+			STDMETHODIMP	  GetAllocatorRequirements	(D_ALLOCATOR_PROPERTIES *pProps);
+			HRESULT			  CompleteConnect			(D_IPin *pReceivePin);
+			inline const BOOL ReadOnly					() { return m_bReadOnly ; }
+};
+
+class D_CTransInPlaceOutputPin : public D_CTransformOutputPin
+{
+
+protected:
+	D_CTransInPlaceFilter * const				m_pTIPFilter;
+
+public:
+
+//		D_CTransInPlaceOutputPin( TCHAR *pObjectName, D_CTransInPlaceFilter *pFilter, HRESULT *phr, LPCWSTR pName);
+	D_CTransInPlaceOutputPin( char *pObjectName, D_CTransInPlaceFilter *pFilter, HRESULT *phr, LPCWSTR pName);
+
+			STDMETHODIMP	  EnumMediaTypes			( D_IEnumMediaTypes **ppEnum );
+			HRESULT			  CheckMediaType			(const D_CMediaType* pmt);
+			void			  SetAllocator				(D_IMemAllocator * pAllocator);
+			D_IMemInputPin	  *ConnectedIMemInputPin	(){ return m_pInputPin; }
+			D_IMemAllocator	  *PeekAllocator			() const {  return m_pAllocator; }
+			HRESULT			  CompleteConnect			(D_IPin *pReceivePin);
+};
+
+class
+#ifndef DX_GCC_COMPILE
+__declspec(novtable)
+#endif
+D_CTransInPlaceFilter : public D_CTransformFilter
+{
+public:
+	virtual D_CBasePin		  *GetPin					(int n);
+
+public:
+	D_CTransInPlaceFilter(TCHAR *, IUnknown *, REFCLSID clsid, HRESULT *, bool bModifiesData = true);
+#ifdef UNICODE
+	D_CTransInPlaceFilter(CHAR *, IUnknown *, REFCLSID clsid, HRESULT *, bool bModifiesData = true);
+#endif
+			HRESULT			  GetMediaType				(int /*iPosition*/, D_CMediaType * /*pMediaType*/){ return E_UNEXPECTED;	}
+			HRESULT			  DecideBufferSize			(D_IMemAllocator*, D_ALLOCATOR_PROPERTIES *);
+			HRESULT			  CheckTransform			(const D_CMediaType * /*mtIn*/, const D_CMediaType * /*mtOut*/){ return S_OK; };
+			HRESULT			  CompleteConnect			(D_PIN_DIRECTION dir,D_IPin *pReceivePin);
+	virtual HRESULT			  Receive					(D_IMediaSample *pSample);
+	virtual HRESULT			  Transform					(D_IMediaSample *pSample) PURE;
+
+#ifdef PERF
+	virtual void			  RegisterPerfId			(){ m_idTransInPlace = MSR_REGISTER(TEXT("TransInPlace"));}
+#endif
+
+protected:
+
+	D_IMediaSample								*Copy(D_IMediaSample *pSource);
+
+#ifdef PERF
+	int											m_idTransInPlace;
+#endif
+	bool										m_bModifiesData;
+
+	friend class D_CTransInPlaceInputPin;
+	friend class D_CTransInPlaceOutputPin;
+
+			D_CTransInPlaceInputPin  *InputPin					() const { return (D_CTransInPlaceInputPin *)m_pInput; };
+			D_CTransInPlaceOutputPin *OutputPin					() const { return (D_CTransInPlaceOutputPin *)m_pOutput; };
+			BOOL					  TypesMatch				() { return InputPin()->CurrentMediaType() == OutputPin()->CurrentMediaType(); }
+			BOOL					  UsingDifferentAllocators	() const { return InputPin()->PeekAllocator() != OutputPin()->PeekAllocator(); }
+};
+
+class D_IGrabberSample : public IUnknown
+{
+public:
+    virtual HRESULT STDMETHODCALLTYPE SetAcceptedMediaType		( const D_CMediaType *pType) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetConnectedMediaType		( D_CMediaType *pType) = 0;
+    virtual HRESULT STDMETHODCALLTYPE SetCallback				( D_SAMPLECALLBACK Callback, void *CallbackData) = 0;
+    virtual HRESULT STDMETHODCALLTYPE SetDeliveryBuffer			( D_ALLOCATOR_PROPERTIES props, BYTE *pBuffer) = 0;
+};
+
+class D_CSampleGrabberInPin;
+class D_CSampleGrabber;
+
+class D_CSampleGrabberAllocator : public D_CMemAllocator
+{
+	friend class D_CSampleGrabberInPin;
+	friend class D_CSampleGrabber;
+
+protected:
+	D_CSampleGrabberInPin						*m_pPin;
+
+public:
+//		D_CSampleGrabberAllocator( D_CSampleGrabberInPin * pParent, HRESULT *phr ) : D_CMemAllocator( TEXT("SampleGrabberAllocator\0"), NULL, phr ), m_pPin( pParent ){};
+	D_CSampleGrabberAllocator( D_CSampleGrabberInPin * pParent, HRESULT *phr ) : D_CMemAllocator( "SampleGrabberAllocator\0", NULL, phr ), m_pPin( pParent ){};
+	~D_CSampleGrabberAllocator( ){ m_pBuffer = NULL; }
+
+			HRESULT			  Alloc						();
+			void			  ReallyFree				();
+			STDMETHODIMP	  SetProperties				(D_ALLOCATOR_PROPERTIES *pRequest, D_ALLOCATOR_PROPERTIES *pActual);
+};
+
+class D_CSampleGrabberInPin : public D_CTransInPlaceInputPin
+{
+	friend class D_CSampleGrabberAllocator;
+	friend class D_CSampleGrabber;
+
+	D_CSampleGrabberAllocator					*m_pPrivateAllocator;
+	D_ALLOCATOR_PROPERTIES						m_allocprops;
+	BYTE										*m_pBuffer;
+	BOOL										m_bMediaTypeChanged;
+
+protected:
+			D_CSampleGrabber  *SampleGrabber			() { return (D_CSampleGrabber*) m_pFilter; }
+			HRESULT			  SetDeliveryBuffer			( D_ALLOCATOR_PROPERTIES props, BYTE * m_pBuffer );
+
+public:
+	D_CSampleGrabberInPin( D_CTransInPlaceFilter * pFilter, HRESULT * pHr ) ;
+	~D_CSampleGrabberInPin() ;
+
+			HRESULT			  GetMediaType				( int iPosition, D_CMediaType *pMediaType );
+			STDMETHODIMP	  EnumMediaTypes			( D_IEnumMediaTypes **ppEnum );
+			STDMETHODIMP	  NotifyAllocator			( D_IMemAllocator *pAllocator, BOOL bReadOnly );
+			STDMETHODIMP	  GetAllocator				( D_IMemAllocator **ppAllocator );
+			HRESULT			  SetMediaType				( const D_CMediaType *pmt );
+			STDMETHODIMP	  GetAllocatorRequirements	( D_ALLOCATOR_PROPERTIES *pProps );
+};
+
+class D_CSampleGrabber : public D_CTransInPlaceFilter, public D_IGrabberSample
+{
+	friend class D_CSampleGrabberInPin;
+	friend class D_CSampleGrabberAllocator;
+
+protected:
+
+	D_CMediaType								m_mtAccept;
+	D_SAMPLECALLBACK							m_callback;
+	D_CCritSec									m_Lock;
+	void										*m_CallbackData ;
+
+			BOOL			  IsReadOnly				( ) { return !m_bModifiesData; }
+			HRESULT			  CheckInputType			( const D_CMediaType * pmt );
+			HRESULT			  Transform					( D_IMediaSample * pms );
+			HRESULT			  Receive					( D_IMediaSample * pms );
+
+public:
+	D_CSampleGrabber( IUnknown * pOuter, HRESULT * pHr, BOOL ModifiesData );
+
+			STDMETHODIMP	  NonDelegatingQueryInterface(REFIID riid, void ** ppv);
+	virtual HRESULT	__stdcall QueryInterface			( REFIID riid, void **ppv )	{ return GetOwner()->QueryInterface( riid,ppv ) ; } ;
+	virtual ULONG	__stdcall AddRef					()							{ return GetOwner()->AddRef();  } ;
+	virtual ULONG	__stdcall Release					()							{ return GetOwner()->Release(); } ;
+
+			STDMETHODIMP	  SetAcceptedMediaType		( const D_CMediaType * pmt );
+			STDMETHODIMP	  GetConnectedMediaType		( D_CMediaType * pmt );
+			STDMETHODIMP	  SetCallback				( D_SAMPLECALLBACK Callback, void *CallbackData );
+			STDMETHODIMP	  SetDeliveryBuffer			( D_ALLOCATOR_PROPERTIES props, BYTE * m_pBuffer );
+
+	static	D_CUnknown *WINAPI CreateInstance			(IUnknown * punk, HRESULT *phr);
+			void			   DeleteInstance			() ;
+};
+
+#endif // DX_NON_DSHOW_MP3
+
+
+}
+#endif	/* DX_NON_MOVIE */
+#endif  /* DX_NON_DSHOW_MOVIE */
+
+#endif // __WINDOWS__
+
 
 #endif	/* __DXDIRECTX_H__ */
 

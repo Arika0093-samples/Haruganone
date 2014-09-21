@@ -13,16 +13,34 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="基本">
+      <UniqueIdentifier>{565a6689-bd45-42d5-8124-1da64244febc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="基本\Input">
+      <UniqueIdentifier>{5fea6e48-1355-4002-a70d-1657d0830792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="基本\Value">
+      <UniqueIdentifier>{21192f6d-e693-48f5-8332-f28c8be6b481}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Main">
+      <UniqueIdentifier>{e4705b8b-b541-4250-a8c9-dd57d5a732dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Chara.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="HeaderList\Base\IB_Input.cpp">
+      <Filter>基本\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="HeaderList\Base\IB_Value.cpp">
+      <Filter>基本\Value</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>ソース ファイル\Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +52,18 @@
     </ClInclude>
     <ClInclude Include="HeaderList\Constant.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Base\IB_Input.hpp">
+      <Filter>基本\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Base\IB_Value.hpp">
+      <Filter>基本\Value</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Base\IB_BaseInclude.hpp">
+      <Filter>基本</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Base\IB_BaseTemplate.hpp">
+      <Filter>基本</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

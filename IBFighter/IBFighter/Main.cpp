@@ -5,40 +5,56 @@
 #include "Constant.h"
 #include "Game.h"	//ゲーム関連のヘッダーファイル
 
-int Key[256];
-
-#define W_WIDTH 640
-#define W_HEIGHT 480
-
 Game *game;			//ゲームクラス使用するためのポインタ
 
-int GetHitKeyStateAll_2(int GetHitKeyStateAll_InputKey[]){
-    char GetHitKeyStateAll_Key[256];
-    GetHitKeyStateAll( GetHitKeyStateAll_Key );
-    for(int i=0;i<256;i++){
-        if(GetHitKeyStateAll_Key[i]==1) GetHitKeyStateAll_InputKey[i]++;
-        else                            GetHitKeyStateAll_InputKey[i]=0;
-    }
-    return 0;
+bool GetSetup()
+{
+	// Window Mode
+    ChangeWindowMode(TRUE);
+	SetUse3DFlag(TRUE);
+	SetGraphMode(640,480,32);
+	// Title
+	SetMainWindowText("IBFighters");
+	ChangeFontType(DX_FONTTYPE_ANTIALIASING);
+	if(ChangeFont("メイリオ") == -1){
+		return false;
+	}
+	SetFontThickness(1);
+	SetFontSize(16);
+
+	// 初期化と裏画面化
+	if(DxLib_Init() == -1 || SetDrawScreen( DX_SCREEN_BACK )!=0){
+		return false;
+	}
+	return true;
 }
- 
+
+bool GameProcess(){
+	// 画面適用
+    ScreenFlip();
+	// キー/マウスの状態更新
+	KeyBoard::GetInstance()._CheckKeyEvent();
+	Mouse::GetInstance()._CheckMouseEvent();
+	// 返却
+	return ProcessMessage() == 0
+		&& ClearDrawScreen() == 0
+		&& KeyBoard::Pushing(Key::Escape) == 0;
+}
+
+
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine, int nCmdShow ){
 	{
 		SIZE size;size.cx=W_WIDTH,size.cy=W_HEIGHT;
 		game = new Game(size);
 	}
-    ChangeWindowMode(TRUE);//ウィンドウモード
-	SetUse3DFlag(TRUE);
-	SetGraphMode(640,480,32,60);
-	SetMainWindowText("IBFighters");//タイトル変更
-	ChangeFontType(DX_FONTTYPE_ANTIALIASING);
-	if(ChangeFont("メイリオ")==-1)return 0;
-	SetFontThickness(1);
-	SetFontSize(16);
 
-	if(DxLib_Init() == -1 || SetDrawScreen( DX_SCREEN_BACK )!=0) return -1;//初期化と裏画面化
- 
-    while(ProcessMessage()==0 && ClearDrawScreen()==0 && GetHitKeyStateAll_2(Key)==0 && Key[KEY_INPUT_ESCAPE]==0){
+	// ゲームの初期化を行い失敗なら終了
+	if( GetSetup() == false ){
+		return 0;
+	}
+
+	// 1フレームごとに判定を行う
+    while( GameProcess() == true ){
 
 		//ゲームステータスによって分岐
 		switch(game->GetStatus()){
@@ -56,7 +72,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 
 		#ifdef DEBUG	//デバッグモード時のみ発動
 			//F9キーで各種設定確認
-			if(Key[KEY_INPUT_F9]!=0){
+			if(KeyBoard::Pushing(Key::F9) != 0){
 				SetDrawBlendMode(A_ON,150);
 				DrawFillBox(0,0,game->screen.cx,game->screen.cy,BLACK);
 				SetDrawBlendMode(A_OFF,0);
@@ -64,7 +80,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 			}
 		#endif
 
-        ScreenFlip();
     }
  
     DxLib_End();

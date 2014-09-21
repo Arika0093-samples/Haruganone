@@ -1,5 +1,10 @@
 #ifndef H_CONSTANT
 #define H_CONSTANT
+
+//画面幅
+#define W_WIDTH 640
+#define W_HEIGHT 480
+
 //ゲームのステータス(大分岐用)
 #define G_INIT		900000
 #define G_TITLE		900001

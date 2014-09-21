@@ -86,9 +86,15 @@
   <ItemGroup>
     <ClCompile Include="Chara.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HeaderList\Base\IB_Input.cpp" />
+    <ClCompile Include="HeaderList\Base\IB_Value.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HeaderList\Base\IB_BaseInclude.hpp" />
+    <ClInclude Include="HeaderList\Base\IB_BaseTemplate.hpp" />
+    <ClInclude Include="HeaderList\Base\IB_Input.hpp" />
+    <ClInclude Include="HeaderList\Base\IB_Value.hpp" />
     <ClInclude Include="HeaderList\Chara.h" />
     <ClInclude Include="HeaderList\Constant.h" />
     <ClInclude Include="HeaderList\Game.h" />
