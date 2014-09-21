@@ -85,8 +85,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chara.cpp" />
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Input.cpp" />
+    <ClCompile Include="HeaderList\Base\IB_Sequence.cpp" />
     <ClCompile Include="HeaderList\Base\IB_System.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Value.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -95,12 +95,12 @@
     <ClInclude Include="HeaderList\Base\IB_BaseInclude.hpp" />
     <ClInclude Include="HeaderList\Base\IB_BaseTemplate.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Input.hpp" />
+    <ClInclude Include="HeaderList\Base\IB_Sequence.hpp" />
     <ClInclude Include="HeaderList\Base\IB_String.hpp" />
     <ClInclude Include="HeaderList\Base\IB_System.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Value.hpp" />
     <ClInclude Include="HeaderList\Chara.h" />
     <ClInclude Include="HeaderList\Constant.h" />
-    <ClInclude Include="HeaderList\Game.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

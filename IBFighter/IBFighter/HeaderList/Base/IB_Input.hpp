@@ -63,21 +63,21 @@ namespace IB_Base
 			///		<para>0なら押されていない．1以上なら押されている時間．</para>
 			/// </summary>
 			/// <param name = "TargetKey">
-			///		取得する対象のキー．KeyListで定義された値を使用して下さい．
+			///		取得する対象のキー．Keyで定義された値を使用して下さい．
 			/// </param>
 			static unsigned int Pushing(const _KeysData &TargetKey);
 			/// <summary>
 			///		指定したキーがこのフレームで初めて押されたかどうかの情報を取得する．
 			/// </summary>
 			/// <param name = "TargetKey">
-			///		取得する対象のキー．KeyListで定義された値を使用して下さい．
+			///		取得する対象のキー．Keyで定義された値を使用して下さい．
 			/// </param>
 			static bool			PushStart(const _KeysData &TargetKey);
 			/// <summary>
 			///		指定したキーがこのフレームで初めて離されたかどうかの情報を取得する．
 			/// </summary>
 			/// <param name = "TargetKey">
-			///		取得する対象のキー．KeyListで定義された値を使用して下さい．
+			///		取得する対象のキー．Keyで定義された値を使用して下さい．
 			/// </param>
 			static bool			OutStart(const _KeysData &TargetKey);
 			/// <summary>

@@ -31,11 +31,11 @@
     <Filter Include="基本\System">
       <UniqueIdentifier>{5f0dfcea-9629-4525-a7ea-2eacfa822e6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="基本\Sequence">
+      <UniqueIdentifier>{4a419634-b639-4d38-9c74-787ca10bca85}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Chara.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -51,11 +51,11 @@
     <ClCompile Include="HeaderList\Base\IB_System.cpp">
       <Filter>基本\System</Filter>
     </ClCompile>
+    <ClCompile Include="HeaderList\Base\IB_Sequence.cpp">
+      <Filter>基本\Sequence</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeaderList\Game.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderList\Chara.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -79,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="HeaderList\Base\IB_String.hpp">
       <Filter>基本\Value</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Base\IB_Sequence.hpp">
+      <Filter>基本\Sequence</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
