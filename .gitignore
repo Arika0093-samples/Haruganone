@@ -22,6 +22,8 @@
 
 #VS2012
 *.opensdf
+Debug/
+Release/
 
 # =========================
 # Operating System Files
