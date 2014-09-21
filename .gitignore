@@ -25,6 +25,9 @@
 Debug/
 Release/
 DxLib/
+*.sdf
+*.v11.suo
+Log.txt
 
 # =========================
 # Operating System Files
