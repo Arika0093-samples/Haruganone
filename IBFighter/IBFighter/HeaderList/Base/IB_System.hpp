@@ -77,6 +77,10 @@ namespace IB_Base
 			/// </summary>
 			static void				Accept();
 			/// <summary>
+			///		カレントディレクトリを変更する
+			/// </summary>
+			static void				SetProgramDirectory();
+			/// <summary>
 			///		標準のフォント名を取得
 			/// </summary>
 			static tstring			_GetDefaultFontName();

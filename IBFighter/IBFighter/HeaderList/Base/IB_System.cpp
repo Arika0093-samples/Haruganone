@@ -62,3 +62,25 @@ tstring			ApplicationConfig::_GetDefaultFontName()
 	// 返却
 	return lgFont.lfFaceName;
 }	
+
+// ----------------------------------------------------
+//	ApplicationConfig::SetProgramDirectory
+// ----------------------------------------------------
+void			ApplicationConfig::SetProgramDirectory()
+{
+	// プログラムの基準ディレクトリを保存するための変数
+	TCHAR DirPath[1024];
+	// _splitpathを使用するための一時変数
+	TCHAR Drive[16], Dir[MAX_PATH], Name[256], Ext[32];
+	// ----------------------------------------------------
+	// プログラム本体のパスを取得する
+	GetModuleFileName(NULL, DirPath, 1024);
+	// 取得したパスを各要素に分解する
+	_tsplitpath_s(DirPath, Drive, 16, Dir, MAX_PATH, Name, 256, Ext, 32);
+	// 分解したパスを再構築する
+	wsprintf(DirPath, _T("%s%s"), Drive, Dir);
+	// カレントディレクトリに指定する
+	SetCurrentDirectory(DirPath);
+	// 終了
+	return;
+}

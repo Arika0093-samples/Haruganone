@@ -10,12 +10,13 @@
 // ----------------------------------------------------
 bool GetSetup()
 {
+	// ディレクトリ変更
+	ApplicationConfig::SetProgramDirectory();
 	// 設定変更
 	ApplicationConfig::Width = W_WIDTH;
 	ApplicationConfig::Height = W_HEIGHT;
 	ApplicationConfig::Title = _T("IB_Fighters");
 	ApplicationConfig::ClassName = _T("IB_Fighters");
-
 	// 適用
 	ApplicationConfig::Accept();
 
