@@ -25,6 +25,12 @@
     <Filter Include="ソース ファイル\Main">
       <UniqueIdentifier>{e4705b8b-b541-4250-a8c9-dd57d5a732dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="基本\#Base">
+      <UniqueIdentifier>{e7686af4-bcc8-455c-991a-89f57b077201}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="基本\System">
+      <UniqueIdentifier>{5f0dfcea-9629-4525-a7ea-2eacfa822e6e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -41,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>ソース ファイル\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="HeaderList\Base\IB_System.cpp">
+      <Filter>基本\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -60,10 +69,16 @@
       <Filter>基本\Value</Filter>
     </ClInclude>
     <ClInclude Include="HeaderList\Base\IB_BaseInclude.hpp">
-      <Filter>基本</Filter>
+      <Filter>基本\#Base</Filter>
     </ClInclude>
     <ClInclude Include="HeaderList\Base\IB_BaseTemplate.hpp">
-      <Filter>基本</Filter>
+      <Filter>基本\#Base</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Base\IB_System.hpp">
+      <Filter>基本\System</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Base\IB_String.hpp">
+      <Filter>基本\Value</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
