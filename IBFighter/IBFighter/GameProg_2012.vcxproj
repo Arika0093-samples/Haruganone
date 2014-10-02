@@ -53,13 +53,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./HeaderList;./DxLib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./HeaderList;./DxLib;./Lua/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>./HeaderList;./DxLib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./HeaderList;./DxLib;./Lua</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -86,6 +86,7 @@
   <ItemGroup>
     <ClCompile Include="Chara.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Input.cpp" />
+    <ClCompile Include="HeaderList\Base\IB_Script.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Sequence.cpp" />
     <ClCompile Include="HeaderList\Base\IB_System.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Value.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="HeaderList\Base\IB_BaseInclude.hpp" />
     <ClInclude Include="HeaderList\Base\IB_BaseTemplate.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Input.hpp" />
+    <ClInclude Include="HeaderList\Base\IB_Script.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Sequence.hpp" />
     <ClInclude Include="HeaderList\Base\IB_String.hpp" />
     <ClInclude Include="HeaderList\Base\IB_System.hpp" />

@@ -22,11 +22,12 @@
 
 #VS2012
 *.opensdf
-Debug/
-Release/
-DxLib/
 *.sdf
 *.v11.suo
+Debug/
+Release/
+Boost/
+DxLib/
 Log.txt
 
 # =========================

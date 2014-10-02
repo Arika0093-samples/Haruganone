@@ -71,3 +71,4 @@ void			Sequencer::SetStatus(unsigned int Stat)
 {
 	_Status = _SeqChanged = Stat;
 }
+

@@ -34,6 +34,9 @@
     <Filter Include="基本\Sequence">
       <UniqueIdentifier>{4a419634-b639-4d38-9c74-787ca10bca85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="基本\Script">
+      <UniqueIdentifier>{4fceeb28-3df4-44cf-a7d1-5971740ab1d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chara.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="HeaderList\Base\IB_Sequence.cpp">
       <Filter>基本\Sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="HeaderList\Base\IB_Script.cpp">
+      <Filter>基本\Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="HeaderList\Base\IB_Sequence.hpp">
       <Filter>基本\Sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Base\IB_Script.hpp">
+      <Filter>基本\Script</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -73,8 +73,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	}
 
 	// 1フレームごとに判定を行う
-    while( GameProcess() == true )
-	{
+    while( GameProcess() == true ){
 		Sqr.Process();
 
 		#ifdef DEBUG	//デバッグモード時のみ発動
@@ -86,7 +85,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 				DrawFormatString(0,0,WHITE, "STATUS:%d", Sqr.GetStatus());
 			}
 		#endif
-
     }
  
     DxLib_End();
