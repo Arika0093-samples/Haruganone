@@ -27,10 +27,16 @@ namespace IB_Base
 		class LuaScript
 		{
 		public:
+			/// <summary>
+			///		constructor
+			/// </summary>
 			LuaScript();
 
 		private:
-
+			/// <summary>
+			///		Luaスクリプトの処理を行うクラス
+			/// </summary>
+			lua_State *Ls;
 
 		};
 	}

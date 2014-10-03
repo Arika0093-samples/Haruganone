@@ -24,6 +24,7 @@
 *.opensdf
 *.sdf
 *.v11.suo
+*.zip
 Debug/
 Release/
 Boost/
