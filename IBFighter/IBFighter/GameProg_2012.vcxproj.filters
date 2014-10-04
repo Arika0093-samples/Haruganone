@@ -37,6 +37,9 @@
     <Filter Include="基本\Script">
       <UniqueIdentifier>{4fceeb28-3df4-44cf-a7d1-5971740ab1d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="基本\Sound">
+      <UniqueIdentifier>{c89c3c69-29d5-4729-8ec9-0c507bd9b762}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chara.cpp">
@@ -59,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="HeaderList\Base\IB_Script.cpp">
       <Filter>基本\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="HeaderList\Base\IB_Sound.cpp">
+      <Filter>基本\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="HeaderList\Base\IB_Script.hpp">
       <Filter>基本\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Base\IB_Sound.hpp">
+      <Filter>基本\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,9 +10,10 @@
 //	必要なヘッダーを読み込む
 // --------------------------------------------------------
 extern "C"{
-	#include "Lua/include/lua.h"
+	#include <include/lua.h>
 }
-#include "Lua/luabind/luabind.hpp"
+#include <luabind/luabind.hpp>
+
 
 // --------------------------------------------------------
 //	名前空間を使用(IB_Base::Script)
@@ -34,9 +35,9 @@ namespace IB_Base
 
 		private:
 			/// <summary>
-			///		Luaスクリプトの処理を行うクラス
+			///		Luaスクリプトを扱う構造体
 			/// </summary>
-			lua_State *Ls;
+			lua_State *_Ls;
 
 		};
 	}

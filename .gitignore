@@ -29,6 +29,7 @@ Debug/
 Release/
 Boost/
 DxLib/
+Lua/
 Log.txt
 
 # =========================
