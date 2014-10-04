@@ -84,7 +84,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Chara.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Input.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Script.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Sequence.cpp" />
@@ -96,6 +95,7 @@
   <ItemGroup>
     <ClInclude Include="HeaderList\Base\IB_BaseInclude.hpp" />
     <ClInclude Include="HeaderList\Base\IB_BaseTemplate.hpp" />
+    <ClInclude Include="HeaderList\Base\IB_Chara.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Input.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Script.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Sequence.hpp" />

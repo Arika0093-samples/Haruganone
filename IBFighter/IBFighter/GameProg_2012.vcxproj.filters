@@ -34,17 +34,19 @@
     <Filter Include="基本\Sequence">
       <UniqueIdentifier>{4a419634-b639-4d38-9c74-787ca10bca85}</UniqueIdentifier>
     </Filter>
+<<<<<<< Updated upstream
     <Filter Include="基本\Script">
       <UniqueIdentifier>{4fceeb28-3df4-44cf-a7d1-5971740ab1d8}</UniqueIdentifier>
     </Filter>
     <Filter Include="基本\Sound">
       <UniqueIdentifier>{c89c3c69-29d5-4729-8ec9-0c507bd9b762}</UniqueIdentifier>
+=======
+    <Filter Include="基本\Chara">
+      <UniqueIdentifier>{079025f4-f227-493d-9dec-09b5b34abc53}</UniqueIdentifier>
+>>>>>>> Stashed changes
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Chara.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="HeaderList\Base\IB_Input.cpp">
       <Filter>基本\Input</Filter>
     </ClCompile>
@@ -95,11 +97,16 @@
     <ClInclude Include="HeaderList\Base\IB_Sequence.hpp">
       <Filter>基本\Sequence</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
     <ClInclude Include="HeaderList\Base\IB_Script.hpp">
       <Filter>基本\Script</Filter>
     </ClInclude>
     <ClInclude Include="HeaderList\Base\IB_Sound.hpp">
       <Filter>基本\Sound</Filter>
+=======
+    <ClInclude Include="HeaderList\Base\IB_Chara.hpp">
+      <Filter>基本\Chara</Filter>
+>>>>>>> Stashed changes
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -26,13 +26,18 @@
 #define PINK	GetColor(255,  0,150)
 
 //重力設定(重力加速度をそのまま使用)
-#define IB_GRAVITY	9.8
+#define GRAVITY	9.8
 
-//描画ブレンド定数再定義
+//描画ブレンド定数再定義(プログラム効率上昇を試みる)
 #define A_ON	DX_BLENDMODE_ALPHA
 #define A_OFF	DX_BLENDMODE_NOBLEND
 
-//キャラクラスの設定
-#define C_MAX_HANDLE	10		//キャラハンドル最大数
-#define C_MAX_SE		10		//SEハンドル最大数
+//キャラクタの処理モードのID
+#define CHARA_2D		222
+#define CHARA_3D		333
+
+//キャラクタの重量ID(吹っ飛ばしやすさに関連)
+#define CH_LITE			25
+#define CH_NORMAL		50
+#define CH_HEAVY		75
 #endif 

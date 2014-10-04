@@ -53,10 +53,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 {
 	// シーケンス管理クラスを確保してG_INITで初期化
 	Sequencer Sqr = G_INIT;
-
+	//　プレイヤーは4人までに固定
+	Chara p1(),p2(),p3(),p4();
 	// シーケンス関数を登録
 	Sqr.RegistFunction(G_INIT, [](Sequencer& Sq)
 		{
+			//初期化処理を実行
+
+			//初期化終了後の状態遷移
 			Sq.SetStatus(G_BATTLE);
 		}
 	);
@@ -73,11 +77,17 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	}
 
 	// 1フレームごとに判定を行う
+<<<<<<< Updated upstream
     while( GameProcess() == true ){
+=======
+    while( GameProcess() == true )
+	{
+		// 対応シーケンス関数の呼び出し
+>>>>>>> Stashed changes
 		Sqr.Process();
 
 		#ifdef DEBUG	//デバッグモード時のみ発動
-			//F9キーで各種設定確認
+		//F9キーで各種設定確認
 			if(KeyBoard::Pushing(Key::F9) != 0){
 				SetDrawBlendMode(A_ON,150);
 				DrawFillBox(0,0, W_WIDTH, W_HEIGHT, BLACK);
