@@ -16,13 +16,14 @@
 //	“ÆŽ©include
 // --------------------------------------------------------
 #include "IB_BaseTemplate.hpp"
+#include "IB_Debug.hpp"
 #include "IB_Input.hpp"
 #include "IB_Script.hpp"
 #include "IB_Sequence.hpp"
 #include "IB_String.hpp"
 #include "IB_System.hpp"
 #include "IB_Value.hpp"
-#include "IB_Chara.hpp"
+
 // --------------------------------------------------------
 //	–¼‘O‹óŠÔ‚ð—LŒø‰»
 // --------------------------------------------------------
@@ -34,4 +35,3 @@ using namespace IB_Base::Script;
 using namespace IB_Base::Sequence;
 using namespace IB_Base::System;
 using namespace IB_Base::Value;
-using namespace IB_Base::Charas;

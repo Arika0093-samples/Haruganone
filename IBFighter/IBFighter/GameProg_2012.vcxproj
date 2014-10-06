@@ -53,13 +53,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./HeaderList;./DxLib;./Boost;./Lua</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./HeaderList;./DxLib;./Boost;./Lua; ./Lua/include;</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>./HeaderList;./DxLib;./Lua</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua5.1.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -84,18 +85,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="HeaderList\Base\IB_Debug.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Input.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Script.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Sequence.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Sound.cpp" />
     <ClCompile Include="HeaderList\Base\IB_System.cpp" />
     <ClCompile Include="HeaderList\Base\IB_Value.cpp" />
+    <ClCompile Include="Lua\src\class.cpp" />
+    <ClCompile Include="Lua\src\class_info.cpp" />
+    <ClCompile Include="Lua\src\class_registry.cpp" />
+    <ClCompile Include="Lua\src\class_rep.cpp" />
+    <ClCompile Include="Lua\src\create_class.cpp" />
+    <ClCompile Include="Lua\src\error.cpp" />
+    <ClCompile Include="Lua\src\exception_handler.cpp" />
+    <ClCompile Include="Lua\src\function.cpp" />
+    <ClCompile Include="Lua\src\inheritance.cpp" />
+    <ClCompile Include="Lua\src\link_compatibility.cpp" />
+    <ClCompile Include="Lua\src\object_rep.cpp" />
+    <ClCompile Include="Lua\src\open.cpp" />
+    <ClCompile Include="Lua\src\pcall.cpp" />
+    <ClCompile Include="Lua\src\scope.cpp" />
+    <ClCompile Include="Lua\src\stack_content_by_name.cpp" />
+    <ClCompile Include="Lua\src\weak_ref.cpp" />
+    <ClCompile Include="Lua\src\wrapper_base.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HeaderList\Base\IB_Debug.hpp" />
     <ClInclude Include="HeaderList\Base\IB_BaseInclude.hpp" />
     <ClInclude Include="HeaderList\Base\IB_BaseTemplate.hpp" />
-    <ClInclude Include="HeaderList\Base\IB_Chara.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Input.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Script.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Sequence.hpp" />
