@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-<<<<<<< Updated upstream
     <Filter Include="ソース ファイル">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -44,7 +43,10 @@
     <Filter Include="基本\#Base\Debug">
       <UniqueIdentifier>{1b33f519-f46b-4345-9f4f-2a9e8402cf20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="luabind">
+    <Filter Include="別途コンパイル">
+      <UniqueIdentifier>{3f7af8be-e8ce-4911-8da6-a0f64814eaf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="別途コンパイル\luabind">
       <UniqueIdentifier>{c5dca5c6-310b-4d7f-b793-193165198251}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -74,55 +76,55 @@
       <Filter>基本\#Base\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\class.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\class_info.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\class_registry.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\class_rep.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\create_class.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\error.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\exception_handler.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\function.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\inheritance.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\link_compatibility.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\object_rep.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\open.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\pcall.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\scope.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\stack_content_by_name.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\weak_ref.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\wrapper_base.cpp">
-      <Filter>luabind</Filter>
+      <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,29 +164,5 @@
     <ClInclude Include="HeaderList\Base\IB_Debug.hpp">
       <Filter>基本\#Base\Debug</Filter>
     </ClInclude>
-=======
-    <ClCompile Include="HeaderList\Base\IB_Input.cpp" />
-    <ClCompile Include="HeaderList\Base\IB_Script.cpp" />
-    <ClCompile Include="HeaderList\Base\IB_Sequence.cpp" />
-    <ClCompile Include="HeaderList\Base\IB_Sound.cpp" />
-    <ClCompile Include="HeaderList\Base\IB_System.cpp" />
-    <ClCompile Include="HeaderList\Base\IB_Value.cpp" />
-    <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="HeaderList\Base\IB_BaseInclude.hpp" />
-    <ClInclude Include="HeaderList\Base\IB_BaseTemplate.hpp" />
-    <ClInclude Include="HeaderList\Base\IB_Input.hpp" />
-    <ClInclude Include="HeaderList\Base\IB_Script.hpp" />
-    <ClInclude Include="HeaderList\Base\IB_Sequence.hpp" />
-    <ClInclude Include="HeaderList\Base\IB_Sound.hpp" />
-    <ClInclude Include="HeaderList\Base\IB_String.hpp" />
-    <ClInclude Include="HeaderList\Base\IB_System.hpp" />
-    <ClInclude Include="HeaderList\Base\IB_Value.hpp" />
-    <ClInclude Include="HeaderList\Constant.h" />
-    <ClInclude Include="HeaderList\Van\IB_Chara.hpp" />
-    <ClInclude Include="HeaderList\Van\IB_VanTemplate.hpp" />
-    <ClInclude Include="HeaderList\Van\IB_VanInclude.hpp" />
->>>>>>> Stashed changes
   </ItemGroup>
 </Project>

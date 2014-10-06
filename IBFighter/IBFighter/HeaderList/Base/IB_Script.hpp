@@ -5,10 +5,10 @@
 // --------------------------------------------------------
 //	一度だけ読み込む
 #pragma once
+
 // --------------------------------------------------------
 //	必要なヘッダーを読み込む
 // --------------------------------------------------------
-<<<<<<< Updated upstream
 #include "IB_String.hpp"
 #include <lua.hpp>
 #include <luabind/luabind.hpp>
@@ -16,15 +16,6 @@
 // --------------------------------------------------------
 //	defineマクロを使用する
 // --------------------------------------------------------
-
-=======
-/*
-extern "C"{
-	#include <include/lua.h>
-}
-#include <luabind/luabind.hpp>
-*/
->>>>>>> Stashed changes
 
 // --------------------------------------------------------
 //	名前空間を使用(IB_Base::Script)
@@ -43,7 +34,6 @@ namespace IB_Base
 			/// <summary>
 			///		Luaスクリプト使用の準備を行う。
 			/// </summary>
-<<<<<<< Updated upstream
 			/// <param name = "File">
 			///		開くファイルのパス。
 			/// </param>
@@ -72,9 +62,6 @@ namespace IB_Base
 			///		標準でtrue。DEBUG時のみ有効。
 			/// </summary>
 			bool		IsAssert;
-=======
-			LuaScript();
->>>>>>> Stashed changes
 		private:
 			/// <summary>
 			///		開いているファイル名
@@ -83,16 +70,11 @@ namespace IB_Base
 			/// <summary>
 			///		Luaスクリプトを扱う構造体
 			/// </summary>
-<<<<<<< Updated upstream
 			lua_State*	_Ls;
 			/// <summary>
 			///		Luabindのエラー保存
 			/// </summary>
 			LuaError*	_Err;
-=======
-//			lua_State *_Ls;
-
->>>>>>> Stashed changes
 		};
 	}
 }
