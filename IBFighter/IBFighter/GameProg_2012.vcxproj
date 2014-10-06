@@ -53,7 +53,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+<<<<<<< Updated upstream
       <AdditionalIncludeDirectories>./HeaderList;./DxLib;./Boost;./Lua; ./Lua/include;</AdditionalIncludeDirectories>
+=======
+      <AdditionalIncludeDirectories>./Lua/include/;./Boost/boost_1_56_0/;./Van;./HeaderList;./DxLib;./Boost;./Lua</AdditionalIncludeDirectories>
+>>>>>>> Stashed changes
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -122,8 +126,10 @@
     <ClInclude Include="HeaderList\Base\IB_String.hpp" />
     <ClInclude Include="HeaderList\Base\IB_System.hpp" />
     <ClInclude Include="HeaderList\Base\IB_Value.hpp" />
-    <ClInclude Include="HeaderList\Chara.h" />
     <ClInclude Include="HeaderList\Constant.h" />
+    <ClInclude Include="HeaderList\Van\IB_Chara.hpp" />
+    <ClInclude Include="HeaderList\Van\IB_VanInclude.hpp" />
+    <ClInclude Include="HeaderList\Van\IB_VanTemplate.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,7 @@
 // --------------------------------------------------------
-//	IB_BaseInclude.hpp
+//	IB_VanInclude.hpp
 // --------------------------------------------------------
-//	/Code/Base/ ‚Ìinclude
+//	/Code/Van/ ‚Ìinclude
 // --------------------------------------------------------
 #pragma once
 
@@ -15,28 +15,13 @@
 // --------------------------------------------------------
 //	“ÆŽ©include
 //
-//  Arika
+//  VanillaCafe
 // --------------------------------------------------------
-#include "IB_BaseTemplate.hpp"
-#include "IB_Debug.hpp"
-#include "IB_Input.hpp"
-#include "IB_Script.hpp"
-#include "IB_Sequence.hpp"
-#include "IB_String.hpp"
-#include "IB_System.hpp"
-#include "IB_Value.hpp"
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
+#include "IB_VanTemplate.hpp"
+#include "IB_Chara.hpp"
 // --------------------------------------------------------
 //	–¼‘O‹óŠÔ‚ð—LŒø‰»
 // --------------------------------------------------------
 using namespace std;
-using namespace IB_Base;
-using namespace IB_Base::Template;
-using namespace IB_Base::Input;
-using namespace IB_Base::Script;
-using namespace IB_Base::Sequence;
-using namespace IB_Base::System;
-using namespace IB_Base::Value;
+using namespace IB_Van;
+using namespace IB_Van::Charas;

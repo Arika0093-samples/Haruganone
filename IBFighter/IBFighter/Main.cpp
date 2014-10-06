@@ -53,6 +53,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 {
 	// シーケンス管理クラスを確保してG_INITで初期化
 	Sequencer Sqr = G_INIT;
+<<<<<<< Updated upstream
+=======
+	//　プレイヤーは4人までに固定
+//	Chara p1(),p2(),p3(),p4();
+>>>>>>> Stashed changes
 	// シーケンス関数を登録
 	Sqr.RegistFunction(G_INIT, [](Sequencer& Sq)
 		{
@@ -75,7 +80,13 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	}
 
 	// 1フレームごとに判定を行う
+<<<<<<< Updated upstream
     while( GameProcess() == true ){
+=======
+    while( GameProcess() == true )
+	{
+		// 対応シーケンス関数の呼び出し
+>>>>>>> Stashed changes
 		Sqr.Process();
 
 		#ifdef DEBUG	//デバッグモード時のみ発動
