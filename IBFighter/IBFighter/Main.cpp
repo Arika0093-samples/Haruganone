@@ -77,13 +77,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	}
 
 	// 1フレームごとに判定を行う
-<<<<<<< Updated upstream
     while( GameProcess() == true ){
-=======
-    while( GameProcess() == true )
-	{
 		// 対応シーケンス関数の呼び出し
->>>>>>> Stashed changes
 		Sqr.Process();
 
 		#ifdef DEBUG	//デバッグモード時のみ発動

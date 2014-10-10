@@ -9,13 +9,19 @@
 // --------------------------------------------------------
 //	必要なヘッダーを読み込む
 // --------------------------------------------------------
-#include "IB_String.hpp"
+#include "IB_File.hpp"
+#include <memory>
 #include <lua.hpp>
 #include <luabind/luabind.hpp>
 
 // --------------------------------------------------------
-//	defineマクロを使用する
+//	簡易defineマクロ
 // --------------------------------------------------------
+#define NormalFunction(fc)		luabind::def(#fc, fc)
+#define RegistClass(ty)			luabind::class_<ty>(#ty)
+#define ClassConstructor(ty)	def(luabind::constructor<ty>())
+#define ClassFunction(bs, fc)	def(#fc, &bs::fc)
+#define ClassVariable(bs, va)	def_readwrite(#va, &bs::va)
 
 // --------------------------------------------------------
 //	名前空間を使用(IB_Base::Script)
@@ -37,13 +43,13 @@ namespace IB_Base
 			/// <param name = "File">
 			///		開くファイルのパス。
 			/// </param>
-						LuaScript(const char* File);
+						LuaScript(const _FileBase &File);
 			/// <summary>
 			///		Luaで使用する変数、関数などを登録する関数
 			/// </summary>
 			bool		Regist(luabind::scope Rg);
 			/// <summary>
-			///		"Main"関数を呼び出す。
+			///		Main関数を呼び出す。
 			/// </summary>
 			bool		Call() const;
 			/// <summary>
@@ -57,16 +63,12 @@ namespace IB_Base
 			///		エラーメッセージを取得する
 			/// </summary>
 			std::string	GetErrorMessage() const;
-			/// <summary>
-			///		例外発生時にAssertを出すかどうか。
-			///		標準でtrue。DEBUG時のみ有効。
-			/// </summary>
-			bool		IsAssert;
 		private:
 			/// <summary>
 			///		開いているファイル名
 			/// </summary>
-			const char*	_Name;
+			const _FileBase
+						&_File;
 			/// <summary>
 			///		Luaスクリプトを扱う構造体
 			/// </summary>

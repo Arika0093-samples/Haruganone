@@ -10,7 +10,7 @@
 // ----------------------------------------------------
 //	LuaScript::LuaScript (Constructor)
 // ----------------------------------------------------
-			LuaScript::LuaScript(const char* File)
+			LuaScript::LuaScript(const _FileBase &File) : _File(File)
 {
 	IsAssert = true;
 	// New
@@ -19,7 +19,6 @@
 	luaL_openlibs(_Ls);
 	// Used Setup
 	luabind::open(_Ls);
-	_Name = File;
 }
 
 // ----------------------------------------------------
@@ -32,8 +31,6 @@ bool		LuaScript::Regist(luabind::scope Rg)
 		luabind::module(_Ls)[Rg];
 	}
 	catch(luabind::error &er){
-		// assert
-		Assert(IsAssert);
 		// error copy
 		*_Err = er;
 		return false;
@@ -55,14 +52,12 @@ bool		LuaScript::Call() const
 bool		LuaScript::Call(const char* FuncName) const
 {
 	try{
-		// FileOpen
-		int Ret = luaL_dofile(_Ls, _Name);
-		Assert(Ret == 0);
-		// 
+		// FileRead
+		auto LuaText = _File.Read();
+		// Do
+		//luaL_dostring();
 	}
 	catch(luabind::error &er){
-		// assert
-		Assert(IsAssert);
 		// error copy
 		*_Err = er;
 		return false;

@@ -40,14 +40,17 @@
     <Filter Include="基本\Sound">
       <UniqueIdentifier>{c89c3c69-29d5-4729-8ec9-0c507bd9b762}</UniqueIdentifier>
     </Filter>
-    <Filter Include="基本\#Base\Debug">
-      <UniqueIdentifier>{1b33f519-f46b-4345-9f4f-2a9e8402cf20}</UniqueIdentifier>
-    </Filter>
     <Filter Include="別途コンパイル">
       <UniqueIdentifier>{3f7af8be-e8ce-4911-8da6-a0f64814eaf3}</UniqueIdentifier>
     </Filter>
     <Filter Include="別途コンパイル\luabind">
       <UniqueIdentifier>{c5dca5c6-310b-4d7f-b793-193165198251}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="基本\File">
+      <UniqueIdentifier>{e6c6b284-7d10-4536-9f86-81a3c6e6e57e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="基本\Debug">
+      <UniqueIdentifier>{1b33f519-f46b-4345-9f4f-2a9e8402cf20}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +76,7 @@
       <Filter>基本\Sound</Filter>
     </ClCompile>
     <ClCompile Include="HeaderList\Base\IB_Debug.cpp">
-      <Filter>基本\#Base\Debug</Filter>
+      <Filter>基本\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Lua\src\class.cpp">
       <Filter>別途コンパイル\luabind</Filter>
@@ -126,11 +129,11 @@
     <ClCompile Include="Lua\src\wrapper_base.cpp">
       <Filter>別途コンパイル\luabind</Filter>
     </ClCompile>
+    <ClCompile Include="HeaderList\Base\IB_File.cpp">
+      <Filter>基本\File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HeaderList\Chara.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="HeaderList\Constant.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -162,7 +165,19 @@
       <Filter>基本\Sound</Filter>
     </ClInclude>
     <ClInclude Include="HeaderList\Base\IB_Debug.hpp">
-      <Filter>基本\#Base\Debug</Filter>
+      <Filter>基本\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Van\IB_Chara.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Van\IB_VanInclude.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Van\IB_VanTemplate.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderList\Base\IB_File.hpp">
+      <Filter>基本\File</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
